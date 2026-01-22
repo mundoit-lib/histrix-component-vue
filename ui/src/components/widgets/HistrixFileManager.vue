@@ -34,7 +34,8 @@
       theme="list"
       :uploadHeaders="uploadHeaders"
       helpText="Elija o arrastre aquí sus archivos"
-      v-model="files">
+      :model-value="files"
+      @update:model-value="files = $event">
 
 <!--      
     <template v-slot:file-preview-before="{ fileRecord, index }">

@@ -1,69 +1,50 @@
 <template>
-        <q-card style="width: 700px; max-width: 80vw;">
-            <q-card-section class="bg-primary text-white">
-                <h2 class="text-h6 q-ma-xs">Modificar Contraseña</h2>
-            </q-card-section>
-            <q-card-section>
-  <q-form _v-if="!okPassword" @submit.prevent="submit" >
-    <q-list _class="row">
-        <q-item  class="col-12   q-pa-sm">
+  <q-card style="width: 700px; max-width: 80vw;">
+    <q-card-section class="bg-primary text-white">
+      <h2 class="text-h6 q-ma-xs">Modificar Contraseña</h2>
+    </q-card-section>
+    <q-card-section>
+      <q-form _v-if="!okPassword" @submit.prevent="submit">
+        <q-list _class="row">
+          <q-item class="col-12   q-pa-sm">
             <q-item-section>
-                <q-input label="Contraseña Actual" id="password"
-                    filled
-                    required
-                    type="password"
-                    v-model="form.old_password"
-                    name="password" 
-                    :before="[{ icon: 'lock' }]"
-                    :error="v$.form.old_password.$error"
-                    />
+              <q-input label="Contraseña Actual" id="password" filled required type="password"
+                v-model="form.old_password" name="password" :before="[{ icon: 'lock' }]"
+                :error="v$.form.old_password.$error" />
             </q-item-section>
-        </q-item>
+          </q-item>
 
-        <q-item  class="col-12   q-pa-sm">
+          <q-item class="col-12   q-pa-sm">
             <q-item-section>
 
-                          <InputPasswordVue :labelShow="'wer'" v-model="form.new_password"
-                                    placeholder="Ingrese su nueva contraseña"
-                                    :toggle="true"
-                                    required
-                                    @score="showScore"
-                                    class="full-width"
-                                  :error-label="passwordErrorMsg"
-                                    >
-                          </InputPasswordVue>
+              <InputPasswordVue :labelShow="'wer'" :model-value="form.new_password"
+                @update:model-value="form.new_password = $event" placeholder="Ingrese su nueva contraseña"
+                :toggle="true" required @score="showScore" class="full-width" :error-label="passwordErrorMsg">
+              </InputPasswordVue>
             </q-item-section>
-        </q-item>
-        <q-item  class="col-12   q-pa-sm">
-        <q-item-section>
+          </q-item>
+          <q-item class="col-12   q-pa-sm">
+            <q-item-section>
 
-                     <InputPasswordVue :labelShow="'wer'" v-model="form.confirm_password"
-                                    placeholder="Repita su nueva contraseña"
-                                    :toggle="true"
-                                    required
-                                    @score="showScore"
-                                    class="full-width"
-                                  :error-label="passwordErrorMsg"
-                                    >
-                          </InputPasswordVue>
+              <InputPasswordVue :labelShow="'wer'" :model-value="form.confirm_password"
+                @update:model-value="form.confirm_password = $event" placeholder="Repita su nueva contraseña"
+                :toggle="true" required @score="showScore" class="full-width" :error-label="passwordErrorMsg">
+              </InputPasswordVue>
             </q-item-section>
-        </q-item>
-        
-                <br>
-        <div class="col-xs-12 q-mb-sm text-center">
-            <q-btn icon="chevron_right" class="q-pl-md q-pr-md q-pt-sm q-pb-sm full-width"
-                :disable="btnLoading" type="submit"
-                :loading="btnLoading"
-                color="primary" size="md" label="Modificar"
-                    >
+          </q-item>
+
+          <br>
+          <div class="col-xs-12 q-mb-sm text-center">
+            <q-btn icon="chevron_right" class="q-pl-md q-pr-md q-pt-sm q-pb-sm full-width" :disable="btnLoading"
+              type="submit" :loading="btnLoading" color="primary" size="md" label="Modificar">
             </q-btn>
 
-        </div>
+          </div>
 
-    </q-list>
-  </q-form>
-            </q-card-section>
-        </q-card>
+        </q-list>
+      </q-form>
+    </q-card-section>
+  </q-card>
 </template>
 <script>
 import { minLength, required, sameAs } from '@vuelidate/validators';
@@ -184,7 +165,6 @@ export default {
 </script>
 <style scoped>
 .Password {
-    max-width: 100%;
-  }
-
+  max-width: 100%;
+}
 </style>

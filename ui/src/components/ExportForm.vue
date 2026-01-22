@@ -6,7 +6,6 @@
       </q-card-section>
       <q-separator />
       <div class="row">
-
         <q-item tag="label" v-ripple v-for="format in formats" v-bind:key="format.format" class="col-12">
           <q-item-section avatar>
             <q-radio v-model="fileFormat" :val="format.format" />
@@ -20,13 +19,12 @@
           </q-item-section>
         </q-item>
       </div>
-
       <q-separator />
       <q-card-section>
           <q-input v-model="fileName" label="Nombre del Archivo" />
       </q-card-section>
       <q-card-actions align="right">
-        <q-btn icon="cloud_download" @click="downloadFile()" label="Descargar Archivo"></q-btn>
+        <q-btn icon="cloud_download" @click="downloadFile()" label="Descargar Archivo"/>
       </q-card-actions>
   </q-card>
 </template>

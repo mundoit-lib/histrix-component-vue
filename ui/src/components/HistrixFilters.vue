@@ -3,14 +3,14 @@
 
     <q-expansion-item v-if="filterCount > 1" v-model="open" icon="search" :label="schema.title" caption="búsqueda avanzada" dense>
           <q-item v-for="field in filters" v-bind:key="field.uid" class=" col-xs-12 col-sm-6 col-md-6" dense>
-            <HistrixField dense v-model="field.valor" :schema="field" clearable  filled />
+            <HistrixField dense :model-value="field.valor" @update:model-value="field.valor = $event" :schema="field" clearable  filled />
           </q-item>
     </q-expansion-item>
 
     <div v-if="filterCount == 1">
       <q-item v-for="field in filters" v-bind:key="field.uid" class=" col-xs-12 col-sm-6 col-md-6">
 
-           <HistrixField v-model="field.valor" :schema="field" clearable  filled/>
+           <HistrixField :model-value="field.valor" @update:model-value="field.valor = $event" :schema="field" clearable  filled/>
 
 
        </q-item>

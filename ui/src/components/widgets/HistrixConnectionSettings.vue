@@ -16,7 +16,8 @@
           <DatabaseSelector
             :host="host"
             label="Base de datos"
-            v-model="database"
+            :model-value="database"
+            @update:model-value="database = $event"
             hint="Base de Datos por defecto"
           />
           <br />

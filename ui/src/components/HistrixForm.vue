@@ -88,7 +88,8 @@
                       />
 
                       <HistrixField
-                        v-model="localValues[field.name]"
+                        :model-value="localValues[field.name]"
+                        @update:model-value="localValues[field.name] = $event"
                         :name="field.name"
                         :row="localValues"
                         :schema="field"
@@ -124,7 +125,8 @@
               v-bind:key="field.name"
             >
               <HistrixField
-                v-model="localValues[field.name]"
+                :model-value="localValues[field.name]"
+                @update:model-value="localValues[field.name] = $event"
                 :name="field.name"
                 :schema="field"
                 :path="computedPath(field)"
@@ -640,7 +642,7 @@ export default {
         });
     },
     onSubmit() {
-      if (this.editedIndex === -1 || this.editedIndex === null) {
+      if (this.editedIndex === -1 || this.editedIndex === null || this.editedIndex === undefined) {
         this.insertRow();
       } else {
         this.saveForm();

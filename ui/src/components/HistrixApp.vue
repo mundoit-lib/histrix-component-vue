@@ -31,7 +31,11 @@
               :resources="resources"
               :schema="schema"
               :finalStep="finalStep"
-              v-model="localValue"
+              :model-value="localValue"
+              @update:model-value="($event) => {
+                localValue = $event
+                $emit('update:model-value', $event)
+              }"
               :inner="inner"
               :title="title"
               :url="xmlUrl"
@@ -46,7 +50,6 @@
               v-on:select-row="selectRow"
               v-on:export="showExportForm"
               v-on:print="togglePdf"
-              v-on:input="$emit('input', localValue)"
               v-on:validity="onValidityChange"
               v-on:advance-step="$emit('advance-step')"
               v-on:process-finish="refreshMaster"
@@ -95,7 +98,11 @@
                 :query="componentQuery"
                 :resources="resources"
                 :schema="schema"
-                v-model="localValue"
+                :model-value="localValue"
+                @update:model-value="($event) => {
+                  localValue = $event
+                  $emit('update:model-value', $event)
+                }"
                 :inner="inner"
                 :title="title"
                 :url="xmlUrl"
@@ -110,7 +117,6 @@
                 v-on:select-row="selectRow"
                 v-on:export="showExportForm"
                 v-on:print="togglePdf"
-                v-on:input="$emit('input', localValue)"
                 v-on:validity="onValidityChange"
                 v-on:advance-step="step++"
               ></component>
@@ -323,7 +329,7 @@ export default {
       type: Boolean,
       default: false
     },
-    value: null,
+    modelValue: null,
     database: {
       type: String,
       required: false
@@ -345,7 +351,7 @@ export default {
     this.detailQuery = {};
     this.detailPath = '';
     this.closeDetail();
-    this.localValue = this.value;
+    this.localValue = this.modelValue;
   },
   watch: {
     /**
@@ -353,7 +359,7 @@ export default {
      */
     value: {
       handler(_newVal, _oldVal) {
-        this.localValue = this.value;
+        this.localValue = this.modelValue;
       }
     },
     xmlUrl: {
