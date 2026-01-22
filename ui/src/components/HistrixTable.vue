@@ -222,7 +222,8 @@
             class="histrix-cell"
           >
             <HistrixField
-              v-model="rawData[props.key][cell.name]"
+              :model-value="rawData[props.key][cell.name]"
+              @update:model-value="rawData[props.key][cell.name] = $event"
               :row="rawData[props.key]"
               :query="fieldQuerys(cell.name, rawData[props.key])"
               :name="cell.name"
@@ -281,7 +282,8 @@
               </q-item-section>
               <q-item-section class="col">
                 <HistrixField
-                  v-model="rawData[props.key][cell.name]"
+                  :model-value="rawData[props.key][cell.name]"
+                  @update:model-value="rawData[props.key][cell.name] = $event"
                   :row="rawData[props.key]"
                   :query="fieldQuerys(cell.name, rawData[props.key])"
                   :name="cell.name"
@@ -413,7 +415,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="edit" ref="formDialog" full-width @input="showDialog">
+    <q-dialog v-model="edit" ref="formDialog" full-width @update:model-value="showDialog" @input="showDialog">
       <q-card>
         <HistrixForm
           ref="histrixForm"
@@ -466,7 +468,7 @@ export default {
     search: { type: Boolean, default: false },
     computedFields: Object,
     computedTotals: Object,
-    value: null,
+    modelValue: null,
     isFormulation: { type: Boolean, default: false }
   },
   components: {
@@ -479,8 +481,8 @@ export default {
   mounted() {
     this.editedItem = Object.assign({}, this.schema.values);
     /*
-    if (this.value) {
-      this.data = JSON.parse(JSON.stringify(this.value))
+    if (this.modelValue) {
+      this.data = JSON.parse(JSON.stringify(this.modelValue))
     } else {
       this.data = []
     }
@@ -1115,7 +1117,7 @@ export default {
       ],
       data: [],
       openFilter: false,
-      searchStr: this.valueFilter,
+      searchStr: this.modelValueFilter,
       pagination: {
         sortBy: 'desc',
         descending: false,

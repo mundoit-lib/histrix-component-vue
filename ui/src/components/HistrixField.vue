@@ -31,7 +31,8 @@
     <div class="content-field">
       <component
         v-bind:is="fieldComponent"
-        v-model="localValue"
+        :model-value="localValue"
+        @update:model-value="localValue = $event"
         v-bind="$attrs"
         style="flex: 1;"
         v-on:computed-total="onComputedTotal"
@@ -79,8 +80,8 @@
         :style="style"
         :input-class="inputClass"
         :clearable="clearable"
-        :error="v$.value?.$error"
-        :error-message="v$.value?.$errors?.[0]?.$message"
+        :error="v$.modelValue?.$error"
+        :error-message="v$.modelValue?.$errors?.[0]?.$message"
         inline
         :borderless="isDisabled"
         :autocomplete="autoComplet"
@@ -173,6 +174,7 @@
                 mask="DD/MM/YYYY"
                 :locale="dateLocale"
                 v-model="localValue"
+                @update:model-value="() => $refs.qDateProxy.hide()"
                 @input="() => $refs.qDateProxy.hide()"
               />
             </q-popup-proxy>
@@ -252,7 +254,7 @@
       </div>
     </div>
 
-    <q-dialog v-model="openNew" ref="formDialog" full-width @input="showDialog">
+    <q-dialog v-model="openNew" ref="formDialog" full-width @update:model-value="showDialog" @input="showDialog">
         <HistrixApp
           :inner="false"
           :path="dialog.path"
@@ -282,7 +284,7 @@ export default {
     schema: Object,
     rowSchema: Object,
     query: Object,
-    value: null,
+    modelValue: null,
     row: null,
     submitting: null,
     path: null
@@ -788,8 +790,8 @@ export default {
   mounted() {
     this.getHelpSchema();
     this.getOptions(true);
-    if (this.v$?.value) {
-      this.v$?.value?.$touch();
+    if (this.v$?.modelValue) {
+      this.v$?.modelValue?.$touch();
     }
   },
   computed: {
@@ -804,17 +806,17 @@ export default {
     rules() {
       const validations = {};
       if (this.fieldSchema?.required === 'required' || this.fieldSchema?.required === 'true') {
-        validations.value = { ...validations.value, required: helpers.withMessage('* Valor requerido', required) };
+        validations.modelValue = { ...validations.modelValue, required: helpers.withMessage('* Valor requerido', required) };
       }
       if (this.fieldSchema?.TipoDato === 'decimal' || this.fieldSchema?.histrix_type === 'decimal') {
-        validations.value = { ...validations.value, decimal: helpers.withMessage('* Valor decimal', decimal) };
+        validations.modelValue = { ...validations.modelValue, decimal: helpers.withMessage('* Valor decimal', decimal) };
       }
       if (this.fieldSchema?.TipoDato === 'email' || this.fieldSchema?.histrix_type === 'email') {
-        validations.value = { ...validations.value, email: helpers.withMessage('Valor email', email) };
+        validations.modelValue = { ...validations.modelValue, email: helpers.withMessage('Valor email', email) };
       }
       if (this.fieldSchema?.max_length && this.fieldSchema?.max_length !== '0') {
-        validations.value = {
-          ...validations.value,
+        validations.modelValue = {
+          ...validations.modelValue,
           maxLength: helpers.withMessage(
             `No puede tener mas de ${this.fieldSchema.max_length} caracteres`,
             maxLength(this.fieldSchema.max_length)
@@ -825,8 +827,8 @@ export default {
         const regex = new RegExp(
           this.fieldSchema.mask.replace(/9/g, '\\d').replace(/a/g, '[a-zA-Z]').replace(/\*/g, '[a-zA-Z0-9]')
         );
-        validations.value = {
-          ...validations.value,
+        validations.modelValue = {
+          ...validations.modelValue,
           mask: helpers.withMessage('Valor incorrecto', helpers.regex(regex))
         };
       }
@@ -925,7 +927,7 @@ export default {
       return `${this.apiUrl()}/files/${this.path}`;
     },
     thumb() {
-      return `${this.apiUrl()}/thumb/${this.path}${this.value}`;
+      return `${this.apiUrl()}/thumb/${this.path}${this.modelValue}`;
     },
     helperPath() {
       const helper = this.fieldSchema.innerContainer;
@@ -1149,32 +1151,32 @@ export default {
     localValue: {
       get() {
         if (this.histrixType === 'check' || this.histrixType === 'toggle') {
-          if (typeof this.value === 'boolean') {
-            return this.value;
+          if (typeof this.modelValue === 'boolean') {
+            return this.modelValue;
           }
-          if (this.value === '') return false;
-          if (typeof this.value === 'string') return this.value !== '0';
-          return this.value !== 0;
+          if (this.modelValue === '') return false;
+          if (typeof this.modelValue === 'string') return this.modelValue !== '0';
+          return this.modelValue !== 0;
         }
         if (this.histrixType === 'radio') {
-          if (this.value === '' || this.value === null) {
+          if (this.modelValue === '' || this.modelValue === null || this.modelValue === undefined) {
             return undefined;
           }
-          if (typeof this.value === 'string' || this.value instanceof String) {
-            return !Number.isNaN(this.value) && this.value !== '' ? Number(this.value) : this.value;
+          if (typeof this.modelValue === 'string' || this.modelValue instanceof String) {
+            return !Number.isNaN(this.modelValue) && this.modelValue !== '' ? Number(this.modelValue) : this.modelValue;
           }
-          return this.value;
+          return this.modelValue;
         }
         if (this.isDate) {
-          if (this.value === '' || !this.value) {
+          if (this.modelValue === '' || !this.modelValue) {
             return undefined;
           }
-          if (this.value.length !== 10) {
-            return this.value;
+          if (this.modelValue.length !== 10) {
+            return this.modelValue;
           }
-          let value = this.value;
-          if (this.value.includes('/')) {
-            value = this.value.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$2/$1/$3');
+          let value = this.modelValue;
+          if (this.modelValue.includes('/')) {
+            value = this.modelValue.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$2/$1/$3');
           }
           const fecha = new Date(value);
           fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
@@ -1183,17 +1185,17 @@ export default {
 
         if (this.histrixType === 'q-select' && this.options) {
           if (!this.isMultiple) {
-            return !Number.isNaN(Number(this.value)) && this.value !== '' ? Number(this.value) : this.value;
-            // return this.options.find(obj => obj.value == this.value);
+            return !Number.isNaN(Number(this.modelValue)) && this.modelValue !== '' ? Number(this.modelValue) : this.modelValue;
+            // return this.options.find(obj => obj.value == this.modelValue);
           }
-          if (this.value === '' || this.value === null) {
+          if (this.modelValue === '' || this.modelValue === null || this.modelValue === undefined) {
             return undefined;
           }
 
-          if (typeof this.value === 'string' || this.value instanceof String) {
-            let items = JSON.parse(this.value);
+          if (typeof this.modelValue === 'string' || this.modelValue instanceof String) {
+            let items = JSON.parse(this.modelValue);
             if (!Array.isArray(items)) {
-              items = [this.value];
+              items = [this.modelValue];
             }
             items = items.map((item) => {
               // Si es un número válido, convertirlo a Number. Si no, dejarlo igual.
@@ -1205,18 +1207,18 @@ export default {
 
         // if (this.histrixType == 'q-file') {
         //   return null
-        //  return this.value.name
+        //  return this.modelValue.name
         // }
 
         // if (this.histrixType == 'object') {
-        //   return this.value;
+        //   return this.modelValue;
         // }
 
-        if (this.value) {
-          return this.value.value !== undefined ? this.value.value : this.value;
+        if (this.modelValue) {
+          return this.modelValue.value !== undefined ? this.modelValue.value : this.modelValue;
         }
 
-        return this.value;
+        return this.modelValue;
       },
       set(localValue) {
         if (this.histrixType === 'q-select') {

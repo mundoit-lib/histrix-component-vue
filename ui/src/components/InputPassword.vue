@@ -7,8 +7,10 @@
         :ref="referenceValue"
         :class="[defaultClass, $attrs.disabled ? disabledClass : '', $attrs.error ? errorClassPassword : '']"
         :value="value"
+        :model-value="value"
         :minlength= "minlength"
         @input="evt => emitValue('input', evt.target.value)"
+        @update:model-value="evt => emitValue('input', evt.target.value)"
         @blur="evt => emitValue('blur', evt.target.value)"
         @focus="evt => emitValue('focus', evt.target.value)"
       />
