@@ -9,7 +9,7 @@
     />
 
     <q-table
-      :data="innerData"
+      v-bind="tableDateProp"
       :columns="schema.columns"
       :pagination.sync="pagination"
       :_grid="mode == 'grid'"
@@ -266,7 +266,7 @@
           :style="props.selected ? 'transform: scale(0.95);' : ''"
         >
         <!-- @TODO: pasar todo esta card a un componente aparte -->
-          <contenierItem v-bind:is="contentItem" :class="props.selected ? 'bg-grey-2' : ''">
+          <component v-bind:is="contentItem" :class="props.selected ? 'bg-grey-2' : ''">
             <q-item
               v-for="cell in props.cols.filter((row) => row.name)"
               :key="cell.name"
@@ -358,7 +358,7 @@
                 />
               </div>
             </q-card-section>
-          </contenierItem>
+          </component>
         </div>
       </template>
 
@@ -430,7 +430,6 @@
           :inner="inner"
           v-on:open-popup="bubbleLink(editedItem, $event)"
           v-on:form-saved="formSaved"
-          v-on:insert-row="rowRecived"
           v-on:closepopup="closeEdit"
           v-on:valueEdit="setEdit"
           :computedFields="computedFields"
@@ -450,6 +449,7 @@ import HistrixCell from './HistrixCell.vue';
 import HistrixApp from './HistrixApp.vue';
 import HistrixFilters from './HistrixFilters.vue';
 import HistrixField from './HistrixField.vue';
+import { isVue3 } from 'vue-demi';
 
 export default {
   name: 'HistrixTable',
@@ -563,6 +563,13 @@ export default {
         });
       }
     },
+    tableDateProp() {
+      return isVue3 ? {
+        rows: this.innerData,
+      } : {
+        data: this.innerData,
+      };
+    },
     rawData() {
       return this.innerData.map((row) => {
         const newRow = {};
@@ -663,7 +670,7 @@ export default {
       return this.filterObject(this.schema.fields, (field) => !field.update_fields);
     }
   },
-  emits: ['export', 'print', 'computed-total', 'input', 'closepopup', 'open-popup'],
+  emits: ['export', 'print', 'computed-total', 'input', 'closepopup', 'open-popup', 'select-row'],
   methods: {
     setEdit(value) {
       this.editValue = value;
@@ -863,14 +870,6 @@ export default {
           console.log(e);
         });
     },
-    /**
-     * Executed when row is inserted by Form
-     */
-    // rowRecived(row, _index) {
-    //   Vue.set(this.data, row._id, row);
-    //   this.edit = false;
-    //   this.refresh();
-    // },
     formSaved(_row, index) {
       // update row values
 
