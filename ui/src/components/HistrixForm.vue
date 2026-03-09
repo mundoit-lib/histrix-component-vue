@@ -649,7 +649,6 @@ export default {
       }
     },
     insertRow() {
-      this.newRecord = true;
       this.saveForm();
     },
     saveForm() {
