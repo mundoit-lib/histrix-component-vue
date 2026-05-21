@@ -168,7 +168,7 @@ export default function useApi() {
      * @param {string} level
      */
     async getMenu(level) {
-      const url = `${apiUrl()}/menu/${level}`;
+      const url = `${apiUrl()}/menu/${level}?platform=app`;
       return getData(url);
     },
 
@@ -321,92 +321,65 @@ export default function useApi() {
 
     // Favorites
     async getFavoritesOption() {
-      const url = `${apiUrl()}/app/favorito_qry`;
+      const url = `${apiUrl()}/favorites/`;
       try {
         const response = await getData(url);
-        return JSON.parse(response.data.data[0].option_value);
+        if (Array.isArray(response.data)) return response.data;
+        return response.data?.favorites ?? [];
       } catch (_error) {
         return [];
       }
     },
 
     async getFavorites() {
-      const url = `${apiUrl()}/app/favorito_qry`;
+      const url = `${apiUrl()}/favorites/`;
       try {
         const response = await getData(url);
-        return { id: response.data.data[0].id_option, keys: JSON.parse(response.data.data[0].option_value) };
+        const keys = Array.isArray(response.data)
+          ? response.data
+          : (response.data?.favorites ?? []);
+        return { keys };
       } catch (_error) {
-        return { id: null, keys: [] };
+        return { keys: [] };
       }
     },
 
-    async setFavorit(menuId, uri, name, idOption) {
-      if (!idOption) {
-        return axios({
-          method: 'POST',
-          url: `${apiUrl()}/app/favorito`,
-          data: {
-            option_value: JSON.stringify([{ menuId, uri, name }])
-          }
-        });
+    async setFavorit(menuId, uri, name) {
+      const url = `${apiUrl()}/favorites/`;
+      let favorites = [];
+      try {
+        const response = await getData(url);
+        favorites = Array.isArray(response.data)
+          ? response.data
+          : (response.data?.favorites ?? []);
+      } catch (_error) {
+        favorites = [];
       }
-
-      // Crear una referencia a getFavoritesOption para poder usarla aquí
-      const getFavoritesOption = async () => {
-        const url = `${apiUrl()}/app/favorito_qry`;
-        try {
-          const response = await getData(url);
-          return JSON.parse(response.data.data[0].option_value);
-        } catch (_error) {
-          return [];
-        }
-      };
-
-      const options = await getFavoritesOption();
-      options.push({ menuId, uri, name });
-      console.log(options);
+      favorites.push({ menuId, uri, name });
       return axios({
         method: 'PUT',
-        url: `${apiUrl()}/app/favorito`,
-        data: {
-          data: {
-            option_value: JSON.stringify(options)
-          },
-          keys: {
-            id_option: idOption
-          }
-        }
+        url,
+        data: { favorites }
       });
     },
 
-    async removeFavorit(idOption, menuId) {
-      // Crear una referencia a getFavoritesOption para poder usarla aquí
-      const getFavoritesOption = async () => {
-        const url = `${apiUrl()}/app/favorito_qry`;
-        try {
-          const response = await getData(url);
-          return JSON.parse(response.data.data[0].option_value);
-        } catch (_error) {
-          return [];
-        }
-      };
-
-      const options = await getFavoritesOption();
-      const index = options.findIndex((item) => item.menuId === menuId);
-      if (index > -1) {
-        options.splice(index, 1);
+    async removeFavorit(menuId) {
+      const url = `${apiUrl()}/favorites/`;
+      let favorites = [];
+      try {
+        const response = await getData(url);
+        favorites = Array.isArray(response.data)
+          ? response.data
+          : (response.data?.favorites ?? []);
+      } catch (_error) {
+        return null;
       }
+      const index = favorites.findIndex((item) => item.menuId === menuId);
+      if (index > -1) favorites.splice(index, 1);
       return axios({
         method: 'PUT',
-        url: `${apiUrl()}/app/favorito`,
-        data: {
-          data: {
-            option_value: JSON.stringify(options)
-          },
-          keys: {
-            id_option: idOption
-          }
-        }
+        url,
+        data: { favorites }
       });
     },
 

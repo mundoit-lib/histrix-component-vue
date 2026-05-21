@@ -1,50 +1,132 @@
 <template>
   <div>
-    <!--
-    <q-input dense standout v-model="filterString" class="q-ma-md" v-if="filter">
-      <template v-slot:append>
-        <q-icon v-if="filterString === ''" name="search" />
-        <q-icon
-          v-else
-          name="clear"
-          class="cursor-pointer"
-          @click="filterString = ''"
-        />
-      </template>
-    </q-input>
-    <q-skeleton  square height="300px" v-if="loading"/>
-    -->
-
     <q-list>
-      <div v-for="node in data" v-bind:key="node.key">
+      <template v-if="isRoot && loading">
+        <q-item v-for="n in 6" :key="`sk-${n}`">
+          <q-item-section avatar>
+            <q-skeleton type="QAvatar" size="24px" />
+          </q-item-section>
+          <q-item-section>
+            <q-skeleton type="text" />
+          </q-item-section>
+        </q-item>
+      </template>
+
+      <q-expansion-item
+        v-if="isRoot && featured.length"
+        v-model="featuredOpen"
+        dense
+        dense-toggle
+        expand-separator
+        icon="bolt"
+        header-class="text-uppercase text-primary text-weight-medium"
+      >
+        <template v-slot:header>
+          <q-item-section>
+            <div class="row items-center">
+              <q-icon name="bolt" color="primary" size="sm" class="q-mr-sm" />
+              <span>Destacados</span>
+              <span class="text-grey-7 q-ml-xs text-caption">({{ featured.length }})</span>
+            </div>
+          </q-item-section>
+        </template>
+        <div class="row q-gutter-xs q-px-md q-py-sm featured-zone">
+          <q-btn
+            v-for="node in featured"
+            :key="`feat-${node.menuId}`"
+            no-caps
+            unelevated
+            rounded
+            dense
+            size="sm"
+            color="primary"
+            text-color="white"
+            align="left"
+            :to="nodeUri(node)"
+            class="featured-btn"
+            @click="refrest(nodeUri(node))"
+          >
+            <q-icon :name="node.icon || 'star'" size="xs" class="q-mr-xs" />
+            <div class="column items-start text-left">
+              <span
+                class="text-caption capitalize"
+                style="line-height: 1.15"
+                v-html="decodeHTML(node.label).toLowerCase()"
+              />
+              <span
+                v-if="node.subtitle"
+                class="capitalize"
+                style="opacity: 0.85; line-height: 1.05; font-size: 0.65rem"
+                v-html="decodeHTML(node.subtitle).toLowerCase()"
+              />
+            </div>
+          </q-btn>
+        </div>
+      </q-expansion-item>
+
+      <q-expansion-item
+        v-if="isRoot && isFavorite && favorit.keys.length"
+        v-model="favoritesOpen"
+        dense
+        dense-toggle
+        expand-separator
+        icon="star"
+        header-class="text-uppercase text-weight-medium"
+      >
+        <template v-slot:header>
+          <q-item-section>
+            <div class="row items-center">
+              <q-icon name="star" color="amber" size="sm" class="q-mr-sm" />
+              <span>Favoritos</span>
+              <span class="text-grey-7 q-ml-xs text-caption">({{ favorit.keys.length }})</span>
+            </div>
+          </q-item-section>
+        </template>
+        <q-item
+          v-for="fav in favorit.keys"
+          :key="`fav-${fav.menuId}`"
+          :to="nodeUri({ uri: fav.uri, label: fav.name })"
+          dense
+          clickable
+          @click="refrest(nodeUri({ uri: fav.uri, label: fav.name }))"
+        >
+          <q-item-section class="capitalize">
+            {{ decodeHTML(fav.name).toLowerCase() }}
+          </q-item-section>
+          <q-item-section side @click.stop.prevent="toggleFavorit(fav.menuId, fav.uri, fav.name)">
+            <q-btn flat round dense color="primary" icon="star" />
+          </q-item-section>
+        </q-item>
+      </q-expansion-item>
+
+      <div v-for="node in data" :key="node.menuId || node.key">
         <q-expansion-item
+          v-if="node.children"
           dense
           :content-inset-level="0.2"
-          :_header-inset-level="1"
           :group="level"
           expand-separator
-          :icon="node.icon || 'arrow_right'"
+          :icon="node.icon || undefined"
           :label-lines="1"
-          :label="node.label.toLowerCase()"
-          :_caption="node.title"
-          v-if="node.children"
+          :label="decodeHTML(node.label).toLowerCase()"
           class="capitalize"
         >
           <template v-slot:header>
             <q-item-section avatar>
-              <q-avatar :icon="node.icon || 'arrow_right'" />
+              <q-icon :name="node.icon || 'arrow_right'" size="sm" />
             </q-item-section>
-
             <q-item-section>
-              <span v-html="node.label.toLowerCase()" />
+              <q-item-label>
+                <span v-html="decodeHTML(node.label).toLowerCase()" />
+              </q-item-label>
+              <q-item-label
+                v-if="node.subtitle"
+                caption
+                class="capitalize"
+              >
+                <span v-html="decodeHTML(node.subtitle).toLowerCase()" />
+              </q-item-label>
             </q-item-section>
-            <!--
-          <q-item-section side>
-            <div class="row items-center">
-              <q-icon name="star" color="red" size="24px" />
-            </div>
-          </q-item-section>
--->
           </template>
           <q-separator />
 
@@ -52,24 +134,30 @@
             :tree="node.children"
             :favorites="favorit"
             :is-favorite="isFavorite"
-            _class="bg-grey-2"
             :mini="mini"
           />
         </q-expansion-item>
+
         <q-item
           v-else
           :to="nodeUri(node)"
-          _dense
           @click="refrest(nodeUri(node))"
         >
-          <q-item-section avatar v-if="node.icon">
-            <q-icon :name="node.icon" style="font-size: 2rem" />
+          <q-item-section avatar>
+            <q-icon v-if="node.icon" :name="node.icon" size="sm" />
           </q-item-section>
-          <q-item-section _v-if="!mini" class="capitalize">{{ decodeHTML(node.label).toLowerCase() }}</q-item-section>
+          <q-item-section class="capitalize">
+            <q-item-label>
+              {{ decodeHTML(node.label).toLowerCase() }}
+            </q-item-label>
+            <q-item-label v-if="node.subtitle" caption>
+              {{ decodeHTML(node.subtitle).toLowerCase() }}
+            </q-item-label>
+          </q-item-section>
           <q-item-section
-            side
             v-if="isFavorite"
-            @click="setFavorit(node.menuId, node.uri, decodeHTML(node.label).toLowerCase())"
+            side
+            @click.stop.prevent="toggleFavorit(node.menuId, node.uri, decodeHTML(node.label).toLowerCase())"
           >
             <q-btn
               flat
@@ -86,101 +174,111 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+
+const decodeCache = new Map();
+function decodeHTMLcached(text) {
+  if (text == null) return '';
+  if (decodeCache.has(text)) return decodeCache.get(text);
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(text, 'text/html');
+  const result = doc.documentElement.textContent;
+  decodeCache.set(text, result);
+  return result;
+}
+
 export default {
   name: 'HistrixExpansionMenu',
   setup() {
     const { removeFavorit, setFavorit, getFavorites, getMenu } = useApi();
-    return { removeFavorit, setFavorit, getFavorites, getMenu };
+    return {
+      apiRemoveFavorit: removeFavorit,
+      apiSetFavorit: setFavorit,
+      getFavorites,
+      getMenu
+    };
   },
   props: {
     level: String,
-    filter: Boolean,
     isFavorite: {
       type: Boolean,
       default: false
     },
-    tree: { type: Array },
+    tree: { type: Array, default: null },
     mini: Boolean,
     favorites: {
       type: Object,
-      default: () => {
-        //
-      }
+      default: () => ({ keys: [] })
     }
   },
-  
   data() {
     return {
-      open: [],
-      filterString: '',
       data: [],
-      expanded: [],
-      favorit: {},
+      featured: [],
+      favorit: { keys: [] },
       loading: true,
-      locationCurrent: ''
+      locationCurrent: '',
+      featuredOpen: localStorage.getItem('menu.featuredOpen') !== '0',
+      favoritesOpen: localStorage.getItem('menu.favoritesOpen') !== '0'
     };
   },
-  computed: {},
-  watch: {
-    filterString(newval, _oldval) {
-      if (newval !== '') {
-        this.$refs.qtree.expandAll();
-      }
+  computed: {
+    isRoot() {
+      return !this.tree;
     },
-    favorites(newval, _oldval) {
-      this.favorit = newval;
+    favoritIds() {
+      return new Set(this.favorit.keys.map((k) => k.menuId));
+    }
+  },
+  watch: {
+    favorites(newval) {
+      this.favorit = newval?.keys ? newval : { keys: [] };
+    },
+    featuredOpen(val) {
+      localStorage.setItem('menu.featuredOpen', val ? '1' : '0');
+    },
+    favoritesOpen(val) {
+      localStorage.setItem('menu.favoritesOpen', val ? '1' : '0');
     }
   },
   methods: {
     decodeHTML(text) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(text, 'text/html');
-      return doc.documentElement.textContent;
+      return decodeHTMLcached(text);
     },
     setIconStart(idMenu) {
-      if (this.favorit.keys.some((value) => value.menuId === idMenu)) {
-        return 'star';
-      }
-      return 'star_border';
+      return this.favoritIds.has(idMenu) ? 'star' : 'star_border';
     },
-    async setFavorit(menuId, uri, name) {
-      if (this.favorit.keys.some((value) => value.menuId === menuId)) {
-        this.removeFavorit(this.favorit.id, menuId);
-        const indexItem = this.favorit.keys.findIndex((item) => item.menuId === menuId);
-        this.favorit.keys.splice(indexItem, 1);
+    async toggleFavorit(menuId, uri, name) {
+      const exists = this.favoritIds.has(menuId);
+      if (exists) {
+        await this.apiRemoveFavorit(menuId);
+        const index = this.favorit.keys.findIndex((item) => item.menuId === menuId);
+        this.favorit.keys.splice(index, 1);
         this.$events.fire('update-favorit');
         return;
       }
-      this.setFavorit(menuId, uri, name, this.favorit.id)
-        .then((response) => {
-          this.$q.notify({
-            message: 'Favorito guardado',
-            color: 'positive',
-            icon: 'check'
-          });
-          if (response.data.id) {
-            this.favorit.id = response.data.id;
-          }
-          this.favorit.keys.push({ menuId, uri, name });
-        })
-        .catch((_error) => {
-          this.$q.notify({
-            message: 'El favorito no se pudo guardar',
-            color: 'negative',
-            icon: 'warning'
-          });
+      try {
+        await this.apiSetFavorit(menuId, uri, name);
+        this.$q.notify({
+          message: 'Favorito guardado',
+          color: 'positive',
+          icon: 'check'
         });
-      this.$events.fire('update-favorit');
+        this.favorit.keys.push({ menuId, uri, name });
+        this.$events.fire('update-favorit');
+      } catch (_error) {
+        this.$q.notify({
+          message: 'El favorito no se pudo guardar',
+          color: 'negative',
+          icon: 'warning'
+        });
+      }
     },
     nodeUri(node) {
-      // Si no tiene &vue= se devuelve el estandar
       if (!node.uri.includes('vue=')) {
         const path = `/auth/${node.uri}`.replace('//', '/');
         return { path, query: { _title: node.label } };
       }
-      // recortar desde &vue= hasta el siguiente & o el final de la cadena (si no hay mas &)
       const vue = node.uri.match(/vue=(.*?)(&|$)/)[1];
-      // transformar %2F en /
       const path = `/${vue}`.replace(/%2F/g, '/').replace('//', '/');
       return { path };
     },
@@ -193,9 +291,13 @@ export default {
       this.getMenu(this.level)
         .then((response) => {
           this.loading = false;
-          this.data = response.data.tree;
+          this.data = response.data.tree || [];
+          this.featured = response.data.featured || [];
         })
-        .catch(console.log);
+        .catch((err) => {
+          this.loading = false;
+          console.log(err);
+        });
     },
     refrest(url) {
       const localitation = location.hash;
@@ -212,7 +314,8 @@ export default {
   mounted() {
     if (this.tree) {
       this.data = this.tree;
-      this.favorit = this.favorites;
+      this.favorit = this.favorites?.keys ? this.favorites : { keys: [] };
+      this.loading = false;
     } else {
       this.getData();
     }
@@ -220,8 +323,20 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .capitalize {
   text-transform: capitalize;
+}
+.featured-btn {
+  min-height: 0;
+  height: auto;
+}
+.featured-btn :deep(.q-btn__content) {
+  flex-wrap: nowrap;
+  padding: 3px 10px;
+}
+:deep(.q-item__section--avatar) {
+  min-width: 32px;
+  padding-right: 8px;
 }
 </style>
