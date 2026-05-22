@@ -135,6 +135,7 @@
             :favorites="favorit"
             :is-favorite="isFavorite"
             :mini="mini"
+            @close-drawer="$emit('close-drawer')"
           />
         </q-expansion-item>
 
@@ -188,6 +189,7 @@ function decodeHTMLcached(text) {
 
 export default {
   name: 'HistrixExpansionMenu',
+  emits: ['close-drawer'],
   setup() {
     const { removeFavorit, setFavorit, getFavorites, getMenu } = useApi();
     return {
@@ -300,6 +302,7 @@ export default {
         });
     },
     refrest(url) {
+      this.$emit('close-drawer');
       const localitation = location.hash;
       const queryIndex = localitation.indexOf('?');
       const newLocation = localitation.slice(1, queryIndex);
