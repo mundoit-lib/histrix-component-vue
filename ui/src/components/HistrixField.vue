@@ -233,6 +233,7 @@ import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle, date
 
 import { useVuelidate } from '@vuelidate/core';
 import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
+import { resolveFieldKind } from '../core/fieldType.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 
@@ -1033,44 +1034,10 @@ export default {
       return this.fieldSchema.type;
     },
     histrixType() {
-      let { type } = this;
-
-      if (this.hasOptions) {
-        type = 'q-select';
-      }
-
-      if (this.fieldSchema.histrix_type === 'Radio') {
-        type = 'radio';
-      }
-
-      if (this.fieldSchema.TipoDato) {
-        type = this.fieldSchema.TipoDato;
-      }
-
-      if (type === 'select') {
-        type = 'q-select';
-      }
-
-      if (this.renderHelper) {
-        type = 'object';
-      }
-
-      if (this.fieldSchema.histrix_type === 'File') {
-        type = 'q-file';
-      }
-
-      if (this.fieldSchema.histrix_type === 'Editor') {
-        type = 'q-editor';
-      }
-
-      if (this.fieldSchema.histrix_type === 'Check') {
-        type = 'check';
-      }
-
-      if (this.fieldSchema.histrix_type === 'Flipswitch') {
-        type = 'toggle';
-      }
-      return type;
+      // Decisión pura del tipo de campo extraída a ../core/fieldType.js.
+      // `this.type` (data) es el valor base, igual que el `let { type } = this`
+      // original. El render (map kind -> QComponent) sigue en `fieldComponent`.
+      return resolveFieldKind(this.fieldSchema, this.type);
     },
     style() {
       const style = this.fieldSchema.style || '';

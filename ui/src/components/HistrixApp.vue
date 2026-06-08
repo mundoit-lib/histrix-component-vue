@@ -263,6 +263,8 @@ import ExportForm from './ExportForm.vue';
 
 import { defineLazyComponent } from '../services/asyncComponents.js';
 
+import { resolveScreenKind } from '../core/screenType.js';
+
 export default {
   name: 'HistrixApp',
   setup() {
@@ -454,30 +456,19 @@ export default {
      * select apropiate component to render
      */
     histrixComponent() {
-      const map = {
-        ficha: defineLazyComponent(() => import('./HistrixForm.vue')),
-        fichaing: defineLazyComponent(() => import('./HistrixForm.vue')),
-        cabecera: defineLazyComponent(() => import('./HistrixForm.vue')),
-        calendar: defineLazyComponent(() => import('./HistrixCalendar.vue')),
-        gantt: defineLazyComponent(() => import('./HistrixCalendar.vue')),
-        dashboard: defineLazyComponent(() => import('./HistrixDashboard.vue')),
-        tree: defineLazyComponent(() => import('./HistrixTree.vue')),
-        arbol: defineLazyComponent(() => import('./HistrixTree.vue')),
-        treeView: defineLazyComponent(() => import('./HistrixChart.vue')),
-        map: defineLazyComponent(() => import('./HistrixChart.vue')),
+      // La DECISIÓN (qué tipo de pantalla es) vive en el módulo puro
+      // ../core/screenType.js. Acá sólo queda el RENDER: kind → componente Vue.
+      const kind = resolveScreenKind(this.schema.type);
+      const byKind = {
+        form: defineLazyComponent(() => import('./HistrixForm.vue')),
+        table: defineLazyComponent(() => import('./HistrixTable.vue')),
         chart: defineLazyComponent(() => import('./HistrixChart.vue')),
-        list: defineLazyComponent(() => import('./HistrixList.vue')),
-        consulta: defineLazyComponent(() => import('./HistrixTable.vue')),
-        crud: defineLazyComponent(() => import('./HistrixTable.vue')),
-        abm: defineLazyComponent(() => import('./HistrixTable.vue')),
-        ing: defineLazyComponent(() => import('./HistrixTable.vue')),
-        grid: defineLazyComponent(() => import('./HistrixTable.vue')),
-        liveGrid: defineLazyComponent(() => import('./HistrixTable.vue')),
-        help: defineLazyComponent(() => import('./HistrixTable.vue')),
-        ayuda: defineLazyComponent(() => import('./HistrixTable.vue')),
-        'abm-mini': defineLazyComponent(() => import('./HistrixTable.vue'))
+        tree: defineLazyComponent(() => import('./HistrixTree.vue')),
+        calendar: defineLazyComponent(() => import('./HistrixCalendar.vue')),
+        dashboard: defineLazyComponent(() => import('./HistrixDashboard.vue')),
+        list: defineLazyComponent(() => import('./HistrixList.vue'))
       };
-      return map[this.schema.type] || null;
+      return byKind[kind] || null;
     },
     isPdf() {
       if (this.schema.pdf || this.pdf) {

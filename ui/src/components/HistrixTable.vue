@@ -442,6 +442,7 @@
 
 <script>
 import { evaluateFormula } from '../core/formula.js';
+import { keyFieldNames } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
@@ -927,10 +928,10 @@ export default {
       }
     },
     getKeys(item) {
-      const keyFields = Object.entries(this.schema.fields).filter((field) => field[1].esClave === 'true');
+      // El valor de cada clave puede venir envuelto en `._` (formato XML del backend).
       const keyData = {};
-      for (const key of keyFields) {
-        keyData[key[0]] = item[key[0]]._ ? item[key[0]]._ : item[key[0]];
+      for (const name of keyFieldNames(this.schema.fields)) {
+        keyData[name] = item[name]._ ? item[name]._ : item[name];
       }
       return keyData;
     },

@@ -160,6 +160,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { evaluateFormula } from '../core/formula.js';
+import { extractKeys } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
@@ -498,12 +499,8 @@ export default {
       return `${this.path}?`;
     },
     getKeys(_item) {
-      const keyFields = Object.entries(this.localSchema.fields).filter((field) => field[1].esClave === 'true');
-      const keyData = {};
-      for (const key of keyFields) {
-        keyData[key[0]] = this.localValues[key[0]];
-      }
-      return keyData;
+      // Las claves de este form salen de localValues, no del item recibido.
+      return extractKeys(this.localValues, this.localSchema.fields);
     },
     processData() {
       this.submitting = true;
