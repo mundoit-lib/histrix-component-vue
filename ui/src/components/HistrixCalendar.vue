@@ -240,7 +240,7 @@ export default {
         return this.value;
       },
       set(localValue) {
-        this.$emit('input', localValue);
+        this.$emit('update:modelValue', localValue);
       }
     },
     title() {
@@ -251,7 +251,7 @@ export default {
       return '';
     }
   },
-  emits: ['input'],
+  emits: ['update:modelValue'],
   methods: {
     onTitlebarResized(size) {
       this.titlebarHeight = size.height;

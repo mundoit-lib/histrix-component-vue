@@ -23,7 +23,7 @@ export default {
   },
   props: {
     host: null,
-    value: {}
+    modelValue: {}
   },
   data() {
     return {
@@ -38,14 +38,14 @@ export default {
   computed: {
     localValue: {
       get() {
-        return this.value;
+        return this.modelValue;
       },
       set(localValue) {
-        this.$emit('input', localValue.value);
+        this.$emit('update:modelValue', localValue.value);
       }
     }
   },
-  emits: ['input'],
+  emits: ['update:modelValue'],
   watch: {
     host(newVal, _oldVal) {
       this.getData(newVal);

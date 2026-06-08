@@ -229,10 +229,11 @@
 </template>
 
 <script>
-import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle, date } from 'quasar';
+import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle } from 'quasar';
 
 import { useVuelidate } from '@vuelidate/core';
 import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
+import { backendDateToDisplay, dateSortParts, displayDateToBackend } from '../core/dates.js';
 import { resolveFieldKind } from '../core/fieldType.js';
 import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
@@ -300,7 +301,7 @@ export default {
     HistrixApp: defineLazyComponent(() => import('./HistrixApp.vue')),
     HistrixFileManager: defineLazyComponent(() => import('./widgets/HistrixFileManager.vue'))
   },
-  emits: ['selectOption', 'computed-total', 'fill-fields', 'input', 'field-change'],
+  emits: ['selectOption', 'computed-total', 'fill-fields', 'update:modelValue', 'field-change'],
   methods: {
     showDialog() {
       this.openNew = false;
@@ -502,10 +503,8 @@ export default {
     },
 
     formatDate(props) {
-      const year = props.slice(6, 10);
-      const month = Number.parseInt(props.slice(3, 5)) + 1;
-      const day = props.slice(0, 2);
-      return [year, month, day];
+      // Descomposición para ordenar combos por fecha — extraída a ../core/dates.js.
+      return dateSortParts(props);
     },
     getHelpSchema(_url) {
       if (this.helpPath) {
@@ -983,19 +982,8 @@ export default {
           return this.modelValue;
         }
         if (this.isDate) {
-          if (this.modelValue === '' || !this.modelValue) {
-            return undefined;
-          }
-          if (this.modelValue.length !== 10) {
-            return this.modelValue;
-          }
-          let value = this.modelValue;
-          if (this.modelValue.includes('/')) {
-            value = this.modelValue.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$2/$1/$3');
-          }
-          const fecha = new Date(value);
-          fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
-          return date.formatDate(fecha, this.dateMask);
+          // Conversión backend → display extraída a ../core/dates.js (sin Quasar).
+          return backendDateToDisplay(this.modelValue, this.dateMask);
         }
 
         if (this.histrixType === 'q-select' && this.options) {
@@ -1038,13 +1026,14 @@ export default {
         return this.modelValue;
       },
       set(localValue) {
+        // Vue 3: el v-model del padre escucha `update:modelValue` (antes se
+        // emitía `input`, de Vue 2, y el cambio nunca subía al padre).
         if (this.histrixType === 'q-select') {
           const val = localValue;
           if (localValue?.value) {
-            this.$emit('input', localValue.value);
-            const _val = localValue.value;
+            this.$emit('update:modelValue', localValue.value);
           } else {
-            this.$emit('input', localValue);
+            this.$emit('update:modelValue', localValue);
           }
 
           const option = this.options.find((obj) => obj.value === val);
@@ -1054,22 +1043,15 @@ export default {
           });
         } else {
           if (this.isDate) {
-            let fecha = new Date();
-            if (this.dateMask === 'DD/MM/YYYY') {
-              if (localValue.length !== 10) {
-                this.$emit('input', localValue);
-                this.$emit('field-change', this.row);
-                return;
-              }
-              fecha = new Date(localValue.replace(/(\d{2})\/(\d{2})\/(\d{4})/, '$2/$1/$3'));
-              fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
-            } else {
-              fecha = new Date(localValue);
-              fecha.setMinutes(fecha.getMinutes() + fecha.getTimezoneOffset());
+            // Conversión display → ISO backend extraída a ../core/dates.js.
+            const r = displayDateToBackend(localValue, this.dateMask);
+            this.$emit('update:modelValue', r.value);
+            if (r.passthrough) {
+              this.$emit('field-change', this.row);
+              return;
             }
-            this.$emit('input', date.formatDate(fecha, 'YYYY-MM-DD'));
           } else {
-            this.$emit('input', localValue);
+            this.$emit('update:modelValue', localValue);
           }
         }
 

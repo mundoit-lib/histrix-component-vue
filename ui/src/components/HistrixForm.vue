@@ -368,7 +368,7 @@ export default {
             this.localValues[formula] = result;
           }
         }
-        this.$emit('input', this.localValues);
+        this.$emit('update:modelValue', this.localValues);
       },
       deep: true
     },
@@ -601,7 +601,16 @@ export default {
   validations() {
     return {};
   },
-  emits: ['valueEdit', 'input', 'validity', 'open-popup', 'closepopup', 'process-finish', 'form-saved', 'insert-row'],
+  emits: [
+    'valueEdit',
+    'update:modelValue',
+    'validity',
+    'open-popup',
+    'closepopup',
+    'process-finish',
+    'form-saved',
+    'insert-row'
+  ],
   data() {
     return {
       localValues: {},

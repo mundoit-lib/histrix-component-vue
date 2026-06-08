@@ -516,7 +516,7 @@ export default {
     },
     innerData: {
       handler() {
-        this.$emit('input', this.rawData);
+        this.$emit('update:modelValue', this.rawData);
       },
       deep: true
     }
@@ -663,7 +663,7 @@ export default {
       return this.filterObject(this.schema.fields, (field) => !field.update_fields);
     }
   },
-  emits: ['export', 'print', 'computed-total', 'input', 'closepopup', 'open-popup', 'select-row'],
+  emits: ['export', 'print', 'computed-total', 'update:modelValue', 'closepopup', 'open-popup', 'select-row'],
   methods: {
     setEdit(value) {
       this.editValue = value;
