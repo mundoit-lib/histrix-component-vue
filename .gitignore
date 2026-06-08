@@ -14,3 +14,7 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
+
+# Documentación interna del backend propietario (Histrix) — no versionar en repo
+# público. El resto de docs/ (sobre la librería) sí se versiona.
+docs/07-backend-histrix.md
