@@ -95,7 +95,18 @@ export default {
   },
   methods: {
     downloadFile() {
-      this.downloadAppData(this.path, this.params, this.fileFormat, this.fileName);
+      // El service propaga el error; acá (capa UI) lo mostramos.
+      this.downloadAppData(this.path, this.params, this.fileFormat, this.fileName).catch(() => {
+        this.$q.notify({
+          message: 'Error al descargar el archivo',
+          type: 'negative',
+          textColor: 'white',
+          color: 'negative',
+          icon: 'error',
+          closeBtn: 'close',
+          position: 'top'
+        });
+      });
     }
   }
 };

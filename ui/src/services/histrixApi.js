@@ -1,6 +1,5 @@
 import { useAuth } from '@mundoit-lib/plugin-vue-auth';
 import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
-import { Notify } from 'quasar';
 import config from './config';
 
 export default function useApi() {
@@ -377,9 +376,12 @@ export default function useApi() {
       });
     },
 
+    // Descarga el archivo exportado. El service NO muestra UI: retorna la
+    // promesa y propaga el error para que el componente que llama lo muestre
+    // (antes hacía Notify de Quasar acá y se tragaba el error).
     downloadAppData(path, query, fileFormat, fileName) {
       const url = `${apiUrl()}/export/${fileFormat}/${path}`;
-      axios
+      return axios
         .get(url, {
           params: query,
           responseType: 'blob'
@@ -391,17 +393,8 @@ export default function useApi() {
           fileLink.setAttribute('download', fileName);
           document.body.appendChild(fileLink);
           fileLink.click();
-        })
-        .catch((_err) => {
-          Notify.create({
-            message: 'Error downloading File',
-            type: 'negative',
-            textColor: 'white',
-            color: 'negative',
-            icon: 'error',
-            closeBtn: 'close',
-            position: 'top'
-          });
+          fileLink.remove();
+          window.URL.revokeObjectURL(fileURL);
         });
     },
 
