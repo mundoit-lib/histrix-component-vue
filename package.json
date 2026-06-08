@@ -7,8 +7,7 @@
   "author": "",
   "scripts": {
     "check": "biome check --write --unsafe",
-    "lint": "biome lint --write",
-    "versionUp": "node scripts/publish.js"
+    "lint": "biome lint --write"
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4"
