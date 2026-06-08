@@ -159,6 +159,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
+import { evaluateFormula } from '../core/formula.js';
 import useApi from '../services/histrixApi.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
@@ -408,30 +409,11 @@ export default {
       this.localValues[data.target] = data.value;
     },
     /**
-     * Calculates field Formula
-     * replace formula with field values and evaluates
+     * Calcula la fórmula de un campo (computed_fields) con los valores actuales.
+     * La evaluación vive en core/formula.js (evaluador aritmético seguro, sin eval).
      */
     processOperation(formula) {
-      if (formula) {
-        const operatios = /[+\-\*\/\(\)]/g;
-        const keys = formula.split(operatios);
-        let resultFormula = formula;
-
-        keys.map((key) => {
-          const k = key.trim();
-          if (k && this.localValues[k] !== undefined) {
-            resultFormula = resultFormula.replace(k, this.localValues[k]);
-          }
-        }, this);
-
-        try {
-          // biome-ignore lint/security/noGlobalEval: <explanation>
-          const result = eval(resultFormula);
-          return result;
-        } catch (_error) {
-          // ignore formula evaluation errors
-        }
-      }
+      return evaluateFormula(formula, (k) => this.localValues[k]);
     },
     reset() {
       this.localValues = { ...this.editedItem, ...{} };

@@ -441,6 +441,7 @@
 </template>
 
 <script>
+import { evaluateFormula } from '../core/formula.js';
 import useApi from '../services/histrixApi.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
@@ -807,29 +808,15 @@ export default {
       return `${style};`;
     },
     processOperation(str, row) {
-      let formula = str;
-      const operatios = /[+\-\*\/\(\)]/g;
-      const keys = formula.split(operatios);
-
-      keys.map((key) => {
-        const k = key.trim();
-        let value = row[k];
-        if (typeof row[k] === 'object' || typeof row[k] === 'function') {
-          value = row[k].value !== undefined ? row[k].value : row[k]._;
+      // Evaluador aritmético seguro (core/formula.js). El getValue desnormaliza
+      // las celdas-objeto de la tabla (extrae `.value`/`._`) antes de calcular.
+      return evaluateFormula(str, (k) => {
+        const cell = row[k];
+        if (cell && (typeof cell === 'object' || typeof cell === 'function')) {
+          return cell.value !== undefined ? cell.value : cell._;
         }
-
-        if (k && value !== undefined) {
-          formula = formula.replace(k, value);
-        }
-      }, this);
-
-      try {
-        // biome-ignore lint/security/noGlobalEval: <explanation>
-        const result = eval(formula);
-        return result;
-      } catch (_error) {
-        // intentionally ignored: invalid formula expression
-      }
+        return cell;
+      });
     },
     insertRow() {
       const item = JSON.parse(JSON.stringify(this.schema.values));
