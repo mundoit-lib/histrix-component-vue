@@ -6,25 +6,7 @@
           ><q-avatar text-color="white" icon="folder" round />{{path}}</q-toolbar-title>
       </q-toolbar>
       <q-card-section>
-        <!--
-          <q-item v-for="(file, index) in files" v-bind:key="index">
-
-
-              <q-item-section>
-                  {{file.name}}
-              </q-item-section>
-              <q-item-section>
-                  {{file.size}}
-              </q-item-section>
-              <q-item-section>
-                  {{file.time}}
-              </q-item-section>
-          </q-item>
-          -->
-
-          
-
-      <VueFileAgent 
+      <VueFileAgent
       ref="fileAgent"
       :uploadUrl="uploadUrl" 
       :thumbnailSize="120"
@@ -36,12 +18,6 @@
       helpText="Elija o arrastre aquí sus archivos"
       :model-value="files"
       @update:model-value="files = $event">
-
-<!--      
-    <template v-slot:file-preview-before="{ fileRecord, index }">
-      aaa<span class="file-preview-button">Button</span>
-    </template>
-    -->  
       </VueFileAgent>
           
       </q-card-section>

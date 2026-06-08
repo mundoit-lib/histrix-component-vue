@@ -44,7 +44,7 @@
 
 <script>
 export default {
-  name: 'HistrixConectionSettings',
+  name: 'HistrixConnectionSettings',
   data() {
     return {
       host: null,
@@ -60,13 +60,6 @@ export default {
       localStorage.setItem('host', this.host);
       localStorage.setItem('database', this.database);
       this.$emit('change-database');
-      // this.$router.push('/');
-      /*
-          this.$store.dispatch(AUTH_REQUEST, { username, password, database }).then(() => {
-            this.$router.push('/auth/home')
-           });
-
-      */
     }
   },
   emits: ['change-database']

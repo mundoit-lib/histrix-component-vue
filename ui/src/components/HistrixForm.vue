@@ -1,14 +1,6 @@
 <template>
   <div class="q-pa-sm">
     <slot name="slot-top-form" :props="localValues" />
-    <!--
-     <q-toolbar class="text-primary " borderer _flat>
-      <q-toolbar-title>
-        {{ formTitle }}
-      </q-toolbar-title>
-      <q-space />
-    </q-toolbar>
-    -->
     <q-form @submit="onSubmit" enctype="multipart/form-data">
       <div class="row">
         <div class="col">
@@ -56,13 +48,6 @@
                   :class="fieldClass(field)"
                 >
                   <q-item dense>
-                    <!--
-                    <q-item-section style="text-align:right">
-                      <q-item-label caption>{{
-                        field.label || field.title
-                      }}</q-item-label>
-                    </q-item-section>
-                    -->
                     <q-item-section>
                       <q-item-label
                         v-if="
@@ -165,22 +150,7 @@
             class="bg-positive text-white nojustify-end"
             :loading="submitting"
           />
-
-          <!--
-            <q-btn v-if="editedIndex == -1" label="Grabar" icon="save" @click="insertRow()"  />
-            <q-btn v-if="updateButton" label="guardar"   icon="save" :disable="v$.$invalid" class=" bg-primary text-white nojustify-end" @click="saveForm()" :loading="submitting" />
-            -->
         </span>
-        <!--
-            <q-btn
-              icon="thumb_up"
-              label="CONFIRMAR"
-              class=" bg-secondary text-white nojustify-end"
-              @click="processData()"
-              :loading="submitting"
-              v-if="localSchema.can_process && !inner && !schema.process_next_step && !$attrs.finalStep"
-            />
-            -->
       </div>
     </q-form>
     <slot name="slot-botton-form" :props="localValues" />
@@ -190,8 +160,8 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import useApi from '../services/histrixApi.js';
-import HistrixField from './HistrixField.vue';
 import HistrixCell from './HistrixCell.vue';
+import HistrixField from './HistrixField.vue';
 
 export default {
   name: 'HistrixForm',
@@ -230,33 +200,6 @@ export default {
         this.schema.updateButton
       );
     },
-    //@TODO: Ver de implemtar esto
-    // localValidations() {
-    //   // add formValidationscol
-    //   if (this.localSchema.formValidations) {
-    //     this.localSchema.formValidations.map((validation) => {
-    //       const operatios = /[+\-\*\/\(\)]/g;
-    //       const keys = validation.condition.split(operatios);
-
-    //       keys.map((key) => {
-    //         const k = key.trim();
-    //         if (k && this.localValues[k] !== undefined && validation.condition) {
-    //           if (localValidations[k]) {
-    //             localValidations[k].customValidation = (_value) => !this.processOperation(validation.condition);
-    //           } else {
-    //             localValidations[k] = {
-    //               customValidation: (_value) => !this.processOperation(validation.condition)
-    //             };
-    //           }
-
-    //           this.errorMessages[k] = { customError: validation.message };
-    //         }
-    //       }, this);
-    //     }, this);
-    //   }
-
-    //   return { localValues: localValidations };
-    // },
     formTitle() {
       return this.title || this.schema.title;
     },
@@ -294,7 +237,6 @@ export default {
       return data.length ? data : null;
     },
     postData() {
-      // return this.localValues;
       const data = this.localValues;
       Object.keys(this.localValues).map((item) => {
         if (this.localValues[item] && typeof this.localValues[item] === 'object' && this.localValues[item].name) {
@@ -423,7 +365,6 @@ export default {
             this.localValues[formula] = result;
           }
         }
-        // this.refreshSchema();
         this.$emit('input', this.localValues);
       },
       deep: true
@@ -488,7 +429,7 @@ export default {
           const result = eval(resultFormula);
           return result;
         } catch (_error) {
-          // console.log(formula)
+          // ignore formula evaluation errors
         }
       }
     },
@@ -496,27 +437,10 @@ export default {
       this.localValues = { ...this.editedItem, ...{} };
       this.setDefaultValues();
     },
-    /*
-    Why soud i refresh the schema ?
-    refreshSchema() {
-      var fieldQuerys = {fieldQuerys: this.fieldQuerys};
-      this.getAppSchema(this.url, {...this.query, ...fieldQuerys})
-        .then((response) => {
-          this.localSchema = response.data.schema;
-        })
-        .catch((e) => {
-          this.dialog = true;
-          this.message = 'Error de Carga' + e;
-        });
-    },
-    */
     fillFields(targets) {
-      console.log('fill');
-      console.log(targets);
       for (const target in targets) {
         this.localValues[target] = targets[target];
       }
-      console.log(this.localValues);
     },
     onSelectOption(data) {
       const selectedOptions = data.selected_option;
@@ -548,7 +472,7 @@ export default {
       let xs = 12;
 
       // small forms
-      if (this.visibleColumns.length < 6 /* || (field.innerContainer && !field.options) */) {
+      if (this.visibleColumns.length < 6) {
         const all = 12;
         lg = all;
         md = all;
@@ -571,11 +495,6 @@ export default {
       // Si hidden es verdadero, es editable
       // Si editable es explícitamente falso, no es editable
       if (!field.hidden) return false;
-      // return (this.schema.type != 'fichaing' &&
-      //         this.schema.type != 'cabecera' &&
-      //         field.innerContainer &&
-      //         !field.isSelect &&
-      //         field.editable === false)
 
       // Evaluar condiciones específicas para ciertos tipos
       const isSpecialType = this.schema.type !== 'fichaing' && this.schema.type !== 'cabecera';
@@ -623,7 +542,6 @@ export default {
             closeBtn: 'cerrar',
             position: 'top'
           });
-          // this.$router.back();
           const data = response?.data?.resourceIds || [];
           this.reset();
           this.refresh();
@@ -674,7 +592,7 @@ export default {
             this.$emit('insert-row', this.localValues, response.data.id);
           })
           .catch((e) => {
-            console.log(e);
+            console.error(e);
             this.submitting = false;
             this.$events.fire('histrix-error-http', e);
           });
@@ -686,7 +604,7 @@ export default {
             this.$emit('form-saved', this.localValues, this.editedIndex);
           })
           .catch((e) => {
-            console.log(e);
+            console.error(e);
             this.submitting = false;
           });
       }
@@ -708,7 +626,6 @@ export default {
       this.getAppData(this.xmlUrl(), this.query)
         .then((response) => {
           this.localValues = response.data.data[0];
-          // this.localValues = { ...this.localValues, ...this.parseDateToLocale() };
           this.setDefaultValues();
         })
         .catch((_e) => {
@@ -729,7 +646,6 @@ export default {
         fields: {},
         columns: []
       },
-      // fieldQuerys:{},
       data: [],
       submitting: false,
       currentTab: 'mainTab',

@@ -291,22 +291,6 @@ export default {
       const date = new Date(parts[0], parts[1] - 1, parts[2]);
       return this.dateFormatter.format(date);
     },
-    /*
-    displayClasses(event) {
-      return {
-        [`bg-${event.bgcolor}`]: !this.isCssColor(event.bgcolor),
-        'text-white': !this.isCssColor(event.bgcolor)
-      }
-    },
-    displayStyles (event) {
-      const s = {}
-      if (this.isCssColor(event.bgcolor)) {
-        s['background-color'] = event.bgcolor
-        s.color = colors.luminosity(event.bgcolor) > 0.5 ? 'black' : 'white'
-      }
-      return s
-    },
-    */
     xmlUrl(query) {
       return `${this.schema.api}/app/${this.path}?${query || ''}&_dt=!&start=2020-01-01`;
     },
@@ -320,67 +304,6 @@ export default {
           this.message = 'Error de Carga de Datos';
         });
     },
-    /*
-    getDayEvents2 (dt) {
-        console.log('--')
-      console.log(dt )
-
-       const currentDate = QCalendar.parsed(dt)
-      const events = []
-      for (let i = 0; i < this.data.length; ++i) {
-        let added = false
-        let event = this.data[i]
-
-        event.time = event.start.substring(11, 20)
-        event.date= event.start.substring(0, 10)
-        event.duration = 5
-
-        if (event.date === dt.date) {
-          if (event.time) {
-            if (event.time == dt.time) {
-
-            }
-             if (events.length > 0) {
-              // check for overlapping times
-              const startTime = QCalendar.parsed(event.date + ' ' + event.time)
-              const endTime = QCalendar.addToDate(startTime, { minute: event.duration })
-              for (let j = 0; j < events.length; ++j) {
-                if (events[j].time) {
-                  const startTime2 = QCalendar.parsed(events[j].date + ' ' + events[j].time)
-                  const endTime2 = QCalendar.addToDate(startTime2, { minute: events[j].duration })
-                  if (QCalendar.isBetweenDates(startTime, startTime2, endTime2) || QCalendar.isBetweenDates(endTime, startTime2, endTime2)) {
-                    events[j].side = 'left'
-                    event.side = 'right'
-                    events.push(event)
-                    added = true
-                    break
-                  }
-                }
-              }
-             }
-          }
-          if (!added) {
-            event.side = void 0
-            events.push(event)
-          }
-        } else {
-          // check for overlapping dates
-          const startDate = QCalendar.parsed(event.date)
-          const endDate = QCalendar.addToDate(startDate, { day: event.days })
-          if (startDate) {
-
-              if (QCalendar.isBetweenDates(dt, startDate, endDate)) {
-                events.push(event)
-              added = true
-            }
-          }
-        }
-      }
-      console.log(dt.date)
-      console.log(events)
-      return events
-    },
-    */
     getDayEvents(day) {
       return this.data.filter(
         (item) => item.start.substring(0, 10) === day.date && item.start.substring(11, 20) === day.time

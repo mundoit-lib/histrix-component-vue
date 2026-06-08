@@ -99,8 +99,8 @@
 </template>
 
 <script>
-import { required } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { required } from '@vuelidate/validators';
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';

@@ -50,28 +50,8 @@
         :loading="loading"
         :visible-columns="visibleColumns"
         row-key="_id"
-        :expanded.sync="expanded"
+        v-model:expanded="expanded"
       >
-        <!--
-        <template v-slot:body="props">
-          <td data-th="Name">
-            <div v-bind:style="props.setPadding(props.item)"
-                 :class="props.iconName(props.item)!='done'?'q-pl-lg':''">
-              <q-btn @click="props.toggle(props.item)" v-if="props.iconName(props.item)!='done'"
-                     :icon="props.iconName(props.item)" flat
-                     dense>
-              </q-btn>
-              <span class="q-ml-sm">{{props.item.label}}</span>
-            </div>
-          </td>
-          <td class="text-center">{{props.item.description}}</td>
-          <td class="text-left">
-            <q-chip color="lime-9" v-if="props.item.note" square size="sm" class="text-white">
-              {{props.item.note}}
-            </q-chip>
-          </td>
-        </template>
--->
         <template v-slot:body="props">
           <q-td data-th="Name">
             <div
@@ -115,18 +95,6 @@
               no-caps
             />
           </q-td>
-          <!--
-        </q-tr>
-        <q-tr v-if="props.expand" :props="props">
-          <q-td colspan="100%" class="bg-primary">
-            <HistrixApp
-              name="detail"
-              inner="true"
-              :path="detailData(props, 'detailpath')"
-              :query="detailData(props, 'detailquery')"
-            />
-          </q-td>
-        </q-tr> -->
         </template>
       </q-hierarchy>
     </div>
@@ -155,12 +123,12 @@
 
 <script>
 import useApi from '../services/histrixApi.js';
-import HistrixFilters from './HistrixFilters.vue';
 import HistrixCell from './HistrixCell.vue';
+import HistrixFilters from './HistrixFilters.vue';
 import HistrixForm from './HistrixForm.vue';
 
 export default {
-  name: 'HistrixTable',
+  name: 'HistrixTree',
   setup() {
     const { deleteAppData, getAppData } = useApi();
     return { deleteAppData, getAppData };
@@ -221,18 +189,10 @@ export default {
       return { value: item[col.name], text: item[col.name].value };
     },
     detailData(_props, _attr) {
-      /*
-      const row = props.row;
-      const rowAttr = row["DT_RowAttr"];
-      return rowAttr[attr];
-      */
+      // Hook intencionalmente vacío; se sobreescribe en componentes que lo usan.
     },
     hasDetail(_props) {
-      /*
-      const row = props.row;
-      const attr = row["DT_RowAttr"];
-      return attr.hasOwnProperty("detailpath");
-      */
+      // Hook intencionalmente vacío; se sobreescribe en componentes que lo usan.
     },
     xmlUrl(filterQuery) {
       return `${this.path}?${filterQuery}`;
@@ -258,7 +218,7 @@ export default {
           this.data.splice(index, 1);
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
         });
     },
     addItem() {
@@ -285,17 +245,6 @@ export default {
       }
 
       this.editedItem = Object.assign({}, item2);
-      /*
-      this.$router.push({
-        name: "form",
-        params: {
-          path: this.path,
-          editedItem: item2,
-          schema: this.schema,
-          resources: this.resources
-        }
-      });
-      */
       this.edit = true;
     },
     close() {
@@ -305,15 +254,9 @@ export default {
       }, 300);
     },
     getData(url) {
-      console.log(this.requestQuery);
       this.getAppData(url, this.requestQuery)
         .then((response) => {
           const { data } = response.data;
-          /*
-          data.map(function(element) {
-            element["_id"] = element["DT_RowAttr"]["o"];
-          });
-          */
           this.data = data;
           this.loading = false;
         })

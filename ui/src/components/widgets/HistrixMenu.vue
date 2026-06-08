@@ -20,7 +20,7 @@
       no-connectors
       dense
       accordion
-      :expanded.sync="expanded"
+      v-model:expanded="expanded"
       :filter="filterString"
     >
       <template v-slot:default-header="prop">
@@ -83,7 +83,7 @@ export default {
         this.loading = false;
         this.tree = response.data.tree;
       })
-      .catch(console.log);
+      .catch((e) => console.error(e));
   }
 };
 </script>

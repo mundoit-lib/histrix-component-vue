@@ -37,16 +37,10 @@
 </template>
 
 <script>
+import { BarChart, LineChart, PieChart } from 'echarts/charts';
+import { DatasetComponent, GridComponent, LegendComponent, TitleComponent, TooltipComponent } from 'echarts/components';
 import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
-import { LineChart, PieChart, BarChart } from 'echarts/charts';
-import {
-  TitleComponent,
-  TooltipComponent,
-  LegendComponent,
-  GridComponent,
-  DatasetComponent
-} from 'echarts/components';
 import VChart from 'vue-echarts';
 import useApi from '../services/histrixApi.js';
 import HistrixFilters from './HistrixFilters.vue';
@@ -141,9 +135,6 @@ export default {
     path(_newVal, _oldVal) {
       const url = this.xmlUrl();
       this.getData(url);
-    },
-    chartTypes(newVal, _oldVal) {
-      console.log(newVal.key);
     }
   },
   methods: {
@@ -159,7 +150,7 @@ export default {
         options.title.text = chart.titulo;
         options.title.subtext = chart.subtitulo;
         const label = chart.etiquetas;
-        
+
         if (chart.tipo === 'P') {
           options.xAxis = null;
           options.yAxis = null;
@@ -190,7 +181,7 @@ export default {
     getDataIfIsPie(chart, data) {
       const keysSerie = Object.keys(chart.series);
       let series = [];
-      
+
       if (keysSerie.length >= 1) {
         const tempArray = [];
         for (const key of keysSerie) {

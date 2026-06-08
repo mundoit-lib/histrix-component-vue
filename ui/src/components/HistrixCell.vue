@@ -53,14 +53,7 @@
       </div>
     </q-linear-progress>
     <div v-else v-html="formatedValue" :class="schema.class"></div>
-    <!--
-    <q-btn icon="cloud_upload" v-if="isAwsUploader"
-    @click="$emit('open-popup', {url: awsData.url, title: awsData.title || ''})"
-    >
-      {{awsData.title || ''}}
-    </q-btn>
-       // TODO IMPLEMENT PROGRESS METER
-    -->
+    <!-- TODO IMPLEMENT PROGRESS METER -->
   </div>
 </template>
 
@@ -109,7 +102,6 @@ export default {
     link() {
       if (this.col?.value?.link) {
         const { link } = this.col.value;
-        // var path = (dir || this.dirname(this.path)) + link.file;
         let path = `${link.dir}/${link.file}`;
 
         if (link.dir == null) {

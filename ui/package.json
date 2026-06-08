@@ -136,10 +136,6 @@
       "import": "./src/services/config.js",
       "require": "./src/services/config.js"
     },
-    "./services/histrix-bearer": {
-      "import": "./src/services/histrix-bearer.js",
-      "require": "./src/services/histrix-bearer.js"
-    },
     "./services/histrixApi": {
       "import": "./src/services/histrixApi.js",
       "require": "./src/services/histrixApi.js"

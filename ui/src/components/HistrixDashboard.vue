@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { defineAsyncComponentCompat } from '../services/asyncComponents.js';
+import { defineLazyComponent } from '../services/asyncComponents.js';
 
 export default {
   name: 'HistrixDashboard',
@@ -40,7 +40,7 @@ export default {
     resources: {}
   },
   components: {
-        HistrixApp: defineAsyncComponentCompat(import('./HistrixApp.vue'))
+    HistrixApp: defineLazyComponent(() => import('./HistrixApp.vue'))
   },
   mounted() {
     //

@@ -1,25 +1,5 @@
 <template>
   <div>
-    <!--
-    <picture-input v-if="histrixType === 'q-file'"
-      ref="pictureInput"
-      width="300"
-      height="300"
-      margin="16"
-      accept="image/jpeg,image/png"
-      size="10"
-      buttonClass="button-shadow  rounded-borders	 bg-primary text-white"
-       :removable="true"
-      :custom-strings="{
-
-      change: 'Cambiar Imagen',
-      remove: 'Quitar Imagen',
-      upload: 'Su dispositivo no soporta subir imágenes',
-        drag: 'Arrastre imagen aqui'
-      }"
-      @change="onImageChange">
-    </picture-input>
-    -->
     <div v-if="isRadio">
       <div class="header-check">
         <b>{{ rowSchema.label }}</b>
@@ -96,12 +76,6 @@
         </template>
 
         <template v-slot:before v-if="histrixType === 'q-file'">
-          <!--<q-btn   icon="folder"  @click="fileManager = true" />
-
-          <q-dialog v-model="fileManager">
-            <HistrixFileManager :path="path" />
-          </q-dialog>
-          -->
           <q-avatar size="100px">
             <q-img
               :src="previewUrl"
@@ -187,7 +161,6 @@
             @click.stop="localValue = null"
             class="cursor-pointer"
           />
-          <!-- <q-icon name="create_new_folder" @click.stop v-if="histrixType === 'q-file'" /> -->
 
           <!-- TIME CONTROL POPUP -->
           <q-icon name="access_time" class="cursor-pointer" v-if="isTime">
@@ -202,19 +175,6 @@
               />
             </q-popup-proxy>
           </q-icon>
-          <!--
-              <q-icon name="event" class="cursor-pointer" v-if="isDateTime">
-              <q-popup-proxy ref="qDateProxy" transition-show="scale" transition-hide="scale">
-                <q-date mask="YYYY-MM-DD HH:mm:ss" :locale="dateLocale" v-model="localValue" @input="() => $refs.qDateProxy.hide()" />
-
-              </q-popup-proxy>
-            </q-icon>
-              <q-icon name="access_time" class="cursor-pointer" v-if="isDateTime">
-              <q-popup-proxy ref="timeProxy" transition-show="scale" transition-hide="scale">
-                <q-time mask="YYYY-MM-DD HH:mm:ss" v-model="localValue" @input="() => $refs.timeProxy.hide()" format24h />
-              </q-popup-proxy>
-            </q-icon>
-  -->
           <q-icon name="event" class="cursor-pointer" v-if="isDateTime">
             <q-popup-proxy transition-show="scale" transition-hide="scale">
               <q-date v-model="localValue" mask="YYYY-MM-DD HH:mm:ss">
@@ -269,13 +229,12 @@
 </template>
 
 <script>
-import { date, QInput, QOptionGroup, QFile, QCheckbox, QToggle, QEditor, QSelect } from 'quasar';
+import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle, date } from 'quasar';
 
-import useApi from '../services/histrixApi.js';
-import { decimal, email, maxLength, required, helpers } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
-import { defineAsyncComponentCompat } from '../services/asyncComponents.js';
-// import PictureInput from 'vue-picture-input'
+import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
+import { defineLazyComponent } from '../services/asyncComponents.js';
+import useApi from '../services/histrixApi.js';
 
 export default {
   name: 'HistrixField',
@@ -336,9 +295,8 @@ export default {
     }
   },
   components: {
-    HistrixApp: defineAsyncComponentCompat(import('./HistrixApp.vue')),
-    HistrixFileManager: defineAsyncComponentCompat(import('./widgets/HistrixFileManager.vue'))
-    // PictureInput
+    HistrixApp: defineLazyComponent(() => import('./HistrixApp.vue')),
+    HistrixFileManager: defineLazyComponent(() => import('./widgets/HistrixFileManager.vue'))
   },
   emits: ['selectOption', 'computed-total', 'fill-fields', 'input', 'field-change'],
   methods: {
@@ -445,8 +403,8 @@ export default {
         this.$refs.helperProxy.show();
       }
     },
-    onImageChange(image) {
-      console.log(image);
+    onImageChange(_image) {
+      // Hook intencionalmente vacío; se sobreescribe en componentes que lo usan.
     },
     onFileChange: function (file) {
       this.previewUrl = 'entra';
@@ -659,35 +617,15 @@ export default {
             this.selectRow({ row, schema });
           })
           .catch((_e) => {
-            /*
-            this.dialog = true;
-            this.message = 'Error de Carga de Datos';
-            */
+            // Búsqueda fallida: se ignora silenciosamente y no se selecciona fila.
           });
       }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
-    },
-    /*
-    getFieldSchema: function(query) {
-      if (this.hasOptions) {
-        if (query) {
-                this.getAppSchema(this.innerContainerUrl, query)
-                  .then(response => {
-                    this.options = this.mapOptions(response.data.data);
-                  })
-                  .catch(e => {
-                    console.log(e)
-                  });
-        } else {
-          this.options = this.mapOptions(this.fieldSchema.options);
-        }
-      }
     },
     /**
      * Realiza la peticion de busqueda cuando autocomplete es 'true'
      * @param {*} valueSearch
      * @return Promise<Array>
      */
-
     async searchOptions(valueSearch) {
       try {
         let field = await this.getAppSchema(this.innerContainerUrl);
@@ -704,7 +642,7 @@ export default {
           selected_option: option
         });
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     },
     /**
@@ -741,7 +679,7 @@ export default {
                 });
               })
               .catch((e) => {
-                console.log(e);
+                console.error(e);
               });
           }
         } else {
@@ -806,10 +744,16 @@ export default {
     rules() {
       const validations = {};
       if (this.fieldSchema?.required === 'required' || this.fieldSchema?.required === 'true') {
-        validations.modelValue = { ...validations.modelValue, required: helpers.withMessage('* Valor requerido', required) };
+        validations.modelValue = {
+          ...validations.modelValue,
+          required: helpers.withMessage('* Valor requerido', required)
+        };
       }
       if (this.fieldSchema?.TipoDato === 'decimal' || this.fieldSchema?.histrix_type === 'decimal') {
-        validations.modelValue = { ...validations.modelValue, decimal: helpers.withMessage('* Valor decimal', decimal) };
+        validations.modelValue = {
+          ...validations.modelValue,
+          decimal: helpers.withMessage('* Valor decimal', decimal)
+        };
       }
       if (this.fieldSchema?.TipoDato === 'email' || this.fieldSchema?.histrix_type === 'email') {
         validations.modelValue = { ...validations.modelValue, email: helpers.withMessage('Valor email', email) };
@@ -1050,18 +994,6 @@ export default {
             ['undo', 'redo'],
             ['viewsource']
           ];
-          /*
-          :fonts="{
-            arial: 'Arial',
-            arial_black: 'Arial Black',
-            comic_sans: 'Comic Sans MS',
-            courier_new: 'Courier New',
-            impact: 'Impact',
-            lucida_grande: 'Lucida Grande',
-            times_new_roman: 'Times New Roman',
-            verdana: 'Verdana'
-          }"
-          */
           break;
         case 'q-input':
           component = QInput;
@@ -1070,7 +1002,7 @@ export default {
           component = QSelect;
           break;
         case 'object':
-          component = defineAsyncComponentCompat(() => import('./HistrixApp.vue'))
+          component = defineLazyComponent(() => import('./HistrixApp.vue'));
           break;
         default:
           component = QInput;
@@ -1185,7 +1117,9 @@ export default {
 
         if (this.histrixType === 'q-select' && this.options) {
           if (!this.isMultiple) {
-            return !Number.isNaN(Number(this.modelValue)) && this.modelValue !== '' ? Number(this.modelValue) : this.modelValue;
+            return !Number.isNaN(Number(this.modelValue)) && this.modelValue !== ''
+              ? Number(this.modelValue)
+              : this.modelValue;
             // return this.options.find(obj => obj.value == this.modelValue);
           }
           if (this.modelValue === '' || this.modelValue === null || this.modelValue === undefined) {
@@ -1235,29 +1169,6 @@ export default {
             value: localValue,
             selected_option: option
           });
-          /*
-                        console.log('select');
-
-            if (this.isMultiple) {
-              // this.$emit('input', localValue );
-
-              const values = localValue.map(item =>  {
-                 console.log(item) ;
-                return item.value })
-
-              this.$emit('input', values);
-
-            } else {
-              console.log('PUTO VALOR DE ENTRADA');
-              console.log(localValue)
-              this.$emit('input', localValue);
-
-              const option = this.options.find(obj => obj.value == localValue);
-
-        //      this.$emit('selectOption', { value: localValue, selected_option: option });
-
-            }
-            */
         } else {
           if (this.isDate) {
             let fecha = new Date();

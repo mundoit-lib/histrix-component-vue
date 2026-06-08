@@ -1,7 +1,7 @@
+import { useAuth } from '@mundoit-lib/plugin-vue-auth';
+import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
 import { Notify } from 'quasar';
 import config from './config';
-import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
-import { useAuth } from '@mundoit-lib/plugin-vue-auth';
 
 export default function useApi() {
   /**
@@ -204,7 +204,7 @@ export default function useApi() {
           return resp.data.data[0];
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
           return null;
         });
     },
@@ -335,9 +335,7 @@ export default function useApi() {
       const url = `${apiUrl()}/favorites/`;
       try {
         const response = await getData(url);
-        const keys = Array.isArray(response.data)
-          ? response.data
-          : (response.data?.favorites ?? []);
+        const keys = Array.isArray(response.data) ? response.data : (response.data?.favorites ?? []);
         return { keys };
       } catch (_error) {
         return { keys: [] };
@@ -349,9 +347,7 @@ export default function useApi() {
       let favorites = [];
       try {
         const response = await getData(url);
-        favorites = Array.isArray(response.data)
-          ? response.data
-          : (response.data?.favorites ?? []);
+        favorites = Array.isArray(response.data) ? response.data : (response.data?.favorites ?? []);
       } catch (_error) {
         favorites = [];
       }
@@ -368,9 +364,7 @@ export default function useApi() {
       let favorites = [];
       try {
         const response = await getData(url);
-        favorites = Array.isArray(response.data)
-          ? response.data
-          : (response.data?.favorites ?? []);
+        favorites = Array.isArray(response.data) ? response.data : (response.data?.favorites ?? []);
       } catch (_error) {
         return null;
       }

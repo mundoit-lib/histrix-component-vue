@@ -11,7 +11,7 @@
     <q-table
       v-bind="tableDateProp"
       :columns="schema.columns"
-      :pagination.sync="pagination"
+      v-model:pagination="pagination"
       :_grid="mode == 'grid'"
       :grid="$q.screen.lt.sm"
       flat
@@ -21,7 +21,7 @@
       :visible-columns="visibleColumns"
       row-key="_id"
       class=" fit"
-      :expanded.sync="expanded"
+      v-model:expanded="expanded"
       :hide-bottom="data.length < pagination.rowsPerPage"
       :_hide-top="data.length < pagination.rowsPerPage"
       v-on:closepopup="closePopup"
@@ -441,15 +441,12 @@
 </template>
 
 <script>
-// import qs from 'qs';
-// import Vue from 'vue';
 import useApi from '../services/histrixApi.js';
-import HistrixForm from './HistrixForm.vue';
-import HistrixCell from './HistrixCell.vue';
 import HistrixApp from './HistrixApp.vue';
-import HistrixFilters from './HistrixFilters.vue';
+import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
-import { isVue3 } from 'vue-demi';
+import HistrixFilters from './HistrixFilters.vue';
+import HistrixForm from './HistrixForm.vue';
 
 export default {
   name: 'HistrixTable',
@@ -564,10 +561,8 @@ export default {
       }
     },
     tableDateProp() {
-      return isVue3 ? {
-        rows: this.innerData,
-      } : {
-        data: this.innerData,
+      return {
+        rows: this.innerData
       };
     },
     rawData() {
@@ -706,7 +701,6 @@ export default {
     fieldQuerys(fieldname, row) {
       const fieldQuerys = {};
 
-      //if (this.fieldsWithContainers) {
       const field = this.schema.fields[fieldname];
       const rel = {};
       /**
@@ -794,7 +788,6 @@ export default {
       this.getData();
     },
     rowChange(row) {
-      console.log('CHANGE ROW');
       if (this.schema.type === 'liveGrid') {
         this.updateLiveRow(row);
       }
@@ -835,7 +828,7 @@ export default {
         const result = eval(formula);
         return result;
       } catch (_error) {
-        // console.log(formula)
+        // intentionally ignored: invalid formula expression
       }
     },
     insertRow() {
@@ -867,7 +860,7 @@ export default {
           });
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
         });
     },
     formSaved(_row, index) {
@@ -969,7 +962,7 @@ export default {
               this.refresh();
             })
             .catch((e) => {
-              console.log(e);
+              console.error(e);
             });
         }
       }
@@ -997,23 +990,6 @@ export default {
       }
       this.insertButton = true;
       this.edit = true;
-
-      // if (this.$refs.histrixForm) {
-      // this.$refs.histrixForm.reset()
-      // }
-
-      /*
-      this.$router.push({
-        name: 'form',
-        params: {
-          path: this.path,
-          editedItem: {},
-          newRecord: true,
-          schema: this.schema,
-          resources: this.resources
-        }
-      });
-      */
     },
     editRow(row) {
       // this.editedIndex = this.data.indexOf(row);

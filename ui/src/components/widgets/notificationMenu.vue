@@ -31,7 +31,6 @@
         <q-chip v-if="notificationCount == 0" icon="notifications"
           >Sin Notificaciones</q-chip
         >
-        <!--  </q-expansion-item> -->
       </q-menu>
     </q-avatar>
     <q-tooltip>Notifications</q-tooltip>

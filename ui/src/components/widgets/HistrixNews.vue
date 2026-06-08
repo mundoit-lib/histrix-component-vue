@@ -70,7 +70,7 @@ export default {
           this.data = response.data.data;
         })
         .catch((e) => {
-          console.log(e);
+          console.error(e);
         });
     }
   },

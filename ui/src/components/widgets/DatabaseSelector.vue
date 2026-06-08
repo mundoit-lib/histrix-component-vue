@@ -56,7 +56,6 @@ export default {
       this.getHostDb(host)
         .then((response) => {
           const data = [];
-          console.log(response.data);
           Object.entries(response.data)
             .filter((data) => data[1].hidden !== 'true')
             .map((info) => {

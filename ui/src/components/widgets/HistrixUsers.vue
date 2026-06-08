@@ -32,8 +32,6 @@
 
         <q-item-section>
           <q-item-label>{{ contact.fullname }}</q-item-label>
-          <!--          <q-item-label caption lines="1">{{ contact.email }}</q-item-label>
-          <q-item-label caption lines="1">{{ contact.telefono }}</q-item-label> -->
         </q-item-section>
 
         <q-item-section
@@ -111,7 +109,6 @@ export default {
     }
   },
   mounted() {
-    // this.subscribeWamp();
     this.getUsers().then((response) => {
       this.users = response.data.users;
       this.total = response.data.total;

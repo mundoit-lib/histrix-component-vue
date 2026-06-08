@@ -47,8 +47,8 @@
   </q-card>
 </template>
 <script>
-import { minLength, required, sameAs } from '@vuelidate/validators';
 import { useVuelidate } from '@vuelidate/core';
+import { minLength, required, sameAs } from '@vuelidate/validators';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
 import InputPasswordVue from './InputPassword.vue';
@@ -94,20 +94,7 @@ export default {
       if (this.form.old_password === '') {
         return '';
       }
-      // if (!this.warning && this.warning.suggestions.length) {
       return 'Ingrese contraseña correcta';
-      // }
-
-      // let msg = this.warning.suggestions[0]
-      // switch (msg) {
-      //   case 'Add another word or two. Uncommon words are better.':
-      //   msg = 'Agregue otra palabra. Preferiblemente palabras no comunes.'
-      //   break
-      //   default:
-      //   msg = 'Ingrese contraseña correcta'
-      //   break
-      // }
-      // return msg
     },
     passwordError() {
       return this.v$.form.old_password.$error;
@@ -118,8 +105,8 @@ export default {
     this.form.user_id = this.user.user_id;
   },
   methods: {
-    showScore(score) {
-      console.log('💯', score);
+    showScore(_score) {
+      // Hook intencionalmente vacío; se sobreescribe donde se necesite mostrar el score.
     },
     validateForm() {
       return this.form.new_password === this.form.confirm_password;
@@ -147,10 +134,8 @@ export default {
           this.$emit('close');
         })
         .catch((error) => {
-          // console.log(error.response)
           const resp = error.response.data.responseText || 'Ha ocurrido un error reseteando contraseña';
           this.$q.notify({
-            // message: `${error.response.data.responseText}`,
             message: resp,
             type: 'negative',
             timeout: 8000,

@@ -190,19 +190,6 @@
       </q-splitter>
     </template>
 
-    <!--
-    <q-banner
-      inline-actions
-      class="text-white bg-red"
-      v-if="this.componentType == 'notyet'"
-    >
-      <template v-slot:avatar>
-        <q-icon name="mood_bad" color="white" />
-      </template>
-      type {{ schema.type }} not yet implemented
-    </q-banner>
--->
-
     <q-dialog
       v-model="showIframe"
       full-width
@@ -231,22 +218,6 @@
             <q-btn flat @click="linkDialog = false" round dense icon="close" />
           </q-toolbar>
         </q-header>
-        <!--
-        <q-footer class="bg-black text-white">
-          <q-toolbar inset>
-            <q-toolbar-title>Footer</q-toolbar-title>
-          </q-toolbar>
-        </q-footer>
--->
-        <!--
-        <q-drawer bordered v-model="drawer" :width="200" :breakpoint="600" content-class="bg-grey-3 q-pa-sm">
-          <div v-for="n in 50" :key="n">Drawer {{ n }} / 50</div>
-        </q-drawer>
-
-        <q-drawer side="right" bordered v-model="drawerR" :width="200" :breakpoint="300" content-class="bg-grey-3 q-pa-sm">
-          <div v-for="n in 50" :key="n">Drawer {{ n }} / 50</div>
-        </q-drawer>
--->
         <q-page-container>
           <q-page>
             <HistrixApp
@@ -282,22 +253,6 @@
         </q-card-section>
       </q-card>
     </q-dialog>
-    <!--
-    <q-footer v-if="pdf">
-      <q-toolbar v-if="pdf">
-        <q-toolbar-title>
-          <q-btn
-            icon="list"
-            label="Consulta"
-            class="bg-secondary text-white"
-            @click="togglePdf()"
-            v-if="pdf"
-          />
-          <q-btn icon="thumb_up" label="procesar " class=" bg-secondary text-white nojustify-end" @click="$refs.main.processData()" v-if="schema.can_process" />
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-footer>
-    -->
   </div>
 </template>
 
@@ -306,7 +261,7 @@ import useApi from '../services/histrixApi.js';
 
 import ExportForm from './ExportForm.vue';
 
-import { defineAsyncComponentCompat } from '../services/asyncComponents.js';
+import { defineLazyComponent } from '../services/asyncComponents.js';
 
 export default {
   name: 'HistrixApp',
@@ -342,9 +297,6 @@ export default {
   },
   components: {
     ExportForm
-  },
-  beforeMount() {
-    //
   },
   mounted() {
     this.getSchema();
@@ -486,9 +438,6 @@ export default {
       return this.hasDetail && !this.schema.inline_detail;
     },
     //TODO: cambiar
-    // componentFile() {
-    //   return httpVueLoader(this.vueUrl);
-    // },
     /**
      * database id
      */
@@ -506,27 +455,27 @@ export default {
      */
     histrixComponent() {
       const map = {
-        ficha: defineAsyncComponentCompat(import('./HistrixForm.vue')),
-        fichaing: defineAsyncComponentCompat(import('./HistrixForm.vue')),
-        cabecera: defineAsyncComponentCompat(import('./HistrixForm.vue')),
-        calendar: defineAsyncComponentCompat(import('./HistrixCalendar.vue')),
-        gantt: defineAsyncComponentCompat(import('./HistrixCalendar.vue')),
-        dashboard: defineAsyncComponentCompat(import('./HistrixDashboard.vue')),
-        tree: defineAsyncComponentCompat(import('./HistrixTree.vue')),
-        arbol: defineAsyncComponentCompat(import('./HistrixTree.vue')),
-        treeView: defineAsyncComponentCompat(import('./HistrixChart.vue')),
-        map: defineAsyncComponentCompat(import('./HistrixChart.vue')),
-        chart: defineAsyncComponentCompat(import('./HistrixChart.vue')),
-        list: defineAsyncComponentCompat(import('./HistrixList.vue')),
-        consulta: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        crud: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        abm: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        ing: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        grid: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        liveGrid: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        help: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        ayuda: defineAsyncComponentCompat(import('./HistrixTable.vue')),
-        'abm-mini': defineAsyncComponentCompat(import('./HistrixTable.vue'))
+        ficha: defineLazyComponent(() => import('./HistrixForm.vue')),
+        fichaing: defineLazyComponent(() => import('./HistrixForm.vue')),
+        cabecera: defineLazyComponent(() => import('./HistrixForm.vue')),
+        calendar: defineLazyComponent(() => import('./HistrixCalendar.vue')),
+        gantt: defineLazyComponent(() => import('./HistrixCalendar.vue')),
+        dashboard: defineLazyComponent(() => import('./HistrixDashboard.vue')),
+        tree: defineLazyComponent(() => import('./HistrixTree.vue')),
+        arbol: defineLazyComponent(() => import('./HistrixTree.vue')),
+        treeView: defineLazyComponent(() => import('./HistrixChart.vue')),
+        map: defineLazyComponent(() => import('./HistrixChart.vue')),
+        chart: defineLazyComponent(() => import('./HistrixChart.vue')),
+        list: defineLazyComponent(() => import('./HistrixList.vue')),
+        consulta: defineLazyComponent(() => import('./HistrixTable.vue')),
+        crud: defineLazyComponent(() => import('./HistrixTable.vue')),
+        abm: defineLazyComponent(() => import('./HistrixTable.vue')),
+        ing: defineLazyComponent(() => import('./HistrixTable.vue')),
+        grid: defineLazyComponent(() => import('./HistrixTable.vue')),
+        liveGrid: defineLazyComponent(() => import('./HistrixTable.vue')),
+        help: defineLazyComponent(() => import('./HistrixTable.vue')),
+        ayuda: defineLazyComponent(() => import('./HistrixTable.vue')),
+        'abm-mini': defineLazyComponent(() => import('./HistrixTable.vue'))
       };
       return map[this.schema.type] || null;
     },
@@ -559,36 +508,27 @@ export default {
     },
     subscribeWamp() {
       if (this.$wamp) {
-        this.$wamp
-          .subscribe(
-            this.hash,
-            (_args, kwArgs, details) => {
-              // component context is available
-              console.log('args');
-              console.log(kwArgs);
-              console.log('details');
-              console.log(details);
-              this.$q.notify({
-                message: 'Xml utilizado',
-                type: 'info',
-                textColor: 'white',
-                color: 'info',
-                icon: 'info',
-                closeBtn: 'cerrar',
-                position: 'top'
-              });
-            },
-            {
-              acknowledge: true // option needed for promise, automatically added
-            }
-          )
-          .then((s) => {
-            console.log('AutobahnJS Subscription object: ', s);
-          });
+        this.$wamp.subscribe(
+          this.hash,
+          (_args, _kwArgs, _details) => {
+            // component context is available
+            this.$q.notify({
+              message: 'Xml utilizado',
+              type: 'info',
+              textColor: 'white',
+              color: 'info',
+              icon: 'info',
+              closeBtn: 'cerrar',
+              position: 'top'
+            });
+          },
+          {
+            acknowledge: true // option needed for promise, automatically added
+          }
+        );
       }
     },
     refreshMaster(data) {
-      //this.$refs.main.refresh()
       this.$emit('process-finish', data);
       if (this.redirectPage) {
         this.$router.push(this.redirectPage);
@@ -652,12 +592,10 @@ export default {
     getDialogTitle(data) {
       const title = [];
       const schema = this.schema;
-      console.log(data);
       const _attrs = data.DT_RowAttr;
       Object.entries(data).map((value) => {
         const field = schema.fields[value[0]];
         if (value[1] !== '' && field && !field.hidden && field.histrix_type === 'Varchar') {
-          console.log(field);
           const val = value[1].replace(/<[^>]*>?/gm, '');
           title.push(val);
         }
@@ -674,7 +612,6 @@ export default {
 
       const title = this.getDialogTitle(data.row);
       const link = data.link;
-      //var path = (dir || this.dirname(this.path)) + link.file;
       let path = `${link.dir}/${link.file}`;
 
       if (link.dir == null) {
@@ -705,7 +642,7 @@ export default {
           this.pdfSrc = window.URL.createObjectURL(blob);
         })
         .catch((err) => {
-          console.log(err);
+          console.error(err);
           this.$q.notify({
             message: 'Error downloading PDF',
             type: 'negative',
@@ -744,7 +681,6 @@ export default {
           }
 
           this.schema.api = this.apiUrl;
-          // this.$wamp.publish(this.hash, [], { xml: this.path })
           this.subscribeWamp();
         })
         .catch((e) => {
@@ -794,7 +730,6 @@ export default {
       step: 1, // default initial Step
       validity: true,
       showPdfPopup: false,
-      // pdf: false, // ya estaba en props deje ahi default false
       pdfSrc: '',
       show: true,
       message: null,
@@ -809,7 +744,6 @@ export default {
       innerQuery: '', //  inner link
       resources: null,
       localValue: {},
-      // splitterModel: 40,
       isDetailOpened: false,
       schema: {
         type: '',
