@@ -1,15 +1,16 @@
 {
   "name": "@mundoit-lib/histrix-component-vue",
-  "version": "0.0.199",
+  "version": "0.1.0",
   "author": "Luis M. Melgratti <luis@mundoit.com.ar>",
-  "description": "Histrix Vue client components",
+  "description": "Histrix Vue 3 client components (Quasar 2)",
   "license": "MIT",
-  "module": "dist/index.esm.js",
-  "main": "dist/index.common.js",
+  "main": "src/index.esm.js",
+  "module": "src/index.esm.js",
+  "files": ["src"],
   "exports": {
     ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.common.js"
+      "import": "./src/index.esm.js",
+      "require": "./src/index.esm.js"
     },
     "./plugin": {
       "import": "./src/index.js",
@@ -58,6 +59,10 @@
     "./components/HistrixList": {
       "import": "./src/components/HistrixList.vue",
       "require": "./src/components/HistrixList.vue"
+    },
+    "./components/HistrixLoginSplit": {
+      "import": "./src/components/HistrixLoginSplit.vue",
+      "require": "./src/components/HistrixLoginSplit.vue"
     },
     "./components/HistrixPasswordChange": {
       "import": "./src/components/HistrixPasswordChange.vue",
@@ -138,78 +143,26 @@
     "./services/histrixApi": {
       "import": "./src/services/histrixApi.js",
       "require": "./src/services/histrixApi.js"
-    },
-    "./style": "./dist/index.css"
+    }
   },
   "scripts": {
-    "dev": "cd dev && yarn dev && cd ..",
-    "dev:umd": "yarn build && node build/script.open-umd.js",
-    "dev:ssr": "cd dev && yarn 'dev:ssr' && cd ..",
-    "dev:ios": "cd dev && yarn 'dev:ios' && cd ..",
-    "dev:android": "cd dev && yarn 'dev:android' && cd ..",
-    "dev:electron": "cd dev && yarn 'dev:electron' && cd ..",
-    "build": "node build/index.js",
-    "build:js": "node build/script.javascript.js",
-    "build:css": "node build/script.css.js"
+    "dev": "cd dev && pnpm dev"
   },
   "repository": {
     "type": "git",
     "url": "https://github.com/mundoit-lib/histrix-component-vue"
   },
-  "bugs": "",
-  "homepage": "",
-  "devDependencies": {
-    "@rollup/plugin-buble": "^0.21.3",
-    "@rollup/plugin-commonjs": "^22.0.1",
-    "@rollup/plugin-json": "^4.1.0",
-    "@rollup/plugin-node-resolve": "^13.3.0",
-    "@types/qs": "^6.9.7",
-    "autoprefixer": "^10.4.7",
-    "chalk": "^4.1.2",
-    "cssnano": "^5.1.12",
-    "fs-extra": "^10.1.0",
-    "open": "^8.4.0",
-    "postcss": "^8.4.14",
-    "quasar": "^1.19.4",
-    "rimraf": "^3.0.2",
-    "rollup": "^2.77.0",
-    "rollup-plugin-scss": "^3.0.0",
-    "rollup-plugin-vue": "^6.0.0",
-    "rtlcss": "^3.5.0",
-    "sass": "1.53.0",
-    "uglify-js": "^3.16.2",
-    "zlib": "^1.0.5"
-  },
-  "browserslist": [
-    "last 10 Chrome versions",
-    "last 10 Firefox versions",
-    "last 4 Edge versions",
-    "last 7 Safari versions",
-    "last 8 Android versions",
-    "last 8 ChromeAndroid versions",
-    "last 8 FirefoxAndroid versions",
-    "last 10 iOS versions",
-    "last 5 Opera versions"
-  ],
   "dependencies": {
     "@quasar/quasar-ui-qcalendar": "^3.4.1",
     "echarts": "^5.6.0",
-    "vue-demi": "^0.13.11",
-    "vue": "^2.6.11",
-    "vue-echarts": "^7.0.3",
-    "vue-picture-input": "^2.4.0"
-  },
-  "peerDependenciesMeta": {
-    "@vue/composition-api": {
-      "optional": true
-    }
+    "vue-echarts": "^7.0.3"
   },
   "peerDependencies": {
     "@mundoit-lib/plugin-vue-auth": "*",
     "@mundoit-lib/plugin-vue-axios": "*",
     "@vuelidate/core": ">=2.0.0 <3.0.0",
     "@vuelidate/validators": ">=2.0.0 <3.0.0",
-    "@vue/composition-api": "^1.0.0-rc.1",
-    "vue": "^2.0.0 || ^3.0.0"
+    "quasar": "^2.0.0",
+    "vue": "^3.2.0"
   }
 }

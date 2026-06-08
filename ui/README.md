@@ -1,132 +1,71 @@
-# Component HistrixClient
+# @mundoit-lib/histrix-component-vue
 
-[![npm](https://img.shields.io/npm/v/quasar-ui-histrix-client.svg?label=quasar-ui-histrix-client)](https://www.npmjs.com/package/quasar-ui-histrix-client)
-[![npm](https://img.shields.io/npm/dt/quasar-ui-histrix-client.svg)](https://www.npmjs.com/package/quasar-ui-histrix-client)
+[![npm](https://img.shields.io/npm/v/@mundoit-lib/histrix-component-vue.svg?label=@mundoit-lib/histrix-component-vue)](https://www.npmjs.com/package/@mundoit-lib/histrix-component-vue)
 
-# Component HistrixClient
-> Short description of the component
+Componentes **Vue 3 + Quasar 2** para construir clientes del backend **Histrix** (ERP declarativo, schema-driven). El componente raíz `<HistrixApp :path="..."/>` pide el schema de un XML de Histrix al backend y monta la pantalla completa (tabla, formulario, calendario, dashboard, árbol, gráfico) sin programarla.
 
+> **v0.1.0+ requiere Vue 3 nativo y Quasar 2.** Apps Vue 2: usar la serie `0.0.x`.
 
-# Usage
+## Instalación
 
-## Quasar CLI project
+```bash
+npm install @mundoit-lib/histrix-component-vue
+```
 
-Install the [App Extension](../app-extension).
+**Distribución source-only**: el paquete contiene los `.vue` sin compilar; los compila el bundler de tu app (Vite / Quasar CLI / webpack).
 
-**OR**:
+Peers requeridos en tu app:
 
-Create and register a boot file:
+```bash
+npm install vue@^3 quasar@^2 @vuelidate/core @vuelidate/validators \
+  @mundoit-lib/plugin-vue-axios @mundoit-lib/plugin-vue-auth
+```
+
+## Uso
 
 ```js
-import Vue from 'vue'
-import Plugin from 'quasar-ui-histrix-client'
-import 'quasar-ui-histrix-client/dist/index.css'
+// Como plugin (registra todos los componentes globalmente):
+import HistrixPlugin from '@mundoit-lib/histrix-component-vue/plugin';
+app.use(HistrixPlugin);
 
-Vue.use(Plugin)
+// Named imports:
+import { HistrixApp, HistrixTable, config } from '@mundoit-lib/histrix-component-vue';
+
+// Por subpath (tree-shaking manual):
+import HistrixForm from '@mundoit-lib/histrix-component-vue/components/HistrixForm';
+import useApi from '@mundoit-lib/histrix-component-vue/services/histrixApi';
 ```
 
-**OR**:
-
-```html
-<style src="quasar-ui-histrix-client/dist/index.css"></style>
-
-<script>
-import { Component as HistrixClient } from 'quasar-ui-histrix-client'
-
-export default {
-  components: {
-    HistrixClient
-  }
-}
-</script>
-```
-
-## Vue CLI project
+Configuración runtime (host del backend, base, credenciales OAuth):
 
 ```js
-import Vue from 'vue'
-import Plugin from 'quasar-ui-histrix-client'
-import 'quasar-ui-histrix-client/dist/index.css'
+import { config } from '@mundoit-lib/histrix-component-vue';
 
-Vue.use(Plugin)
+config.fixApi = 'https://mi-backend-histrix.com';
+config.db = 'micliente';
+config.clientId = '...';
+config.clientSecret = '...';
 ```
 
-**OR**:
-
-```html
-<style src="quasar-ui-histrix-client/dist/index.css"></style>
-
-<script>
-import { Component as HistrixClient } from 'quasar-ui-histrix-client'
-
-export default {
-  components: {
-    HistrixClient
-  }
-}
-</script>
+```vue
+<!-- Montar cualquier pantalla declarada en un XML de Histrix: -->
+<HistrixApp path="ventas/qry/listado.xml" :query="{ id: 123 }" />
 ```
 
-## UMD variant
+## Desarrollo
 
-Exports `window.histrixClient`.
+El playground vive en `dev/` (Vite + Quasar 2, consume esta librería vía `link:..`). Todo el repo usa **pnpm**:
 
-Add the following tag(s) after the Quasar ones:
-
-```html
-<head>
-  <!-- AFTER the Quasar stylesheet tags: -->
-  <link href="https://cdn.jsdelivr.net/npm/quasar-ui-histrix-client/dist/index.min.css" rel="stylesheet" type="text/css">
-</head>
-<body>
-  <!-- at end of body, AFTER Quasar script(s): -->
-  <script src="https://cdn.jsdelivr.net/npm/quasar-ui-histrix-client/dist/index.umd.min.js"></script>
-</body>
-```
-If you need the RTL variant of the CSS, then go for the following (instead of the above stylesheet link):
-```html
-<link href="https://cdn.jsdelivr.net/npm/quasar-ui-histrix-client/dist/index.rtl.min.css" rel="stylesheet" type="text/css">
-```
-
-# Setup
 ```bash
-$ yarn
+pnpm install           # deps de la librería (en ui/)
+cd dev
+pnpm install
+cp .env.example .env   # completar host/db/credenciales
+pnpm dev
 ```
 
-# Developing
-```bash
-# start dev in SPA mode
-$ yarn dev
+La documentación interna completa (arquitectura, contrato del schema, trampas del backend) está en el [repo](https://github.com/mundoit-lib/histrix-component-vue), carpeta `docs/`.
 
-# start dev in UMD mode
-$ yarn dev:umd
+## Licencia
 
-# start dev in SSR mode
-$ yarn dev:ssr
-
-# start dev in Cordova iOS mode
-$ yarn dev:ios
-
-# start dev in Cordova Android mode
-$ yarn dev:android
-
-# start dev in Electron mode
-$ yarn dev:electron
-```
-
-# Building package
-```bash
-$ yarn build
-```
-
-# Adding Testing Components
-in the `ui/dev/src/pages` you can add Vue files to test your component/directive. When using `yarn dev` to build the UI, any pages in that location will automatically be picked up by dynamic routing and added to the test page.
-
-# Adding Assets
-If you have a component that has assets, like language or icon-sets, you will need to provide these for UMD. In the `ui/build/script.javascript.js` file, you will find a couple of commented out commands that call `addAssets`. Uncomment what you need and add your assets to have them be built and put into the `ui/dist` folder.
-
-# Donate
-If you appreciate the work that went into this, please consider [donating to Quasar](https://donate.quasar.dev).
-
-# License
 MIT (c) Luis M. Melgratti <luis@mundoit.com.ar>

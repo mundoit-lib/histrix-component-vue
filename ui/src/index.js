@@ -11,13 +11,17 @@ import HistrixField from './components/HistrixField.vue';
 import HistrixFilters from './components/HistrixFilters.vue';
 import HistrixForm from './components/HistrixForm.vue';
 import HistrixList from './components/HistrixList.vue';
+import HistrixLoginSplit from './components/HistrixLoginSplit.vue';
 import HistrixPasswordChange from './components/HistrixPasswordChange.vue';
 import HistrixTable from './components/HistrixTable.vue';
 import HistrixTree from './components/HistrixTree.vue';
+import InputPassword from './components/InputPassword.vue';
 import LoginForm from './components/LoginForm.vue';
 import DatabaseSelector from './components/widgets/DatabaseSelector.vue';
 import FavoritItems from './components/widgets/FavoritItems.vue';
+import HistrixConnectionSettings from './components/widgets/HistrixConnectionSettings.vue';
 import HistrixExpansionMenu from './components/widgets/HistrixExpansionMenu.vue';
+import HistrixFileManager from './components/widgets/HistrixFileManager.vue';
 import HistrixLog from './components/widgets/HistrixLog.vue';
 import HistrixMenu from './components/widgets/HistrixMenu.vue';
 import HistrixNews from './components/widgets/HistrixNews.vue';
@@ -26,90 +30,107 @@ import notificationMenu from './components/widgets/notificationMenu.vue';
 import profileMenu from './components/widgets/profileMenu.vue';
 import profileMenuItems from './components/widgets/profileMenuItems.vue';
 import config from './services/config';
-// import HistrixApi from './services/histrixApi.js';
 
-export {
-  version,
-  // HistrixApi,
+const components = [
   ExportForm,
+  FormLoginNotStyles,
   HistrixApp,
   HistrixCalendar,
   HistrixCell,
   HistrixChart,
+  HistrixConnectionSettings,
   HistrixDashboard,
+  HistrixExpansionMenu,
   HistrixField,
+  HistrixFileManager,
   HistrixFilters,
   HistrixForm,
   HistrixList,
-  HistrixTable,
-  HistrixTree,
-  LoginForm,
-  HistrixPasswordChange,
-  DatabaseSelector,
-  HistrixExpansionMenu,
   HistrixLog,
+  HistrixLoginSplit,
   HistrixMenu,
   HistrixNews,
+  HistrixPasswordChange,
+  HistrixTable,
+  HistrixTree,
   HistrixUsers,
+  InputPassword,
+  LoginForm,
+  DatabaseSelector,
+  FavoritItems,
+  notificationMenu,
+  profileMenu,
+  profileMenuItems
+];
+
+export {
+  version,
+  ExportForm,
+  FormLoginNotStyles,
+  HistrixApp,
+  HistrixCalendar,
+  HistrixCell,
+  HistrixChart,
+  HistrixConnectionSettings,
+  HistrixDashboard,
+  HistrixExpansionMenu,
+  HistrixField,
+  HistrixFileManager,
+  HistrixFilters,
+  HistrixForm,
+  HistrixList,
+  HistrixLog,
+  HistrixLoginSplit,
+  HistrixMenu,
+  HistrixNews,
+  HistrixPasswordChange,
+  HistrixTable,
+  HistrixTree,
+  HistrixUsers,
+  InputPassword,
+  LoginForm,
+  DatabaseSelector,
+  FavoritItems,
   notificationMenu,
   profileMenu,
   profileMenuItems,
-  FavoritItems,
-  FormLoginNotStyles
+  config
 };
 
 export default {
   version,
   ExportForm,
+  FormLoginNotStyles,
   HistrixApp,
   HistrixCalendar,
   HistrixCell,
   HistrixChart,
+  HistrixConnectionSettings,
   HistrixDashboard,
+  HistrixExpansionMenu,
   HistrixField,
+  HistrixFileManager,
   HistrixFilters,
   HistrixForm,
   HistrixList,
-  HistrixTable,
-  HistrixTree,
-  LoginForm,
-  HistrixPasswordChange,
-  DatabaseSelector,
-  HistrixExpansionMenu,
   HistrixLog,
+  HistrixLoginSplit,
   HistrixMenu,
   HistrixNews,
+  HistrixPasswordChange,
+  HistrixTable,
+  HistrixTree,
   HistrixUsers,
+  InputPassword,
+  LoginForm,
+  DatabaseSelector,
+  FavoritItems,
   notificationMenu,
   profileMenu,
-  FavoritItems,
   profileMenuItems,
-  FormLoginNotStyles,
-  install(Vue, _options) {
-    Vue.component(ExportForm.name, ExportForm);
-    Vue.component(HistrixApp.name, HistrixApp);
-    Vue.component(HistrixCalendar.name, HistrixCalendar);
-    Vue.component(HistrixCell.name, HistrixCell);
-    Vue.component(HistrixChart.name, HistrixChart);
-    Vue.component(HistrixDashboard.name, HistrixDashboard);
-    Vue.component(HistrixField.name, HistrixField);
-    Vue.component(HistrixFilters.name, HistrixFilters);
-    Vue.component(HistrixForm.name, HistrixForm);
-    Vue.component(HistrixList.name, HistrixList);
-    Vue.component(HistrixTable.name, HistrixTable);
-    Vue.component(HistrixTree.name, HistrixTree);
-    Vue.component(HistrixPasswordChange.name, HistrixPasswordChange);
-    Vue.component(LoginForm.name, LoginForm);
-    Vue.component(DatabaseSelector.name, DatabaseSelector);
-    Vue.component(HistrixExpansionMenu.name, HistrixExpansionMenu);
-    Vue.component(HistrixLog.name, HistrixLog);
-    Vue.component(HistrixMenu.name, HistrixMenu);
-    Vue.component(HistrixNews.name, HistrixNews);
-    Vue.component(HistrixUsers.name, HistrixUsers);
-    Vue.component(notificationMenu.name, notificationMenu);
-    Vue.component(profileMenu.name, profileMenu);
-    Vue.component(profileMenuItems.name, profileMenuItems);
-    Vue.component(FavoritItems.name, FavoritItems);
-    Vue.component(FormLoginNotStyles.name, FormLoginNotStyles);
+  install(app, _options) {
+    for (const component of components) {
+      app.component(component.name, component);
+    }
   }
 };
