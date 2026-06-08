@@ -48,11 +48,13 @@ histrix-quasar-client/
         │   ├── fieldVisibility.js    # editable / columnas visibles
         │   ├── dates.js              # conversión dd/mm/yyyy ↔ ISO (sin Quasar)
         │   └── *.test.js             # tests colocalizados (Vitest, 119 en total)
-        └── services/            # Cliente API + helpers (ver 04-servicios.md)
-            ├── histrixApi.js         # useApi(): todos los endpoints (agnóstico de Quasar)
-            ├── config.js             # Config runtime (Proxy sobre process.env)
-            ├── histrix-bearer.js     # Driver bearer para plugin-vue-auth
-            └── asyncComponents.js    # defineLazyComponent (async + loading/error states)
+        ├── services/            # Cliente API + helpers (ver 04-servicios.md)
+        │   ├── histrixApi.js         # useApi(): todos los endpoints (agnóstico de Quasar)
+        │   ├── config.js             # Config runtime (Proxy sobre process.env)
+        │   ├── histrix-bearer.js     # Driver bearer para plugin-vue-auth
+        │   └── asyncComponents.js    # defineLazyComponent (async + loading/error states)
+        └── utils/               # Helpers puros sin Vue (compartidos por componentes)
+            └── color.js              # shade(): oscurecer/aclarar un hex (gradiente del panel auth)
 ```
 
 ## Notas importantes

@@ -87,6 +87,14 @@ export default function useApi() {
       return axios.post(`${apiUrl()}/registration/`, form);
     },
 
+    // Solicitar/confirmar reseteo de contraseña. Endpoint a nivel host (no
+    // scopeado por /api/db/{db}); la base viaja en el body (`db`). Se usa tanto
+    // para pedir el mail de recupero ({ email, recover, db }) como para fijar la
+    // nueva contraseña con token ({ email, password, confirm_password, token, db }).
+    resetPassword(form) {
+      return axios.post(`${host()}/api/resetpassword/`, form);
+    },
+
     updateUser(form, userId) {
       return axios
         .put(`${apiUrl()}/app/users/current_user_form.xml`, {

@@ -1,7 +1,8 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <!-- En /login no mostramos el chrome del playground: el login es full-screen. -->
-    <q-header v-if="!isLogin" elevated class="bg-primary text-white">
+    <!-- En las pantallas de auth (login/registro/recupero/reset) no mostramos el
+         chrome del playground: son full-screen (meta.fullscreen en el router). -->
+    <q-header v-if="!isAuthScreen" elevated class="bg-primary text-white">
       <q-toolbar>
         <q-btn
           v-if="loggedIn"
@@ -42,7 +43,7 @@
     </q-header>
 
     <q-drawer
-      v-if="loggedIn && !isLogin"
+      v-if="loggedIn && !isAuthScreen"
       v-model="drawer"
       show-if-above
       bordered
@@ -82,7 +83,8 @@ export default {
     const route = useRoute();
     const { proxy } = getCurrentInstance();
 
-    const isLogin = computed(() => route.name === 'login');
+    // Pantallas full-screen sin chrome (login/registro/recupero/reset).
+    const isAuthScreen = computed(() => route.meta.fullscreen === true);
 
     const drawer = ref(false);
     const loggedIn = ref(!!localStorage.getItem('user') || !!localStorage.getItem('accessToken'));
@@ -116,7 +118,7 @@ export default {
       proxy.$events?.off('loaded-user', refresh);
     });
 
-    return { drawer, loggedIn, isLogin, dbLabel, logout, refresh };
+    return { drawer, loggedIn, isAuthScreen, dbLabel, logout, refresh };
   }
 };
 </script>

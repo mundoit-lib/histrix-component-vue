@@ -9,10 +9,13 @@ import HistrixChart from './components/HistrixChart.vue';
 import HistrixDashboard from './components/HistrixDashboard.vue';
 import HistrixField from './components/HistrixField.vue';
 import HistrixFilters from './components/HistrixFilters.vue';
+import HistrixForgotPasswordSplit from './components/HistrixForgotPasswordSplit.vue';
 import HistrixForm from './components/HistrixForm.vue';
 import HistrixList from './components/HistrixList.vue';
 import HistrixLoginSplit from './components/HistrixLoginSplit.vue';
 import HistrixPasswordChange from './components/HistrixPasswordChange.vue';
+import HistrixRegisterSplit from './components/HistrixRegisterSplit.vue';
+import HistrixResetPasswordSplit from './components/HistrixResetPasswordSplit.vue';
 import HistrixTable from './components/HistrixTable.vue';
 import HistrixTree from './components/HistrixTree.vue';
 import InputPassword from './components/InputPassword.vue';
@@ -44,6 +47,7 @@ const components = [
   HistrixField,
   HistrixFileManager,
   HistrixFilters,
+  HistrixForgotPasswordSplit,
   HistrixForm,
   HistrixList,
   HistrixLog,
@@ -51,6 +55,8 @@ const components = [
   HistrixMenu,
   HistrixNews,
   HistrixPasswordChange,
+  HistrixRegisterSplit,
+  HistrixResetPasswordSplit,
   HistrixTable,
   HistrixTree,
   HistrixUsers,
@@ -77,6 +83,7 @@ export {
   HistrixField,
   HistrixFileManager,
   HistrixFilters,
+  HistrixForgotPasswordSplit,
   HistrixForm,
   HistrixList,
   HistrixLog,
@@ -84,6 +91,8 @@ export {
   HistrixMenu,
   HistrixNews,
   HistrixPasswordChange,
+  HistrixRegisterSplit,
+  HistrixResetPasswordSplit,
   HistrixTable,
   HistrixTree,
   HistrixUsers,
@@ -111,6 +120,7 @@ export default {
   HistrixField,
   HistrixFileManager,
   HistrixFilters,
+  HistrixForgotPasswordSplit,
   HistrixForm,
   HistrixList,
   HistrixLog,
@@ -118,6 +128,8 @@ export default {
   HistrixMenu,
   HistrixNews,
   HistrixPasswordChange,
+  HistrixRegisterSplit,
+  HistrixResetPasswordSplit,
   HistrixTable,
   HistrixTree,
   HistrixUsers,

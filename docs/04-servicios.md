@@ -53,6 +53,7 @@ apiUrl()    = `${host()}/api/db/${currentDb()}`  (si hay DB)
 | `confirmRegistration(data)` | POST | `{apiUrl}/confirm-registration/` |
 | `reSendConfirmationMail(data)` | POST | `{apiUrl}/resend-confirmation/` |
 | `changePassword(data)` | POST | `{apiUrl}/change-password/` |
+| `resetPassword(form)` | POST | `{host}/api/resetpassword/` (a nivel host, **no** scopeado por `/api/db/`; la base viaja en el body `db`). Sirve para pedir el mail de recupero (`{email, recover, db}`) y para fijar la nueva contraseña con token (`{email, password, confirm_password, token, db}`). |
 | `updateUser(form, userId)` | PUT | `{apiUrl}/app/users/current_user_form.xml` |
 | `getValidToken(id)` | GET | `{apiUrl}/app/users/valid_token.xml?login=…` |
 | `getAppSchema(path, params)` | GET | `{apiUrl}/schema/{path}` |

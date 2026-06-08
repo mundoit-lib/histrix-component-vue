@@ -72,7 +72,7 @@ El activo del proyecto es el motor schema→pantalla, no la UI. Hoy están amasa
 
 **Estrategia: strangler (de afuera hacia adentro), no big-bang.** No se reescribe todo de golpe — se reemplaza pieza por pieza, empezando por lo barato:
 
-1. **Componentes simples primero** (login, cambio de password, connection settings, menús, news): son HTML + lógica, migrables a nativo + CSS scoped sin costo alto. **Ya empezó: `HistrixLoginSplit`** es el primer componente 100% nativo (ver `03-componentes.md`).
+1. **Componentes simples primero** (login, cambio de password, connection settings, menús, news): son HTML + lógica, migrables a nativo + CSS scoped sin costo alto. **Ya empezó: la familia de auth nativa `htx-auth`** — `HistrixLoginSplit` (primero), más `HistrixRegisterSplit`, `HistrixForgotPasswordSplit` y `HistrixResetPasswordSplit` (agregados el 2026-06-08, mismo diseño split). Comparten `utils/color.js` y, opcionalmente, el select de DB (`show-database`) que persiste la base elegida en `config.db`+`localStorage` (ver `03-componentes.md`).
 2. **Motor pesado al final** (HistrixTable, HistrixField, HistrixForm, HistrixApp): dependen de QTable/QSelect/QDate/QEditor, que son lo caro de reemplazar. Quedan en Quasar hasta tener el motor separado (Fase 2) y un reemplazo headless elegido (TanStack Table, datepickers, TipTap…).
 
 **Principios para componentes nativos nuevos:**

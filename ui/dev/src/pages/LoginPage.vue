@@ -9,6 +9,9 @@
     brand="Histrix"
     primary-color="#049DD9"
     tagline="ERP declarativo. Las pantallas se declaran en el backend y se renderizan acá."
+    show-database
+    show-register
+    show-forgot-password
     @success="onSuccess"
   >
     <!-- Slot opcional para info de entorno (solo en el playground / dev). -->

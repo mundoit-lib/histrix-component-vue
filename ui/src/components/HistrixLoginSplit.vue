@@ -19,6 +19,25 @@
         </slot>
 
         <form class="htx-login__form" novalidate @submit.prevent="onSubmit">
+          <!-- Selector de base de datos (opcional, prop `showDatabase`) -->
+          <div v-if="showDatabase" class="htx-login__field-group">
+            <label class="htx-login__field">
+              <svg class="htx-login__icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="currentColor"
+                  d="M12 3C7.58 3 4 4.79 4 7s3.58 4 8 4s8-1.79 8-4s-3.58-4-8-4M4 9v3c0 2.21 3.58 4 8 4s8-1.79 8-4V9c0 2.21-3.58 4-8 4s-8-1.79-8-4m0 5v3c0 2.21 3.58 4 8 4s8-1.79 8-4v-3c0 2.21-3.58 4-8 4s-8 1.79-8 4z"
+                />
+              </svg>
+              <select v-model="db" class="htx-login__input htx-login__select">
+                <option value="" disabled>{{ databasePlaceholder }}</option>
+                <option v-for="opt in databases" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
+              </select>
+              <svg class="htx-login__chevron" viewBox="0 0 24 24" aria-hidden="true">
+                <path fill="currentColor" d="M7 10l5 5l5-5z" />
+              </svg>
+            </label>
+          </div>
+
           <!-- Usuario / email -->
           <div class="htx-login__field-group">
             <label class="htx-login__field">
@@ -92,6 +111,26 @@
             {{ loading ? loadingLabel : submitLabel }}
           </button>
 
+          <!-- Acciones secundarias: registro y recuperar contraseña (opcionales) -->
+          <div v-if="showRegister || showForgotPassword" class="htx-login__actions">
+            <router-link
+              v-if="showRegister"
+              :to="registerTo"
+              class="htx-login__link"
+              :style="{ color: primaryColor }"
+            >
+              {{ registerLabel }}
+            </router-link>
+            <router-link
+              v-if="showForgotPassword"
+              :to="forgotPasswordTo"
+              class="htx-login__link"
+              :style="{ color: primaryColor }"
+            >
+              {{ forgotPasswordLabel }}
+            </router-link>
+          </div>
+
           <slot name="footer" />
         </form>
       </div>
@@ -115,7 +154,9 @@
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 
+import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { shade } from '../utils/color.js';
 
 export default {
   name: 'HistrixLoginSplit',
@@ -138,12 +179,31 @@ export default {
     emailPlaceholder: { type: String, default: 'Correo electrónico o usuario' },
     passwordPlaceholder: { type: String, default: 'Contraseña' },
     submitLabel: { type: String, default: 'Ingresar' },
-    loadingLabel: { type: String, default: 'Ingresando…' }
+    loadingLabel: { type: String, default: 'Ingresando…' },
+
+    /** Muestra el selector de base de datos (busca las DB y configura la elegida). */
+    showDatabase: { type: Boolean, default: false },
+    /** Placeholder del selector de base de datos. */
+    databasePlaceholder: { type: String, default: 'Seleccioná una base de datos' },
+
+    /** Muestra el enlace "Registrarme". */
+    showRegister: { type: Boolean, default: false },
+    /** Texto del enlace de registro. */
+    registerLabel: { type: String, default: 'Registrarme' },
+    /** Destino (router-link `to`) del enlace de registro. */
+    registerTo: { type: [String, Object], default: () => ({ name: 'register' }) },
+
+    /** Muestra el enlace "Recuperar contraseña". */
+    showForgotPassword: { type: Boolean, default: false },
+    /** Texto del enlace de recuperar contraseña. */
+    forgotPasswordLabel: { type: String, default: 'Recuperar contraseña' },
+    /** Destino (router-link `to`) del enlace de recuperar contraseña. */
+    forgotPasswordTo: { type: [String, Object], default: () => ({ name: 'mail-reset-password' }) }
   },
-  emits: ['success', 'error'],
+  emits: ['success', 'error', 'db-change'],
   setup() {
-    const { login } = useApi();
-    return { login, v$: useVuelidate() };
+    const { login, apiDBQuery } = useApi();
+    return { login, apiDBQuery, v$: useVuelidate() };
   },
   data() {
     return {
@@ -151,8 +211,34 @@ export default {
       password: '',
       showPassword: false,
       loading: false,
-      errorMsg: ''
+      errorMsg: '',
+      /** Base de datos seleccionada. */
+      db: '',
+      /** Bases de datos disponibles ({ value, label, img }). */
+      databases: []
     };
+  },
+  watch: {
+    /** Al elegir base de datos: persistir y reconfigurar el cliente API. */
+    db(newVal) {
+      if (!newVal) return;
+      config.db = newVal;
+      localStorage.setItem('database', newVal);
+      this.$emit('db-change', newVal);
+    }
+  },
+  mounted() {
+    if (!this.showDatabase) return;
+    this.apiDBQuery()
+      .then((list) => {
+        this.databases = list;
+        // Preseleccionar la base ya configurada (config.db / localStorage).
+        const current = config.db;
+        if (current && list.some((opt) => opt.value === current)) {
+          this.db = current;
+        }
+      })
+      .catch((e) => this.$emit('error', e));
   },
   validations() {
     return {
@@ -171,7 +257,7 @@ export default {
       }
       // Gradiente con el color de marca (oscurecido para el final).
       return {
-        backgroundImage: `linear-gradient(135deg, ${this.primaryColor} 0%, ${this.shade(this.primaryColor, -0.45)} 100%)`
+        backgroundImage: `linear-gradient(135deg, ${this.primaryColor} 0%, ${shade(this.primaryColor, -0.45)} 100%)`
       };
     }
   },
@@ -199,18 +285,6 @@ export default {
         // Limpiamos password sin que dispare el error "requerido" del campo.
         this.v$.password.$reset();
       }
-    },
-    /** Oscurece/aclara un hex (#rrggbb) por un factor [-1, 1]. */
-    shade(hex, factor) {
-      const h = hex.replace('#', '');
-      if (h.length !== 6) return hex;
-      const num = Number.parseInt(h, 16);
-      const t = factor < 0 ? 0 : 255;
-      const p = Math.abs(factor);
-      const r = Math.round(((num >> 16) & 0xff) * (1 - p) + t * p);
-      const g = Math.round(((num >> 8) & 0xff) * (1 - p) + t * p);
-      const b = Math.round((num & 0xff) * (1 - p) + t * p);
-      return `#${((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1)}`;
     }
   }
 };
@@ -356,6 +430,24 @@ export default {
   font-size: 0.8rem;
   color: #dc2626;
 }
+
+/* Select de base de datos: mismo look que el input, sin chrome nativo. */
+.htx-login__select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+}
+.htx-login__chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.25rem;
+  height: 1.25rem;
+  color: #9ca3af;
+  pointer-events: none;
+}
 .htx-login__toggle {
   position: absolute;
   right: 0.5rem;
@@ -407,6 +499,24 @@ export default {
   opacity: 0.7;
   cursor: default;
 }
+/* Enlaces secundarios (registro / recuperar contraseña) */
+.htx-login__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  margin-top: 0.25rem;
+}
+.htx-login__link {
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+}
+.htx-login__link:hover {
+  text-decoration: underline;
+}
+
 .htx-login__spinner {
   width: 1rem;
   height: 1rem;

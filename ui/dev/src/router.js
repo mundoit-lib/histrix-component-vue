@@ -1,16 +1,18 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 import AppPage from './pages/AppPage.vue';
+import ForgotPasswordPage from './pages/ForgotPasswordPage.vue';
 import HomePage from './pages/HomePage.vue';
 import LoginPage from './pages/LoginPage.vue';
-import StubPage from './pages/StubPage.vue';
+import RegisterPage from './pages/RegisterPage.vue';
+import ResetPasswordPage from './pages/ResetPasswordPage.vue';
 
 const routes = [
   {
     path: '/login',
     name: 'login',
     component: LoginPage,
-    meta: { public: true }
+    meta: { public: true, fullscreen: true }
   },
   {
     path: '/',
@@ -31,19 +33,25 @@ const routes = [
     name: 'auth-app',
     component: AppPage
   },
-  // Rutas con nombre referenciadas por FormLoginNotStyles (:to="{ name: ... }").
-  // Sin ellas vue-router tira al renderizar los q-btn del formulario de login.
+  // Rutas con nombre que enlazan login/registro/recupero de la librería.
   {
     path: '/register',
     name: 'register',
-    component: StubPage,
-    meta: { public: true }
+    component: RegisterPage,
+    meta: { public: true, fullscreen: true }
   },
   {
     path: '/mail-reset-password',
     name: 'mail-reset-password',
-    component: StubPage,
-    meta: { public: true }
+    component: ForgotPasswordPage,
+    meta: { public: true, fullscreen: true }
+  },
+  {
+    // Pantalla a la que apunta el link del mail de recupero: ?token=...&email=...
+    path: '/reset-password',
+    name: 'reset-password',
+    component: ResetPasswordPage,
+    meta: { public: true, fullscreen: true }
   },
   {
     // Fallback: cualquier otra cosa la tratamos como path de app

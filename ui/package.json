@@ -52,6 +52,10 @@
       "import": "./src/components/HistrixFilters.vue",
       "require": "./src/components/HistrixFilters.vue"
     },
+    "./components/HistrixForgotPasswordSplit": {
+      "import": "./src/components/HistrixForgotPasswordSplit.vue",
+      "require": "./src/components/HistrixForgotPasswordSplit.vue"
+    },
     "./components/HistrixForm": {
       "import": "./src/components/HistrixForm.vue",
       "require": "./src/components/HistrixForm.vue"
@@ -67,6 +71,14 @@
     "./components/HistrixPasswordChange": {
       "import": "./src/components/HistrixPasswordChange.vue",
       "require": "./src/components/HistrixPasswordChange.vue"
+    },
+    "./components/HistrixRegisterSplit": {
+      "import": "./src/components/HistrixRegisterSplit.vue",
+      "require": "./src/components/HistrixRegisterSplit.vue"
+    },
+    "./components/HistrixResetPasswordSplit": {
+      "import": "./src/components/HistrixResetPasswordSplit.vue",
+      "require": "./src/components/HistrixResetPasswordSplit.vue"
     },
     "./components/HistrixTable": {
       "import": "./src/components/HistrixTable.vue",
