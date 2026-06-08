@@ -21,6 +21,7 @@
 </template>
 
 <script>
+import { buildFilterQuery } from '../core/filters.js';
 import HistrixField from './HistrixField.vue';
 
 export default {
@@ -44,17 +45,7 @@ export default {
       return this.filters.length;
     },
     filterString() {
-      let query = '';
-      this.filters.map((filter) => {
-        let value = filter.valor;
-        if (filter.type === 'checkbox') {
-          value = filter.valor ? 1 : 0;
-        }
-        if (filter.valor) {
-          query += `&_f[]=${filter.campo}&_o[]=${filter.operador}&_v[]=${value}`;
-        }
-      });
-      return query;
+      return buildFilterQuery(this.filters);
     }
   },
   emits: ['filter-data'],

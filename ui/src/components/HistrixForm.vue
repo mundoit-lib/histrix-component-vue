@@ -159,6 +159,7 @@
 
 <script>
 import { useVuelidate } from '@vuelidate/core';
+import { isFieldEditable as isFieldEditablePure } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { extractKeys } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
@@ -472,25 +473,9 @@ export default {
     isFieldEditable(field) {
       // TRUE = No mostrar No editable
       // FALSE = Mostrar editable
-      // Si editable es explícitamente falso, no es editable
-      if (!field.editable) return true;
-
-      // Si hidden es verdadero, es editable
-      // Si editable es explícitamente falso, no es editable
-      if (!field.hidden) return false;
-
-      // Evaluar condiciones específicas para ciertos tipos
-      const isSpecialType = this.schema.type !== 'fichaing' && this.schema.type !== 'cabecera';
-      const isInnerContainer = field.innerContainer;
-      const isNotSelect = !field.isSelect;
-      const isExplicitlyNotEditable = field.editable === false;
-
-      // Si cumple todas estas condiciones, no es editable
-      if (isSpecialType && isInnerContainer && isNotSelect && isExplicitlyNotEditable) {
-        return false;
-      }
-      // Si no cayó en ninguno de los casos anteriores, el campo es editable
-      return true;
+      // Lógica pura extraída a ../core/fieldVisibility.js; se le pasa el tipo
+      // del schema porque la decisión depende de this.schema.type.
+      return isFieldEditablePure(field, this.schema.type);
     },
     deleteItem(_item) {
       //

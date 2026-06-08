@@ -441,6 +441,7 @@
 </template>
 
 <script>
+import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
@@ -652,13 +653,8 @@ export default {
       return !this.canInsert && !this.canUpdate && !this.canDelete;
     },
     visibleColumns() {
-      return this.schema.columns
-        .filter((column) => {
-          return !column.hidden && !column.style.includes('display:none;');
-        })
-        .map((column, _index, _array) => {
-          return column.name;
-        });
+      // Lógica pura extraída a ../core/fieldVisibility.js.
+      return visibleColumnNames(this.schema.columns);
     },
     fieldsWithContainers() {
       return this.filterObject(this.schema.fields, (field) => !field.innerContainer && !field.options);

@@ -234,6 +234,7 @@ import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle, date
 import { useVuelidate } from '@vuelidate/core';
 import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
 import { resolveFieldKind } from '../core/fieldType.js';
+import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 
@@ -446,42 +447,13 @@ export default {
       this.$emit('fill-fields', row);
       this.$refs.helperProxy.hide();
     },
+    // Wrapper fino: la normalización pura vive en ../core/options.js.
+    // Acá sólo se mantiene la parte que depende de `this` (orderData, que usa
+    // this.formatDate, y la asignación reactiva de this.optionFixed).
     mapRemoteOptions(options) {
-      const data = [];
-      let flat = false;
+      const { data, flat } = mapRemoteOptions(options, this.helperPath);
+      // El original hacía un early return con `!options` SIN tocar optionFixed.
       if (!options) return data;
-      for (const optionData of options) {
-        let counter = 0;
-        let key = null;
-        let label = '';
-        for (const [, value] of Object.entries(optionData)) {
-          if (counter === 0) {
-            key = optionData.value ?? value;
-          }
-          if (counter === 1) {
-            label = optionData.label ?? value;
-          }
-          counter++;
-        }
-        if (!label) continue;
-        if (!flat && label.includes(' - ')) {
-          const temp = label.slice(0, label.indexOf(' - '));
-          if (temp.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/)) flat = true;
-        }
-        if (this.helperPath) {
-          data.push({
-            value: key,
-            label
-          });
-        } else {
-          data.push({
-            value: key,
-            label,
-            description: label,
-            data: optionData
-          });
-        }
-      }
       if (this.fieldSchema.sortable !== false) {
         this.orderData(data, flat);
       }
@@ -489,74 +461,18 @@ export default {
       return data;
     },
     mapOptions(options) {
-      const data = [];
-      let flat = false;
-      if (options) {
-        options.map((option) => {
-          const key = String(option._id);
-          //const key = option[0];
-          let label = option;
-          if ((typeof label === 'object' || typeof label === 'function') && label !== null) {
-            label = label[Object.keys(label)[0]];
-          }
-
-          if (!flat && label.includes(' - ')) {
-            const temp = label.slice(0, label.indexOf(' - '));
-            if (temp.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/)) flat = true;
-          }
-          if (this.helperPath) {
-            data.push({
-              value: key,
-              label
-            });
-          } else {
-            data.push({
-              value: key,
-              label,
-              description: label,
-              data: option
-            });
-          }
-        });
-        if (this.fieldSchema.sortable !== false) {
-          this.orderData(data, flat);
-        }
+      const { data, flat } = mapArrayOptions(options, this.helperPath);
+      // El original sólo ordena/llama orderData cuando `options` existe.
+      if (options && this.fieldSchema.sortable !== false) {
+        this.orderData(data, flat);
       }
       this.optionFixed = data;
       return data;
     },
     mapOptionsOld(options) {
-      const data = [];
-      let flat = false;
+      const { data, flat } = mapDictOptions(options, this.helperPath);
+      // El original llama orderData sólo cuando `options` existe.
       if (options) {
-        Object.entries(options).map((option) => {
-          let key = option[0]?.trim?.() ?? option[0];
-          if (key && !Number.isNaN(Number(key)) && typeof key === 'string') {
-            key = Number(key);
-          }
-          let label = option[1];
-          if ((typeof label === 'object' || typeof label === 'function') && label !== null) {
-            label = label[Object.keys(label)[0]];
-          }
-          if (!flat && label.includes(' - ')) {
-            const temp = label.slice(0, label.indexOf(' - '));
-            if (temp.match(/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/)) flat = true;
-          }
-          if (this.helperPath) {
-            data.push({
-              value: key,
-              label,
-              data: option[1] ?? {}
-            });
-          } else {
-            data.push({
-              value: key,
-              label,
-              description: label,
-              data: option
-            });
-          }
-        });
         this.orderData(data, flat);
       }
       this.optionFixed = data;
