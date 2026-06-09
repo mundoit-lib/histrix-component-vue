@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <q-list>
+  <div class="histrix-menu">
+    <q-list padding>
       <template v-if="isRoot && loading">
         <q-item v-for="n in 6" :key="`sk-${n}`">
           <q-item-section avatar>
@@ -12,31 +12,33 @@
         </q-item>
       </template>
 
+      <!-- DESTACADOS -->
       <q-expansion-item
         v-if="isRoot && featured.length"
         v-model="featuredOpen"
         dense
         dense-toggle
-        expand-separator
-        icon="bolt"
-        header-class="text-uppercase text-primary text-weight-medium"
+        :duration="160"
+        header-class="menu-section-header"
       >
         <template v-slot:header>
+          <q-item-section avatar class="menu-section-avatar">
+            <q-icon name="bolt" size="20px" class="menu-section-icon--featured" />
+          </q-item-section>
           <q-item-section>
-            <div class="row items-center">
-              <q-icon name="bolt" color="primary" size="sm" class="q-mr-sm" />
+            <div class="menu-section-label menu-section-label--featured">
               <span>Destacados</span>
-              <span class="text-grey-7 q-ml-xs text-caption">({{ featured.length }})</span>
+              <span class="menu-section-count">{{ featured.length }}</span>
             </div>
           </q-item-section>
         </template>
-        <div class="row q-gutter-xs q-px-md q-py-sm featured-zone">
+
+        <div class="featured-zone">
           <q-btn
             v-for="node in featured"
             :key="`feat-${node.menuId}`"
             no-caps
             unelevated
-            rounded
             dense
             size="sm"
             color="primary"
@@ -46,17 +48,15 @@
             class="featured-btn"
             @click="refrest(nodeUri(node))"
           >
-            <q-icon :name="node.icon || 'star'" size="xs" class="q-mr-xs" />
+            <q-icon :name="node.icon || 'bolt'" size="16px" class="featured-btn-icon" />
             <div class="column items-start text-left">
               <span
-                class="text-caption capitalize"
-                style="line-height: 1.15"
+                class="featured-btn-label capitalize"
                 v-html="decodeHTML(node.label).toLowerCase()"
               />
               <span
                 v-if="node.subtitle"
-                class="capitalize"
-                style="opacity: 0.85; line-height: 1.05; font-size: 0.65rem"
+                class="featured-btn-sub capitalize"
                 v-html="decodeHTML(node.subtitle).toLowerCase()"
               />
             </div>
@@ -64,59 +64,71 @@
         </div>
       </q-expansion-item>
 
+      <!-- FAVORITOS -->
       <q-expansion-item
         v-if="isRoot && isFavorite && favorit.keys.length"
         v-model="favoritesOpen"
         dense
         dense-toggle
-        expand-separator
-        icon="star"
-        header-class="text-uppercase text-weight-medium"
+        :duration="160"
+        header-class="menu-section-header"
       >
         <template v-slot:header>
+          <q-item-section avatar class="menu-section-avatar">
+            <q-icon name="star" size="20px" class="menu-section-icon--fav" />
+          </q-item-section>
           <q-item-section>
-            <div class="row items-center">
-              <q-icon name="star" color="amber" size="sm" class="q-mr-sm" />
+            <div class="menu-section-label menu-section-label--fav">
               <span>Favoritos</span>
-              <span class="text-grey-7 q-ml-xs text-caption">({{ favorit.keys.length }})</span>
+              <span class="menu-section-count">{{ favorit.keys.length }}</span>
             </div>
           </q-item-section>
         </template>
+
         <q-item
           v-for="fav in favorit.keys"
           :key="`fav-${fav.menuId}`"
           :to="nodeUri({ uri: fav.uri, label: fav.name })"
           dense
           clickable
+          class="menu-leaf"
           @click="refrest(nodeUri({ uri: fav.uri, label: fav.name }))"
         >
-          <q-item-section class="capitalize">
+          <q-item-section class="capitalize menu-leaf-label">
             {{ decodeHTML(fav.name).toLowerCase() }}
           </q-item-section>
-          <q-item-section side @click.stop.prevent="toggleFavorit(fav.menuId, fav.uri, fav.name)">
-            <q-btn flat round dense color="primary" icon="star" />
+          <q-item-section
+            side
+            class="fav-star fav-star--active"
+            @click.stop.prevent="toggleFavorit(fav.menuId, fav.uri, fav.name)"
+          >
+            <q-btn flat round dense icon="star" class="fav-star-btn" aria-label="Quitar de favoritos" />
           </q-item-section>
         </q-item>
       </q-expansion-item>
 
+      <q-separator
+        v-if="isRoot && (featured.length || (isFavorite && favorit.keys.length))"
+        class="menu-divider"
+      />
+
+      <!-- ÁRBOL DE NAVEGACIÓN -->
       <div v-for="node in data" :key="node.menuId || node.key">
         <q-expansion-item
           v-if="node.children"
           dense
           :content-inset-level="0.2"
           :group="level"
-          expand-separator
-          :icon="node.icon || undefined"
+          :duration="160"
           :label-lines="1"
-          :label="decodeHTML(node.label).toLowerCase()"
-          class="capitalize"
+          header-class="menu-branch"
         >
           <template v-slot:header>
-            <q-item-section avatar>
-              <q-icon :name="node.icon || 'arrow_right'" size="sm" />
+            <q-item-section avatar class="menu-branch-avatar">
+              <q-icon :name="node.icon || 'folder_open'" size="20px" />
             </q-item-section>
             <q-item-section>
-              <q-item-label>
+              <q-item-label class="menu-branch-label capitalize">
                 <span v-html="decodeHTML(node.label).toLowerCase()" />
               </q-item-label>
               <q-item-label
@@ -128,7 +140,6 @@
               </q-item-label>
             </q-item-section>
           </template>
-          <q-separator />
 
           <histrixExpansionMenu
             :tree="node.children"
@@ -142,12 +153,14 @@
         <q-item
           v-else
           :to="nodeUri(node)"
+          class="menu-leaf"
           @click="refrest(nodeUri(node))"
         >
-          <q-item-section avatar>
-            <q-icon v-if="node.icon" :name="node.icon" size="sm" />
+          <q-item-section avatar class="menu-leaf-avatar">
+            <q-icon v-if="node.icon" :name="node.icon" size="20px" />
+            <span v-else class="menu-leaf-dot" />
           </q-item-section>
-          <q-item-section class="capitalize">
+          <q-item-section class="capitalize menu-leaf-label">
             <q-item-label>
               {{ decodeHTML(node.label).toLowerCase() }}
             </q-item-label>
@@ -158,13 +171,17 @@
           <q-item-section
             v-if="isFavorite"
             side
+            class="fav-star"
+            :class="{ 'fav-star--active': favoritIds.has(node.menuId) }"
             @click.stop.prevent="toggleFavorit(node.menuId, node.uri, decodeHTML(node.label).toLowerCase())"
           >
             <q-btn
               flat
               round
-              color="primary"
+              dense
               :icon="setIconStart(node.menuId)"
+              class="fav-star-btn"
+              :aria-label="favoritIds.has(node.menuId) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
             />
           </q-item-section>
         </q-item>
@@ -327,19 +344,226 @@ export default {
 </script>
 
 <style scoped>
+.histrix-menu {
+  /* Dorado de favoritos: con presencia sobre fondo claro, no el amarillo plano de Quasar */
+  --fav-gold: #f59e0b;
+}
+
 .capitalize {
   text-transform: capitalize;
+}
+
+/* ───────────── Cabeceras de sección (Destacados / Favoritos) ───────────── */
+.histrix-menu :deep(.menu-section-header) {
+  min-height: 34px;
+  padding-left: 12px;
+  padding-right: 8px;
+}
+.menu-section-avatar {
+  min-width: 28px;
+  padding-right: 6px;
+}
+.menu-section-icon--featured {
+  color: var(--q-primary);
+}
+.menu-section-icon--fav {
+  color: var(--fav-gold);
+}
+.menu-section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+}
+.menu-section-label--featured {
+  color: var(--q-primary);
+}
+.menu-section-label--fav {
+  color: var(--fav-gold);
+}
+.menu-section-count {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0;
+  color: #94a3b8;
+  background: rgba(148, 163, 184, 0.16);
+  border-radius: 999px;
+  padding: 0 6px;
+  line-height: 1.5;
+}
+
+/* ───────────── Píldoras de destacados ───────────── */
+.featured-zone {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 4px 12px 10px;
 }
 .featured-btn {
   min-height: 0;
   height: auto;
+  border-radius: 12px;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.14), 0 1px 1px rgba(15, 23, 42, 0.08);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.featured-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.2);
+}
+.featured-btn:active {
+  transform: translateY(0);
 }
 .featured-btn :deep(.q-btn__content) {
   flex-wrap: nowrap;
-  padding: 3px 10px;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 12px;
 }
+.featured-btn-icon {
+  opacity: 0.9;
+}
+.featured-btn-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+.featured-btn-sub {
+  font-size: 0.62rem;
+  line-height: 1.1;
+  opacity: 0.82;
+}
+
+/* ───────────── Separador ───────────── */
+.menu-divider {
+  margin: 6px 12px;
+  opacity: 0.6;
+}
+
+/* ───────────── Ramas (secciones con hijos) ───────────── */
+.histrix-menu :deep(.menu-branch) {
+  min-height: 40px;
+  border-radius: 8px;
+  margin: 1px 8px;
+  transition: background 0.15s ease;
+}
+.histrix-menu :deep(.menu-branch:hover) {
+  background: rgba(15, 23, 42, 0.045);
+}
+.menu-branch-avatar {
+  min-width: 28px;
+  padding-right: 8px;
+}
+.menu-branch-avatar :deep(.q-icon) {
+  color: #64748b;
+}
+.menu-branch-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+/* ───────────── Hojas (items finales) ───────────── */
+.menu-leaf {
+  position: relative;
+  border-radius: 8px;
+  margin: 1px 8px;
+  min-height: 36px;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+.menu-leaf:hover {
+  background: rgba(15, 23, 42, 0.045);
+}
+.menu-leaf-avatar {
+  min-width: 28px;
+  padding-right: 8px;
+}
+.menu-leaf-avatar :deep(.q-icon) {
+  color: #64748b;
+}
+/* Título de la hoja (no el subtítulo, que se mantiene como caption más chico y gris) */
+.menu-leaf-label :deep(.q-item__label:not(.q-item__label--caption)) {
+  font-size: 0.8rem;
+  color: #334155;
+}
+.menu-leaf-label :deep(.q-item__label--caption) {
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+.menu-leaf-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #cbd5e1;
+  margin-left: 7px;
+  transition: background 0.15s ease;
+}
+.menu-leaf:hover .menu-leaf-dot {
+  background: #94a3b8;
+}
+
+/* Item de la ruta activa: riel lateral + fondo teñido con el color de marca */
+.menu-leaf.q-router-link--active {
+  background: color-mix(in srgb, var(--q-primary) 11%, white);
+}
+.menu-leaf.q-router-link--active .menu-leaf-label :deep(.q-item__label:not(.q-item__label--caption)) {
+  color: var(--q-primary);
+  font-weight: 600;
+}
+.menu-leaf.q-router-link--active .menu-leaf-dot {
+  background: var(--q-primary);
+}
+.menu-leaf.q-router-link--active::before {
+  content: '';
+  position: absolute;
+  left: -8px;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 56%;
+  width: 3px;
+  border-radius: 0 3px 3px 0;
+  background: var(--q-primary);
+}
+
+/* ───────────── Estrella de favorito ─────────────
+   Oculta por defecto. Aparece al pasar el mouse, al enfocar con teclado,
+   en el item activo, o cuando ya es favorito (siempre visible y dorada). */
+.fav-star {
+  opacity: 0;
+  transform: scale(0.8);
+  transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.menu-leaf:hover .fav-star,
+.menu-leaf:focus-within .fav-star,
+.menu-leaf.q-router-link--active .fav-star,
+.fav-star--active {
+  opacity: 1;
+  transform: scale(1);
+}
+.fav-star-btn {
+  color: #b6c0cf;
+  transition: color 0.16s ease, transform 0.16s ease;
+}
+.fav-star:hover .fav-star-btn {
+  color: var(--fav-gold);
+  transform: scale(1.12);
+}
+.fav-star--active .fav-star-btn {
+  color: var(--fav-gold);
+}
+
+/* Dispositivos táctiles (sin hover): mantener visibles para que sean alcanzables */
+@media (hover: none) {
+  .fav-star {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
 :deep(.q-item__section--avatar) {
-  min-width: 32px;
+  min-width: 28px;
   padding-right: 8px;
 }
 </style>
