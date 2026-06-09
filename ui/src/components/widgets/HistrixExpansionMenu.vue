@@ -34,33 +34,33 @@
         </template>
 
         <div class="featured-zone">
-          <q-btn
+          <q-item
             v-for="node in featured"
             :key="`feat-${node.menuId}`"
-            no-caps
-            unelevated
-            dense
-            size="sm"
-            color="primary"
-            text-color="white"
-            align="left"
             :to="nodeUri(node)"
-            class="featured-btn"
+            dense
+            clickable
+            class="featured-row"
             @click="refrest(nodeUri(node))"
           >
-            <q-icon :name="node.icon || 'bolt'" size="16px" class="featured-btn-icon" />
-            <div class="column items-start text-left">
-              <span
-                class="featured-btn-label capitalize"
-                v-html="decodeHTML(node.label).toLowerCase()"
-              />
-              <span
+            <q-item-section avatar class="featured-row-avatar">
+              <span class="featured-row-icon">
+                <q-icon :name="node.icon || 'bolt'" size="16px" />
+              </span>
+            </q-item-section>
+            <q-item-section>
+              <q-item-label class="featured-row-label capitalize">
+                <span v-html="decodeHTML(node.label).toLowerCase()" />
+              </q-item-label>
+              <q-item-label
                 v-if="node.subtitle"
-                class="featured-btn-sub capitalize"
-                v-html="decodeHTML(node.subtitle).toLowerCase()"
-              />
-            </div>
-          </q-btn>
+                caption
+                class="featured-row-sub capitalize"
+              >
+                <span v-html="decodeHTML(node.subtitle).toLowerCase()" />
+              </q-item-label>
+            </q-item-section>
+          </q-item>
         </div>
       </q-expansion-item>
 
@@ -395,45 +395,48 @@ export default {
   line-height: 1.5;
 }
 
-/* ───────────── Píldoras de destacados ───────────── */
+/* ───────────── Destacados: lista de accesos en bloque teñido ───────────── */
 .featured-zone {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  padding: 4px 12px 10px;
-}
-.featured-btn {
-  min-height: 0;
-  height: auto;
+  margin: 2px 10px 4px;
+  padding: 4px;
   border-radius: 12px;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.14), 0 1px 1px rgba(15, 23, 42, 0.08);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-.featured-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 5px 14px rgba(15, 23, 42, 0.2);
+.featured-row {
+  border-radius: 8px;
+  min-height: 38px;
+  padding: 4px 8px;
+  transition: background 0.15s ease;
 }
-.featured-btn:active {
-  transform: translateY(0);
+.featured-row:hover {
+  background: color-mix(in srgb, var(--q-primary) 12%, transparent);
 }
-.featured-btn :deep(.q-btn__content) {
-  flex-wrap: nowrap;
+.featured-row.q-router-link--active {
+  background: color-mix(in srgb, var(--q-primary) 18%, transparent);
+}
+.featured-row-avatar {
+  min-width: 34px;
+  padding-right: 8px;
+}
+.featured-row-icon {
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 5px 12px;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  background: var(--q-primary);
+  color: #fff;
 }
-.featured-btn-icon {
-  opacity: 0.9;
-}
-.featured-btn-label {
-  font-size: 0.72rem;
+.featured-row-label {
+  font-size: 0.8rem;
   font-weight: 600;
   line-height: 1.2;
+  color: var(--q-primary);
 }
-.featured-btn-sub {
-  font-size: 0.62rem;
-  line-height: 1.1;
-  opacity: 0.82;
+.featured-row-sub {
+  font-size: 0.68rem;
+  line-height: 1.15;
+  color: #64748b;
 }
 
 /* ───────────── Separador ───────────── */
