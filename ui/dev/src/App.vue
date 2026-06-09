@@ -20,6 +20,13 @@
           </span>
         </q-toolbar-title>
 
+        <HistrixMenuSearch
+          v-if="loggedIn"
+          level="phpmen"
+          placeholder="Buscar en el menú…"
+          class="q-mr-sm"
+        />
+
         <q-btn flat dense no-caps icon="home" label="Home" :to="{ name: 'home' }" />
         <q-btn
           v-if="!loggedIn"

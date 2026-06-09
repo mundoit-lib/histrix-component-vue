@@ -27,6 +27,7 @@ import HistrixExpansionMenu from './components/widgets/HistrixExpansionMenu.vue'
 import HistrixFileManager from './components/widgets/HistrixFileManager.vue';
 import HistrixLog from './components/widgets/HistrixLog.vue';
 import HistrixMenu from './components/widgets/HistrixMenu.vue';
+import HistrixMenuSearch from './components/widgets/HistrixMenuSearch.vue';
 import HistrixNews from './components/widgets/HistrixNews.vue';
 import HistrixUsers from './components/widgets/HistrixUsers.vue';
 import notificationMenu from './components/widgets/notificationMenu.vue';
@@ -53,6 +54,7 @@ const components = [
   HistrixLog,
   HistrixLoginSplit,
   HistrixMenu,
+  HistrixMenuSearch,
   HistrixNews,
   HistrixPasswordChange,
   HistrixRegisterSplit,
@@ -89,6 +91,7 @@ export {
   HistrixLog,
   HistrixLoginSplit,
   HistrixMenu,
+  HistrixMenuSearch,
   HistrixNews,
   HistrixPasswordChange,
   HistrixRegisterSplit,
@@ -126,6 +129,7 @@ export default {
   HistrixLog,
   HistrixLoginSplit,
   HistrixMenu,
+  HistrixMenuSearch,
   HistrixNews,
   HistrixPasswordChange,
   HistrixRegisterSplit,
