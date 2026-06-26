@@ -39,9 +39,9 @@
         :isFormulation="true"
         :filled="!isDisabled"
         :toolbar="toolbar"
-        :disabled="isDisabled"
-        :disable="isDisabled"
-        :readonly="isDisabled"
+        :disabled="isDisabled || undefined"
+        :disable="isDisabled || undefined"
+        :readonly="isDisabled || undefined"
         :counter="isMultiple"
         :fonts="{
           arial: 'Arial',
@@ -287,8 +287,8 @@ export default {
         if (this.options.find((o) => o.value === this.localValue)) {
           return;
         }
-        if (this.options.length === 1 && this.fieldSchema.innerContainer.empty === false) {
-          this.localValue = this.options[0];
+        if (this.options.length === 1 && this.fieldSchema.innerContainer?.empty === false) {
+          this.localValue = this.options[0].value;
           return;
         }
         // @TODO: Verificar porque para rosgan tiene que estar comentado pero para mgp no
@@ -988,6 +988,13 @@ export default {
 
         if (this.histrixType === 'q-select' && this.options) {
           if (!this.isMultiple) {
+            // El backend a veces manda un objeto como valor inicial (p.ej.
+            // { genmoneda_id: '1' }, sólo contexto, sin cuenta elegida). En ese
+            // caso no hay opción seleccionable: tomar .value si viene, si no,
+            // dejar el combo sin selección (evita pintar "[object Object]").
+            if (this.modelValue !== null && typeof this.modelValue === 'object') {
+              return this.modelValue.value ?? undefined;
+            }
             return !Number.isNaN(Number(this.modelValue)) && this.modelValue !== ''
               ? Number(this.modelValue)
               : this.modelValue;
@@ -1030,7 +1037,7 @@ export default {
         // emitía `input`, de Vue 2, y el cambio nunca subía al padre).
         if (this.histrixType === 'q-select') {
           const val = localValue;
-          if (localValue?.value) {
+          if (localValue !== null && typeof localValue === 'object' && 'value' in localValue) {
             this.$emit('update:modelValue', localValue.value);
           } else {
             this.$emit('update:modelValue', localValue);

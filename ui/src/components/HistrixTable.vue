@@ -415,7 +415,7 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="edit" ref="formDialog" full-width @update:model-value="showDialog" @input="showDialog">
+    <q-dialog v-model="edit" ref="formDialog" full-width @update:model-value="showDialog">
       <q-card>
         <HistrixForm
           ref="histrixForm"
@@ -430,6 +430,7 @@
           :inner="inner"
           v-on:open-popup="bubbleLink(editedItem, $event)"
           v-on:form-saved="formSaved"
+          v-on:insert-row="commitGridRow"
           v-on:closepopup="closeEdit"
           v-on:valueEdit="setEdit"
           :computedFields="computedFields"
@@ -824,6 +825,9 @@ export default {
       // this.data.push(item);
       this.editedIndex = item._id;
       this.editedItem = item;
+      // Fila nueva del grid: marcar newRecord para que el form muestre el botón
+      // Grabar y que saveForm() haga INSERT (POST a la instancia), no UPDATE.
+      this.newRecord = true;
       this.edit = true;
     },
     updateLiveRow(row) {
@@ -856,6 +860,27 @@ export default {
         this.getData();
       }
       this.edit = false;
+    },
+    commitGridRow(row, editedIndex) {
+      // Renglón confirmado de un grid "ing"/"grid": se acumula cliente-side en
+      // this.data (sin pegarle a la API). El watcher de innerData emite
+      // update:modelValue hacia el grid padre, que junta los renglones para que
+      // viajen en el process del comprobante.
+      const item = JSON.parse(JSON.stringify(row));
+      let idx = -1;
+      if (item._id !== undefined) {
+        idx = this.data.findIndex((r) => r._id === item._id);
+      }
+      if (idx < 0 && editedIndex && typeof editedIndex === 'object') {
+        idx = this.data.indexOf(editedIndex);
+      }
+      if (idx >= 0) {
+        this.data.splice(idx, 1, item);
+      } else {
+        this.data.push(item);
+      }
+      this.edit = false;
+      this.setEdit(false);
     },
     processData() {
       this.submitting = true;

@@ -192,7 +192,18 @@ export default {
   },
   computed: {
     insertButton() {
-      return this.schema.insertButton && (this.editedIndex === -1 || this.editedIndex == null);
+      // Para grids tipo "ing"/"grid" la fila nueva trae editedIndex >= 0 (su
+      // posición en la tabla), por eso además contemplamos newRecord: si es una
+      // fila nueva hay que mostrar el botón Grabar igual.
+      return (
+        this.schema.insertButton &&
+        (this.isGridRow || this.newRecord || this.editedIndex === -1 || this.editedIndex == null)
+      );
+    },
+    isGridRow() {
+      // El form se está usando para confirmar un renglón de un grid embebido
+      // (detalle de comprobante) en vez de un alta/edición directa contra la API.
+      return ['ing', 'grid', 'liveGrid'].includes(this.schema?.type);
     },
     updateButton() {
       return (
@@ -524,6 +535,14 @@ export default {
         });
     },
     onSubmit() {
+      // Grids tipo "ing"/"grid": las filas NO se graban una por una contra la
+      // API. Se acumulan en la tabla interna del grid (cliente-side) y viajan
+      // juntas en el process del comprobante padre. Acá sólo confirmamos el
+      // renglón emitiéndolo hacia arriba; HistrixTable lo agrega a su data.
+      if (this.isGridRow) {
+        this.$emit('insert-row', this.localValues, this.editedIndex);
+        return;
+      }
       if (this.editedIndex === -1 || this.editedIndex === null || this.editedIndex === undefined) {
         this.insertRow();
       } else {
