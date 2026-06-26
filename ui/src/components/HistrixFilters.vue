@@ -1,22 +1,73 @@
 <template>
-  <div>
+  <div class="histrix-filters full-width">
 
-    <q-expansion-item v-if="filterCount > 1" v-model="open" icon="search" :label="schema.title" caption="búsqueda avanzada" dense>
-          <q-item v-for="field in filters" v-bind:key="field.uid" class=" col-xs-12 col-sm-6 col-md-6" dense>
-            <HistrixField dense :model-value="field.valor" @update:model-value="onFilterUpdate(field, $event)" :schema="field" clearable  filled />
-          </q-item>
-    </q-expansion-item>
+    <!-- Búsqueda avanzada: varios filtros dentro de un acordeón -->
+    <template v-if="filterCount > 1">
+      <q-expansion-item
+        v-model="open"
+        icon="search"
+        :label="schema.title"
+        caption="búsqueda avanzada"
+        dense
+      >
+        <div class="row q-col-gutter-sm q-pa-sm">
+          <div
+            v-for="field in filters"
+            v-bind:key="field.uid"
+            class="col-xs-12 col-sm-6"
+          >
+            <HistrixField
+              class="full-width"
+              dense
+              :model-value="field.valor"
+              @update:model-value="onFilterUpdate(field, $event)"
+              :schema="field"
+              clearable
+              filled
+            />
+          </div>
+        </div>
+      </q-expansion-item>
+      <q-btn
+        v-if="schema.filters[0] && !autoFilter"
+        class="histrix-filters__btn q-ma-sm"
+        color="secondary"
+        label="Buscar"
+        icon="search"
+        v-on:click="filterData"
+      />
+    </template>
 
-    <div v-if="filterCount == 1">
-      <q-item v-for="field in filters" v-bind:key="field.uid" class=" col-xs-12 col-sm-6 col-md-6">
-
-           <HistrixField :model-value="field.valor" @update:model-value="onFilterUpdate(field, $event)" :schema="field" clearable  filled/>
-
-
-       </q-item>
-
+    <!-- Filtro único: campo + botón en línea (desktop) / apilados (celular) -->
+    <div
+      v-else-if="filterCount == 1"
+      class="row items-center"
+      style="gap: 8px;"
+    >
+      <div
+        v-for="field in filters"
+        v-bind:key="field.uid"
+        class="col-xs-12 col-sm-auto"
+      >
+        <HistrixField
+          class="full-width"
+          :model-value="field.valor"
+          @update:model-value="onFilterUpdate(field, $event)"
+          :schema="field"
+          clearable
+          filled
+        />
+      </div>
+      <div v-if="schema.filters[0] && !autoFilter" class="col-xs-12 col-sm-auto">
+        <q-btn
+          class="histrix-filters__btn full-width"
+          color="secondary"
+          label="Buscar"
+          icon="search"
+          v-on:click="filterData"
+        />
+      </div>
     </div>
-            <q-btn v-if="schema.filters[0] && !autoFilter" color="secondary" label="Buscar" icon="search" v-on:click="filterData" />
   </div>
 </template>
 

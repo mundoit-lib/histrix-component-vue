@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="histrix-table">
     <HistrixApp
       v-if="schema.header"
       :path="headerPath"
@@ -29,9 +29,10 @@
     >
       <!-- TOP LEFT: FILTERS -->
       <template v-slot:top-left="">
-        <div v-if="!inner" class="row">
+        <div v-if="!inner" class="row full-width items-center q-gutter-y-xs">
           <HistrixFilters
             v-if="schema.filters.length"
+            class="col-xs-12 col-sm-auto"
             dense
             :schema="schema"
             v-on:filter-data="histrixFilter"
@@ -42,6 +43,7 @@
           </q-item>
           <q-input
             v-if="search"
+            class="col-xs-12 col-sm-auto"
             v-model="searchStr"
             type="search"
             dense
@@ -58,6 +60,7 @@
       <template v-slot:top-right="props">
         <div
           v-if="data.length > 50"
+          class="histrix-pagination"
           style="display: flex; align-items: center; justify-content: center; text-align: center;"
         >
           <span style="text-align: center; font-size: 0.8rem;"
@@ -136,6 +139,8 @@
 
         <q-btn
           fab
+          :size="$q.screen.lt.sm ? 'sm' : 'md'"
+          class="histrix-add-btn"
           color="positive"
           icon="add"
           title="Nuevo"
@@ -259,105 +264,107 @@
         </q-tr>
       </template>
 
-      <!-- grid mode -->
+      <!-- grid mode (celular): cada fila es una tarjeta compacta -->
       <template v-slot:item="props">
-        <div
-          :class="rowClass(props) + 'q-pa-xs col-12 grid-style-transition'"
-          :style="props.selected ? 'transform: scale(0.95);' : ''"
-        >
-        <!-- @TODO: pasar todo esta card a un componente aparte -->
-          <component v-bind:is="contentItem" :class="props.selected ? 'bg-grey-2' : ''">
-            <q-item
-              v-for="cell in props.cols.filter((row) => row.name)"
-              :key="cell.name"
-              class=""
-              dense
-            >
-              <q-item-section
-                side
-                class="text-grey-15"
-                v-if="!getFieldAttribute(props.key, cell.name, 'editable')  && cell.label"
+        <div :class="gridCellClasses(props)">
+          <component
+            v-bind:is="contentItem"
+            flat
+            :class="'histrix-grid-card' + (props.selected ? ' histrix-grid-card--selected' : '')"
+          >
+            <div class="histrix-grid-body">
+              <template
+                v-for="(cell, idx) in props.cols.filter((row) => row.name)"
+                :key="cell.name"
               >
-                {{ cell.label }}
-              </q-item-section>
-              <q-item-section class="col">
-                <HistrixField
-                  :model-value="rawData[props.key][cell.name]"
-                  @update:model-value="rawData[props.key][cell.name] = $event"
-                  :row="rawData[props.key]"
-                  :query="fieldQuerys(cell.name, rawData[props.key])"
-                  :name="cell.name"
-                  :schema="schema.fields[cell.name]"
-                  :rowSchema="getRowSchema(props.key, cell.name)"
-                  dense
+                <div
                   v-if="
-                    getFieldAttribute(props.key, cell.name, 'editable') &&
-                      isGrid
+                    idx === 0 ||
+                    (getFieldAttribute(props.key, cell.name, 'editable') && isGrid) ||
+                    (rawData[props.key][cell.name] != null && rawData[props.key][cell.name] !== '')
                   "
-                />
-                <HistrixCell
-                  v-else
-                  :path="path"
-                  :props="props"
-                  :schema="schema.fields[cell.name]"
-                  :col="cell"
-                  v-on:open-popup="bubbleLink(rawData[props.key], $event)"
-                  v-on:closepopup="closePopup"
-                />
-              </q-item-section>
-            </q-item>
+                  :class="idx === 0 ? 'histrix-grid-title' : 'histrix-grid-line'"
+                >
+                  <span
+                    v-if="idx !== 0 && cell.label && !(getFieldAttribute(props.key, cell.name, 'editable') && isGrid)"
+                    class="histrix-grid-label"
+                  >
+                    {{ cell.label }}
+                  </span>
+                  <span class="histrix-grid-value">
+                    <HistrixField
+                      :model-value="rawData[props.key][cell.name]"
+                      @update:model-value="rawData[props.key][cell.name] = $event"
+                      :row="rawData[props.key]"
+                      :query="fieldQuerys(cell.name, rawData[props.key])"
+                      :name="cell.name"
+                      :schema="schema.fields[cell.name]"
+                      :rowSchema="getRowSchema(props.key, cell.name)"
+                      dense
+                      v-if="getFieldAttribute(props.key, cell.name, 'editable') && isGrid"
+                    />
+                    <HistrixCell
+                      v-else
+                      :path="path"
+                      :props="props"
+                      :schema="schema.fields[cell.name]"
+                      :col="cell"
+                      v-on:open-popup="bubbleLink(rawData[props.key], $event)"
+                      v-on:closepopup="closePopup"
+                    />
+                  </span>
+                </div>
+              </template>
+            </div>
 
-            <q-separator v-if="!isFormulation" />
-            <q-card-section
-              class="row q-pa-xs"
-              v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete)"
+            <template
+              v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete) || hasDetail(props)"
             >
-              <q-item style="align-items: center;">
+              <q-separator class="histrix-grid-sep" />
+              <div class="histrix-grid-actions">
                 <q-btn
                   flat
-                  rounded
+                  dense
                   icon="edit"
+                  label="Editar"
                   v-if="canUpdate && !isGrid"
                   color="positive"
                   @click="editRow(props.row)"
                   size="sm"
                   no-caps
-                  padding="4px 5px"
                 />
                 <q-btn
                   flat
-                  unelevated
-                  rounded
+                  dense
                   icon="delete"
+                  label="Borrar"
                   v-if="schema.can_delete && canDelete"
                   color="secondary"
                   @click="deleteItem(props.row)"
                   size="sm"
                   no-caps
-                  padding="4px 5px"
-                  style="margin-left: 0.5rem;"
                 />
                 <q-btn
+                  flat
+                  dense
                   color="accent"
                   v-if="hasDetail(props)"
-                  padding="4px 8px"
-                  dense
                   @click="props.expand = !props.expand"
                   :icon="props.expand ? 'remove' : 'add'"
-                  style="font-size: 0.6rem; height:1.5rem; margin-left: 0.5rem;"
-                />
-              </q-item>
-            </q-card-section>
-            <q-card-section v-if="props.expand" :props="props">
-              <div class="bg-grey-12 qa-pa-xs">
-                <HistrixApp
-                  name="detail"
-                  inner="true"
-                  :path="detailPath(props)"
-                  :query="detailQuery(props)"
+                  :label="props.expand ? 'Cerrar' : 'Detalle'"
+                  size="sm"
+                  no-caps
                 />
               </div>
-            </q-card-section>
+            </template>
+            <div v-if="props.expand" class="histrix-grid-detail">
+              <HistrixApp
+                name="detail"
+                inner="true"
+                :path="detailPath(props)"
+                :query="detailQuery(props)"
+              />
+            </div>
           </component>
         </div>
       </template>
@@ -940,6 +947,18 @@ export default {
 
       return rowclass;
     },
+    gridCellClasses(props) {
+      // En modo grid (celular) NO propagamos DT_RowClass: esa clase la genera el
+      // ERP legacy para filas <tr> de DataTables (alto mínimo de fila + un
+      // border-left de color) y al aplicarla al wrapper de la tarjeta la estiraba
+      // y dejaba un hueco vacío. La tarjeta controla su propio layout; solo
+      // conservamos el cursor-pointer cuando la fila abre detalle o es de consulta.
+      let cls = 'histrix-grid-cell col-12';
+      if (this.hasDetail(props) || this.onlyConsulta) {
+        cls += ' cursor-pointer';
+      }
+      return cls;
+    },
     xmlUrl(filterQuery) {
       return `${this.path}?&_dt=table${filterQuery}`;
     },
@@ -1126,5 +1145,176 @@ export default {
 
 .action-cell {
   white-space: nowrap !important ;
+}
+
+/* ===========================================================================
+   Vista móvil (modo grid de QTable, < 600px) — lista de tarjetas
+   Reglas namespaceadas bajo .histrix-table para no afectar otras tablas.
+   =========================================================================== */
+
+/* --- Área del grid: fondo tenue para que las tarjetas "floten" --- */
+.histrix-table .q-table__grid-content {
+  background: #eef1f5;
+  padding: 12px 12px 4px;
+  align-content: flex-start;
+  align-items: flex-start;
+}
+
+/* Cada celda del grid envuelve una tarjeta. Reset defensivo: ningún alto ni
+   borde impuesto desde fuera (Quasar o estilos heredados) puede estirar la
+   tarjeta. El DT_RowClass del ERP legacy ya no se propaga aquí (ver
+   gridCellClasses), por eso desaparece la franja de color y el hueco vacío. */
+.histrix-table .histrix-grid-cell {
+  align-self: flex-start !important;
+  min-height: 0 !important;
+  height: auto !important;
+  padding: 0 !important;
+}
+
+/* --- Tarjeta: contenedor flex, borde y sombra suaves --- */
+.histrix-table .histrix-grid-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 0 !important;
+  height: auto !important;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #e3e7ee;
+  border-radius: 14px;
+  box-shadow:
+    0 1px 2px rgba(16, 24, 40, 0.06),
+    0 1px 3px rgba(16, 24, 40, 0.05);
+  margin-bottom: 12px;
+  overflow: hidden;
+  transition:
+    box-shadow 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.histrix-table .histrix-grid-card--selected {
+  border-color: var(--q-primary, #1976d2);
+  box-shadow: 0 0 0 2px var(--q-primary, #1976d2);
+}
+
+/* --- Cuerpo: pila de campos --- */
+.histrix-table .histrix-grid-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+}
+
+/* Título: la primera columna, destacada como nombre de la tarjeta */
+.histrix-table .histrix-grid-title {
+  font-size: 1.08rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #101828;
+  word-break: break-word;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f2f5;
+}
+
+.histrix-table .histrix-grid-title .histrix-grid-value {
+  text-align: left;
+  font-weight: 700;
+}
+
+/* Resto de campos: etiqueta a la izquierda, valor a la derecha */
+.histrix-table .histrix-grid-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+
+.histrix-table .histrix-grid-label {
+  flex: 0 0 auto;
+  max-width: 45%;
+  color: #667085;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.histrix-table .histrix-grid-value {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: right;
+  word-break: break-word;
+  color: #1d2939;
+  font-weight: 500;
+}
+
+/* Sin etiqueta: el valor se alinea a la izquierda */
+.histrix-table .histrix-grid-line .histrix-grid-value:only-child {
+  text-align: left;
+}
+
+/* --- Acciones: barra inferior con buen tamaño táctil --- */
+.histrix-table .histrix-grid-sep {
+  margin: 0;
+}
+
+.histrix-table .histrix-grid-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #f9fafb;
+}
+
+.histrix-table .histrix-grid-actions .q-btn {
+  min-height: 40px;
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0 12px;
+}
+
+/* --- Detalle expandido dentro de la tarjeta --- */
+.histrix-table .histrix-grid-detail {
+  background: #f7f8fa;
+  padding: 8px;
+  border-top: 1px solid #eceef2;
+}
+
+/* --- Barra superior: apilar y full-width en celular --- */
+@media (max-width: 599px) {
+  .histrix-table .q-table__top {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  /* Cada control (top-left / top-right) ocupa todo el ancho */
+  .histrix-table .q-table__top .q-table__control {
+    width: 100%;
+  }
+
+  /* El separador flexible no aporta nada al apilar en columna */
+  .histrix-table .q-table__top .q-table__separator {
+    display: none;
+  }
+
+  /* Top-right: paginación + acciones se distribuyen y envuelven */
+  .histrix-table .q-table__top .q-table__control:last-child {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 4px 8px;
+  }
+
+  /* Selector "Cantidad por página" + flechas: no se salen de pantalla */
+  .histrix-table .histrix-pagination {
+    flex-wrap: wrap;
+    justify-content: flex-start !important;
+    width: 100%;
+  }
 }
 </style>
