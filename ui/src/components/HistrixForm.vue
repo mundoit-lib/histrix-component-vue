@@ -143,7 +143,7 @@
           />
           <q-btn
             v-if="insertButton || updateButton"
-            :disable="v$.$invalid"
+            :disable="submitting"
             type="submit"
             label="Grabar"
             icon="save"
@@ -534,7 +534,49 @@ export default {
           this.$emit('process-finish', true);
         });
     },
-    onSubmit() {
+    /**
+     * Valida el formulario completo y, si hay errores, los muestra y lleva el
+     * foco al primer campo inválido. Vuelidate agrega automáticamente las reglas
+     * de cada HistrixField hijo, así que v$.$validate() marca todo como tocado
+     * (dirty) y recién ahí aparecen los mensajes en rojo. Devuelve true si el
+     * formulario es válido. Es público: HistrixApp lo invoca vía ref antes de
+     * procesar un comprobante o avanzar un paso del stepper.
+     */
+    async validateAndFocus() {
+      const valid = await this.v$.$validate();
+      if (!valid) {
+        this.focusFirstError();
+      }
+      return valid;
+    },
+    /**
+     * Lleva el foco (y hace scroll) al primer campo que quedó en error. Se basa
+     * en la clase .q-field--error que Quasar agrega al pintar el error, así que
+     * funciona para cualquier tipo de campo (input, select, date, etc.).
+     */
+    focusFirstError() {
+      this.$nextTick(() => {
+        const root = this.$el;
+        if (!root || typeof root.querySelector !== 'function') {
+          return;
+        }
+        const errorEl = root.querySelector('.q-field--error');
+        if (!errorEl) {
+          return;
+        }
+        const focusable = errorEl.querySelector('input, textarea, select, [tabindex]:not([tabindex="-1"])');
+        (focusable || errorEl).focus?.();
+        errorEl.scrollIntoView?.({ behavior: 'smooth', block: 'center' });
+      });
+    },
+    async onSubmit() {
+      // Validación diferida: recién al apretar Grabar validamos todo el form. Si
+      // algo falla, marcamos los campos, frenamos el submit y movemos el foco al
+      // primer error. (El botón ya no se deshabilita por v$.$invalid.)
+      const valid = await this.validateAndFocus();
+      if (!valid) {
+        return;
+      }
       // Grids tipo "ing"/"grid": las filas NO se graban una por una contra la
       // API. Se acumulan en la tabla interna del grid (cliente-side) y viajan
       // juntas en el process del comprobante padre. Acá sólo confirmamos el

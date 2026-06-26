@@ -68,7 +68,7 @@
               <div class="q-pa-sm">
                 <q-btn
                   icon="thumb_up"
-                  :disable="!validity"
+                  :disable="processing"
                   :label="labelButton"
                   class="bg-secondary text-white nojustify-end"
                   @click="process"
@@ -123,10 +123,9 @@
 
               <q-stepper-navigation>
                 <q-btn
-                  @click="step++"
+                  @click="advanceStep"
                   color="primary"
                   label="Continuar"
-                  :disable="!validity"
                   icon="navigate_next"
                 />
               </q-stepper-navigation>
@@ -520,6 +519,7 @@ export default {
       }
     },
     refreshMaster(data) {
+      this.processing = false;
       this.$emit('process-finish', data);
       if (this.redirectPage) {
         this.$router.push(this.redirectPage);
@@ -555,8 +555,33 @@ export default {
       this.detailPath = $rowAttr.detailpath;
       this.isDetailOpened = true;
     },
-    process() {
-      this.validity = false;
+    /**
+     * Valida el contenedor hijo (form) antes de avanzar de paso en el stepper.
+     * Si hay errores, validateAndFocus los muestra y enfoca el primero, y no
+     * avanzamos. Si el hijo no es un form (no tiene validateAndFocus), avanza.
+     */
+    async advanceStep() {
+      if (typeof this.$refs.main?.validateAndFocus === 'function') {
+        const valid = await this.$refs.main.validateAndFocus();
+        if (!valid) {
+          return;
+        }
+      }
+      this.step++;
+    },
+    async process() {
+      // El botón Procesar ya no se deshabilita por validez: validamos al tocarlo
+      // y, si falta algo, mostramos el error y movemos el foco sin procesar.
+      if (this.processing) {
+        return;
+      }
+      if (typeof this.$refs.main?.validateAndFocus === 'function') {
+        const valid = await this.$refs.main.validateAndFocus();
+        if (!valid) {
+          return;
+        }
+      }
+      this.processing = true;
       this.$refs.main.processData();
     },
     closeDetail() {
@@ -720,6 +745,7 @@ export default {
     return {
       step: 1, // default initial Step
       validity: true,
+      processing: false,
       showPdfPopup: false,
       pdfSrc: '',
       show: true,

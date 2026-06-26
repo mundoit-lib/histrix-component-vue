@@ -644,9 +644,11 @@ export default {
   mounted() {
     this.getHelpSchema();
     this.getOptions(true);
-    if (this.v$?.modelValue) {
-      this.v$?.modelValue?.$touch();
-    }
+    // Validación diferida: NO marcamos el campo como "tocado" al montar. Antes
+    // se hacía v$.modelValue.$touch() acá, lo que pintaba los requeridos en rojo
+    // apenas se abría el formulario sin que el usuario tocara nada. Ahora el
+    // error sólo aparece cuando el usuario interactúa con el campo o cuando se
+    // intenta grabar (HistrixForm.validateAndFocus dispara v$.$validate()).
   },
   computed: {
     /**
