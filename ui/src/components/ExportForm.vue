@@ -1,35 +1,76 @@
 <template>
-  <q-card flat>
-      <q-card-section class="bg-primary text-white">
-        <div class="text-h6">Exportar Archivo {{schema.title}}</div>
-        <div class="text-subtitle2">Seleccione formato</div>
-      </q-card-section>
-      <q-separator />
-      <div class="row">
-        <q-item tag="label" v-ripple v-for="format in formats" v-bind:key="format.format" class="col-12">
-          <q-item-section avatar>
-            <q-radio v-model="fileFormat" :val="format.format" />
-          </q-item-section>
-          <q-item-section>
-            <q-item-label><q-icon :name="format.icon" color="secondary" /> {{format.name}} </q-item-label>
-            <q-item-label caption>{{format.caption}}</q-item-label>
-          </q-item-section>
-          <q-item-section v-if="format.delimiter">
-            <q-item-label caption> <q-input v-model="delimiter" label="Delimitador" /></q-item-label>
-          </q-item-section>
-        </q-item>
+  <q-card flat class="export-form">
+    <!-- Encabezado -->
+    <q-card-section class="export-form__header">
+      <q-icon name="cloud_download" size="30px" />
+      <div class="export-form__heading">
+        <div class="export-form__title">Exportar {{ schema.title }}</div>
+        <div class="export-form__subtitle">Elegí el formato de descarga</div>
       </div>
-      <q-separator />
-      <q-card-section>
-          <q-input v-model="fileName" label="Nombre del Archivo" />
-      </q-card-section>
-      <q-card-actions align="right">
-        <q-btn icon="cloud_download" @click="downloadFile()" label="Descargar Archivo"/>
-      </q-card-actions>
+    </q-card-section>
+
+    <!-- Opciones de formato -->
+    <q-card-section class="export-form__formats">
+      <label
+        v-for="f in formats"
+        v-bind:key="f.format"
+        class="export-form__option"
+        :class="{ 'export-form__option--active': fileFormat === f.format }"
+      >
+        <q-radio v-model="fileFormat" :val="f.format" dense />
+        <q-icon :name="f.icon" :color="f.color" size="26px" class="export-form__option-icon" />
+        <div class="export-form__option-text">
+          <div class="export-form__option-name">{{ f.name }}</div>
+          <div class="export-form__option-caption">{{ f.caption }}</div>
+        </div>
+      </label>
+
+      <!-- Delimitador: solo visible cuando el formato lo admite (CSV) -->
+      <q-input
+        v-if="currentFormat && currentFormat.hasDelimiter"
+        v-model="delimiter"
+        label="Delimitador"
+        hint="Carácter que separa las columnas"
+        dense
+        filled
+        maxlength="3"
+        class="export-form__delimiter"
+      >
+        <template v-slot:prepend>
+          <q-icon name="more_vert" />
+        </template>
+      </q-input>
+    </q-card-section>
+
+    <q-separator />
+
+    <!-- Nombre del archivo -->
+    <q-card-section>
+      <q-input v-model="fileName" label="Nombre del archivo" dense filled>
+        <template v-slot:prepend>
+          <q-icon name="insert_drive_file" />
+        </template>
+      </q-input>
+    </q-card-section>
+
+    <!-- Acciones -->
+    <q-card-actions align="right" class="export-form__actions">
+      <q-btn flat label="Cancelar" color="grey-7" no-caps v-close-popup />
+      <q-btn
+        unelevated
+        color="primary"
+        icon="cloud_download"
+        label="Descargar"
+        no-caps
+        :loading="downloading"
+        @click="downloadFile()"
+      />
+    </q-card-actions>
   </q-card>
 </template>
 
 <script>
+import { EXPORT_FORMATS, DEFAULT_DELIMITER, buildExportFileName, buildExportParams, findFormat } from '../core/export.js';
 import useApi from '../services/histrixApi.js';
 
 export default {
@@ -41,73 +82,157 @@ export default {
     schema: {}
   },
   setup() {
-    const { queryStringToObject, downloadAppData } = useApi();
-    return { queryStringToObject, downloadAppData };
+    const { downloadAppData } = useApi();
+    return { downloadAppData };
   },
-  components: {},
+  emits: ['close'],
   watch: {
     fileFormat() {
-      this.fileName = `${this.schema.title}.${this.fileFormat}`;
+      this.fileName = buildExportFileName(this.schema.title, this.fileFormat);
     }
   },
   mounted() {
-    this.fileName = `${this.schema.title}.${this.fileFormat}`;
+    this.fileName = buildExportFileName(this.schema.title, this.fileFormat);
   },
   data() {
     return {
-      formats: [
-        {
-          format: 'xls',
-          name: 'Excel',
-          caption: 'Hoja de Cálculo',
-          icon: 'fas fa-file-excel'
-        },
-        {
-          format: 'pdf',
-          name: 'PDF',
-          caption: 'Documento PDF',
-          icon: 'fas fa-file-pdf'
-        },
-        {
-          format: 'csv',
-          name: 'CSV',
-          caption: 'Texto delimitado por comas',
-          delimiter: ',',
-          icon: 'fas fa-file-csv'
-        },
-        {
-          format: 'xml',
-          name: 'XML',
-          caption: 'Archivo XML de exportación',
-          icon: 'description'
-        }
-      ],
+      formats: EXPORT_FORMATS,
       fileName: '',
       fileFormat: 'xls',
-      delimiter: ','
+      delimiter: DEFAULT_DELIMITER,
+      downloading: false
     };
   },
   computed: {
+    currentFormat() {
+      return findFormat(this.fileFormat);
+    },
     params() {
-      const params = this.queryStringToObject(this.exportQuery);
-      return { ...this.query, ...params };
+      return buildExportParams({
+        query: this.query,
+        exportQuery: this.exportQuery,
+        format: this.fileFormat,
+        delimiter: this.delimiter
+      });
     }
   },
   methods: {
     downloadFile() {
       // El service propaga el error; acá (capa UI) lo mostramos.
-      this.downloadAppData(this.path, this.params, this.fileFormat, this.fileName).catch(() => {
-        this.$q.notify({
-          message: 'Error al descargar el archivo',
-          type: 'negative',
-          textColor: 'white',
-          color: 'negative',
-          icon: 'error',
-          closeBtn: 'close',
-          position: 'top'
+      this.downloading = true;
+      this.downloadAppData(this.path, this.params, this.fileFormat, this.fileName)
+        .then(() => {
+          this.$emit('close');
+        })
+        .catch(() => {
+          this.$q.notify({
+            message: 'Error al descargar el archivo',
+            type: 'negative',
+            textColor: 'white',
+            color: 'negative',
+            icon: 'error',
+            closeBtn: 'close',
+            position: 'top'
+          });
+        })
+        .finally(() => {
+          this.downloading = false;
         });
-      });
     }
   }
 };
 </script>
+
+<style scoped>
+.export-form {
+  width: 440px;
+  max-width: 92vw;
+}
+
+/* --- Encabezado --- */
+.export-form__header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: var(--q-primary, #1976d2);
+  color: #fff;
+  padding: 18px 20px;
+}
+
+.export-form__title {
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+}
+
+.export-form__subtitle {
+  font-size: 0.85rem;
+  opacity: 0.9;
+}
+
+/* --- Opciones de formato --- */
+.export-form__formats {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 16px 20px 8px;
+}
+
+.export-form__option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border: 1px solid #e3e7ee;
+  border-radius: 10px;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease;
+}
+
+.export-form__option:hover {
+  border-color: #c9d2e0;
+  background: #f8fafc;
+}
+
+.export-form__option--active {
+  border-color: var(--q-primary, #1976d2);
+  background: rgba(25, 118, 210, 0.06);
+}
+
+.export-form__option-icon {
+  flex: 0 0 auto;
+}
+
+.export-form__option-text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.export-form__option-name {
+  font-weight: 600;
+  color: #1d2939;
+  line-height: 1.2;
+}
+
+.export-form__option-caption {
+  font-size: 0.8rem;
+  color: #667085;
+}
+
+.export-form__delimiter {
+  margin-top: 8px;
+}
+
+/* --- Acciones --- */
+.export-form__actions {
+  padding: 12px 16px 16px;
+}
+
+.export-form__actions .q-btn {
+  border-radius: 8px;
+  font-weight: 600;
+}
+</style>

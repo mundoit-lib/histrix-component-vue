@@ -232,16 +232,13 @@
     </q-dialog>
 
     <q-dialog v-model="exportDialog" position="top">
-      <q-card style="auto">
-        <q-card-section class="row items-center no-wrap">
-          <ExportForm
-            :schema="schema"
-            :path="path"
-            :query="query"
-            :exportQuery="exportQuery"
-          />
-        </q-card-section>
-      </q-card>
+      <ExportForm
+        :schema="schema"
+        :path="path"
+        :query="query"
+        :exportQuery="exportQuery"
+        @close="exportDialog = false"
+      />
     </q-dialog>
     <q-dialog v-model="dialog" position="top">
       <q-card style="auto">

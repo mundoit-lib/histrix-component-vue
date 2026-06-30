@@ -58,64 +58,61 @@
 
       <!-- TOP right: BUTTONS -->
       <template v-slot:top-right="props">
-        <div
-          v-if="data.length > 50"
-          class="histrix-pagination"
-          style="display: flex; align-items: center; justify-content: center; text-align: center;"
-        >
-          <span style="text-align: center; font-size: 0.8rem;"
-            >Cantidad por pagina:
-          </span>
-          <q-select
-            :options="optionsPagination"
-            hide-bottom-space
-            dense
-            item-aligned
-            emit-value
-            map-options
-            v-model="pagination.rowsPerPage"
-          />
-          <q-btn
-            v-if="props.pagesNumber > 2"
-            icon="first_page"
-            color="grey-8"
-            round
-            dense
-            flat
-            :disable="props.isFirstPage"
-            @click="props.firstPage"
-          />
-
-          <q-btn
-            icon="chevron_left"
-            color="grey-8"
-            round
-            dense
-            flat
-            :disable="props.isFirstPage"
-            @click="props.prevPage"
-          />
-
-          <q-btn
-            icon="chevron_right"
-            color="grey-8"
-            round
-            dense
-            flat
-            :disable="props.isLastPage"
-            @click="props.nextPage"
-          />
-
-          <q-btn
-            v-if="props.pagesNumber > 2"
-            icon="last_page"
-            color="grey-8"
-            round
-            dense
-            flat
-            :disable="props.isLastPage"
-            @click="props.lastPage"
-          />
+        <div v-if="data.length > 50" class="histrix-pagination">
+          <div class="histrix-pagination__size">
+            <span class="histrix-pagination__label">Por página</span>
+            <q-select
+              :options="optionsPagination"
+              hide-bottom-space
+              dense
+              borderless
+              item-aligned
+              emit-value
+              map-options
+              v-model="pagination.rowsPerPage"
+              class="histrix-pagination__select"
+            />
+          </div>
+          <div class="histrix-pagination__nav">
+            <q-btn
+              v-if="props.pagesNumber > 2"
+              icon="first_page"
+              color="grey-8"
+              round
+              dense
+              flat
+              :disable="props.isFirstPage"
+              @click="props.firstPage"
+            />
+            <q-btn
+              icon="chevron_left"
+              color="grey-8"
+              round
+              dense
+              flat
+              :disable="props.isFirstPage"
+              @click="props.prevPage"
+            />
+            <q-btn
+              icon="chevron_right"
+              color="grey-8"
+              round
+              dense
+              flat
+              :disable="props.isLastPage"
+              @click="props.nextPage"
+            />
+            <q-btn
+              v-if="props.pagesNumber > 2"
+              icon="last_page"
+              color="grey-8"
+              round
+              dense
+              flat
+              :disable="props.isLastPage"
+              @click="props.lastPage"
+            />
+          </div>
         </div>
         <q-btn-group dense flat v-if="!inner">
           <q-btn
@@ -1284,6 +1281,37 @@ export default {
   border-top: 1px solid #eceef2;
 }
 
+/* ===========================================================================
+   Paginación (label + selector + flechas) — barra superior derecha
+   =========================================================================== */
+.histrix-table .histrix-pagination {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+}
+
+.histrix-table .histrix-pagination__size {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.histrix-table .histrix-pagination__label {
+  font-size: 0.8rem;
+  color: #667085;
+  white-space: nowrap;
+}
+
+.histrix-table .histrix-pagination__select {
+  min-width: 56px;
+}
+
+.histrix-table .histrix-pagination__nav {
+  display: flex;
+  align-items: center;
+}
+
 /* --- Barra superior: apilar y full-width en celular --- */
 @media (max-width: 599px) {
   .histrix-table .q-table__top {
@@ -1310,11 +1338,10 @@ export default {
     gap: 4px 8px;
   }
 
-  /* Selector "Cantidad por página" + flechas: no se salen de pantalla */
+  /* Selector "Por página" + flechas: label/selector a un lado, flechas al otro */
   .histrix-table .histrix-pagination {
-    flex-wrap: wrap;
-    justify-content: flex-start !important;
     width: 100%;
+    justify-content: space-between;
   }
 }
 </style>

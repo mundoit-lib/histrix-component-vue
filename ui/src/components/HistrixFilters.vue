@@ -9,33 +9,42 @@
         :label="schema.title"
         caption="búsqueda avanzada"
         dense
+        class="histrix-filters__panel"
       >
-        <div class="row q-col-gutter-sm q-pa-sm">
+        <div class="histrix-filters__body q-pa-md">
+          <div class="row q-col-gutter-sm">
+            <div
+              v-for="field in filters"
+              v-bind:key="field.uid"
+              class="col-xs-12 col-sm-6"
+            >
+              <HistrixField
+                class="full-width"
+                dense
+                :model-value="field.valor"
+                @update:model-value="onFilterUpdate(field, $event)"
+                :schema="field"
+                clearable
+                filled
+              />
+            </div>
+          </div>
           <div
-            v-for="field in filters"
-            v-bind:key="field.uid"
-            class="col-xs-12 col-sm-6"
+            v-if="schema.filters[0] && !autoFilter"
+            class="row justify-end q-mt-md"
           >
-            <HistrixField
-              class="full-width"
-              dense
-              :model-value="field.valor"
-              @update:model-value="onFilterUpdate(field, $event)"
-              :schema="field"
-              clearable
-              filled
+            <q-btn
+              class="histrix-filters__btn"
+              color="secondary"
+              label="Buscar"
+              icon="search"
+              unelevated
+              no-caps
+              v-on:click="filterData"
             />
           </div>
         </div>
       </q-expansion-item>
-      <q-btn
-        v-if="schema.filters[0] && !autoFilter"
-        class="histrix-filters__btn q-ma-sm"
-        color="secondary"
-        label="Buscar"
-        icon="search"
-        v-on:click="filterData"
-      />
     </template>
 
     <!-- Filtro único: campo + botón en línea (desktop) / apilados (celular) -->
@@ -144,3 +153,36 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+/* Panel de búsqueda avanzada: contenedor con borde suave para que la zona
+   expandida (campos + botón Buscar) se distinga del resto de la barra. */
+.histrix-filters__panel {
+  border: 1px solid #e3e7ee;
+  border-radius: 12px;
+  background: #fff;
+  overflow: hidden;
+}
+
+/* En desktop fijamos un ancho estable para que el panel NO salte de tamaño
+   entre cerrado y abierto: el acordeón solo crece hacia abajo. En celular
+   ocupa todo el ancho disponible. */
+@media (min-width: 600px) {
+  .histrix-filters__panel {
+    width: 480px;
+    max-width: 100%;
+  }
+}
+
+/* Cuerpo desplegable: separado del header por una línea tenue */
+.histrix-filters__body {
+  border-top: 1px solid #f0f2f5;
+  background: #fcfcfd;
+}
+
+.histrix-filters__btn {
+  border-radius: 8px;
+  font-weight: 600;
+  padding: 0 18px;
+}
+</style>

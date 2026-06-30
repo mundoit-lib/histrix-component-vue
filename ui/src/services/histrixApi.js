@@ -1,5 +1,6 @@
 import { useAuth } from '@mundoit-lib/plugin-vue-auth';
 import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
+import { buildExportUrl, parseQueryString } from '../core/export.js';
 import config from './config';
 
 export default function useApi() {
@@ -300,18 +301,10 @@ export default function useApi() {
       });
     },
 
+    // Reusa la función pura de core/export.js (testeada) para no duplicar el
+    // parseo del querystring pseudo-OData.
     queryStringToObject(query) {
-      const params = new URLSearchParams(query);
-      const result = {};
-      for (const [key, value] of params.entries()) {
-        const cleanKey = key.replace(/\[\]$/, '');
-        if (result[cleanKey]) {
-          result[cleanKey].push(value);
-        } else {
-          result[cleanKey] = [value];
-        }
-      }
-      return result;
+      return parseQueryString(query);
     },
 
     getFiles(path) {
@@ -388,7 +381,7 @@ export default function useApi() {
     // promesa y propaga el error para que el componente que llama lo muestre
     // (antes hacía Notify de Quasar acá y se tragaba el error).
     downloadAppData(path, query, fileFormat, fileName) {
-      const url = `${apiUrl()}/export/${fileFormat}/${path}`;
+      const url = buildExportUrl(apiUrl(), fileFormat, path);
       return axios
         .get(url, {
           params: query,

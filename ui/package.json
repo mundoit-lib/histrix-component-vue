@@ -1,6 +1,6 @@
 {
   "name": "@mundoit-lib/histrix-component-vue",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "author": "Luis M. Melgratti <luis@mundoit.com.ar>",
   "description": "Histrix Vue 3 client components (Quasar 2)",
   "license": "MIT",
