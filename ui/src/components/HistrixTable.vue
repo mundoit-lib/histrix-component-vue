@@ -504,10 +504,18 @@ export default {
   watch: {
     path: {
       handler(_newVal, _oldVal) {
-        this.getData();
+        // Cambió el XML (nueva pantalla): re-aplicamos la regla de preFetch del
+        // nuevo schema. Reseteamos el "armado" para no arrastrar el de la anterior.
+        this.autoFetchArmed = false;
+        if (this.autoFetchAllowed) {
+          this.getData();
+        }
       }
     },
     query: {
+      // NO se filtra por preFetch a propósito: este watcher es data-driven (p. ej.
+      // un grid interno que carga cuando el padre le pasa la clave de relación) y
+      // ya tiene su propio guard por contenido. Sólo dispara ante un cambio real.
       handler(newVal, oldVal) {
         if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
           this.getData();
@@ -516,7 +524,9 @@ export default {
     },
     fullQuery: {
       handler(_newVal, _oldVal) {
-        this.getData();
+        if (this.autoFetchAllowed) {
+          this.getData();
+        }
       }
     },
     innerData: {
@@ -657,6 +667,22 @@ export default {
     onlyConsulta() {
       return !this.canInsert && !this.canUpdate && !this.canDelete;
     },
+    /**
+     * ¿Se permite la carga automática de datos contra la API?
+     *
+     * `preFetch` controla la carga automática INICIAL:
+     *  - preFetch:true  → carga sola al abrir (y ante cambios de path/sort/etc.).
+     *  - preFetch:false → NO pega a la API hasta que el usuario la "arma"
+     *    (p. ej. aplica un filtro). Ej típico: un grid `ing`/`grid` de alta que
+     *    arranca vacío y se completa cargando renglones a mano.
+     *
+     * Antes esto sólo se respetaba en mounted(); los watchers de path/fullQuery y
+     * el update:pagination de la q-table llamaban getData() igual. Este gate lo
+     * centraliza. (El watcher de `query` queda afuera a propósito: ver su nota.)
+     */
+    autoFetchAllowed() {
+      return this.schema.preFetch === true || this.autoFetchArmed;
+    },
     visibleColumns() {
       // Lógica pura extraída a ../core/fieldVisibility.js.
       return visibleColumnNames(this.schema.columns);
@@ -699,6 +725,11 @@ export default {
     updatePagination(pagination) {
       const descending = pagination.descending ? 'desc' : 'asc';
       this.localFilters._sortBy = `${pagination.sortBy}|${descending}`;
+      // La q-table emite update:pagination al montar; con preFetch:false eso NO
+      // debe pegarle a la API. Guardamos el sort igual (por si después se carga).
+      if (!this.autoFetchAllowed) {
+        return;
+      }
       this.getData();
     },
     fieldQuerys(fieldname, row) {
@@ -1044,6 +1075,9 @@ export default {
       }, 300);
     },
     histrixFilter($query) {
+      // El usuario aplicó un filtro: a partir de acá el grid puede cargar aunque
+      // el schema tenga preFetch:false. El watcher de fullQuery hace el getData.
+      this.autoFetchArmed = true;
       this.fullQuery = $query;
     },
     filterObject(obj, predicate) {
@@ -1117,6 +1151,7 @@ export default {
       ],
       data: [],
       openFilter: false,
+      autoFetchArmed: false, // el usuario ya "armó" la carga (aplicó filtro, etc.)
       searchStr: this.modelValueFilter,
       pagination: {
         sortBy: 'desc',

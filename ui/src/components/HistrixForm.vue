@@ -1,5 +1,24 @@
 <template>
   <div class="q-pa-sm">
+    <!--
+      Botones de acción (helpers.link de campos NO editables): abren el XML
+      linkeado en un modal. En una `fichaing` son los accesos grandes tipo
+      "Orden de Trabajo de Obra", "Orden de trabajo de servicio", etc.
+    -->
+    <div v-if="linkButtons.length" class="row q-col-gutter-sm q-mb-md">
+      <div v-for="btn in linkButtons" :key="btn.name" class="col-12 col-sm">
+        <q-btn
+          class="full-width"
+          color="primary"
+          size="md"
+          no-caps
+          unelevated
+          :icon="linkIcon(btn)"
+          :label="linkLabel(btn)"
+          @click="openLinkButton(btn)"
+        />
+      </div>
+    </div>
     <slot name="slot-top-form" :props="localValues" />
     <q-form @submit="onSubmit" enctype="multipart/form-data">
       <div class="row">
@@ -154,6 +173,35 @@
       </div>
     </q-form>
     <slot name="slot-botton-form" :props="localValues" />
+
+    <!-- Modal que abre un botón de acción (helper.link) -->
+    <q-dialog
+      v-model="showLinkButtonDialog"
+      full-width
+      :maximized="$q.platform.is.mobile"
+      transition-show="slide-down"
+      transition-hide="slide-up"
+    >
+      <q-layout view="Lhh lpR fff" container class="bg-white">
+        <q-header class="bg-primary">
+          <q-toolbar>
+            <q-toolbar-title>{{ linkButtonDialog.title }}</q-toolbar-title>
+            <q-btn flat round dense icon="close" v-close-popup />
+          </q-toolbar>
+        </q-header>
+        <q-page-container>
+          <q-page>
+            <HistrixApp
+              :path="linkButtonDialog.path"
+              :query="linkButtonDialog.query"
+              :title="linkButtonDialog.title"
+              class="col"
+              v-on:closepopup="closeLinkButton"
+            />
+          </q-page>
+        </q-page-container>
+      </q-layout>
+    </q-dialog>
   </div>
 </template>
 
@@ -161,7 +209,10 @@
 import { useVuelidate } from '@vuelidate/core';
 import { isFieldEditable as isFieldEditablePure } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
+import { mapUiIcon } from '../core/icons.js';
 import { extractKeys } from '../core/keys.js';
+import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
+import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
@@ -184,7 +235,9 @@ export default {
   },
   components: {
     HistrixField,
-    HistrixCell
+    HistrixCell,
+    // Lazy para evitar el ciclo HistrixApp -> HistrixForm -> HistrixApp.
+    HistrixApp: defineLazyComponent(() => import('./HistrixApp.vue'))
   },
   setup() {
     const { getAppSchema, upload, processAppForm, insertAppData, updateAppData, getAppData } = useApi();
@@ -229,6 +282,19 @@ export default {
         (field) =>
           this.schema.type === 'fichaing' || this.schema.type === 'cabecera' || !field.innerContainer || field.isSelect
       );
+    },
+    /**
+     * Campos "botón" de acción: no editables y con `helpers.link`. En Histrix se
+     * muestran arriba del form como botones grandes que abren el XML linkeado en
+     * un modal (p. ej. en una `fichaing`: "Orden de Trabajo de Obra", etc.).
+     *
+     * Se distinguen del botón "+" inline de HistrixField (isViewAddButton), que
+     * es para campos EDITABLES con helper. Estos no editables no entran en
+     * `editables`, así que hoy no se renderizan por ningún otro lado: agregarlos
+     * acá es puramente aditivo.
+     */
+    linkButtons() {
+      return Object.values(this.localSchema.fields || {}).filter((field) => field.helpers?.link && !field.editable);
     },
     dateFields() {
       return this.filter(this.localSchema.fields, (field) => field['data-role'] !== 'datebox');
@@ -408,6 +474,47 @@ export default {
     },
     closePopup() {
       this.$emit('closepopup');
+    },
+    /**
+     * Texto del botón de acción: el label viene del valor del campo (p. ej.
+     * "Orden de Trabajo de Obra"), con fallback al title/name del schema.
+     */
+    linkLabel(field) {
+      return this.localValues?.[field.name] || field.title || field.name;
+    },
+    /**
+     * Ícono Material del botón, traducido desde el ícono jQuery-UI del helper.
+     */
+    linkIcon(field) {
+      return mapUiIcon(field.helpers?.link?.icon);
+    },
+    /**
+     * Abre el XML linkeado por el helper en un modal (ventana interna Histrix).
+     */
+    openLinkButton(field) {
+      const link = field.helpers?.link;
+      const path = resolveHelperLinkPath(link, this.path);
+      if (!path) {
+        return;
+      }
+      // Los `parameters` del link (p. ej. { source:'3', target:'tipo_oto' }) se
+      // pasan como query al form hijo, que los mergea en sus values (tipo_oto=3).
+      const linkParams = buildLinkParameters(link.parameters);
+      this.linkButtonDialog = {
+        path,
+        title: this.linkLabel(field),
+        width: link.width || '90%',
+        query: { ...this.query, ...linkParams }
+      };
+      this.showLinkButtonDialog = true;
+    },
+    /**
+     * Al cerrar el modal de un botón de acción refrescamos el form (por si el
+     * alta modificó datos que la consulta embebida debe volver a leer).
+     */
+    closeLinkButton() {
+      this.showLinkButtonDialog = false;
+      this.$emit('process-finish');
     },
 
     computedPath(field) {
@@ -683,7 +790,9 @@ export default {
       data: [],
       submitting: false,
       currentTab: 'mainTab',
-      valueEdit: false
+      valueEdit: false,
+      showLinkButtonDialog: false, // modal abierto por un botón de acción (helper.link)
+      linkButtonDialog: {} // { path, title, width, query } del botón clickeado
     };
   }
 };

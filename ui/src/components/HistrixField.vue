@@ -12,7 +12,7 @@
       <component
         v-bind:is="fieldComponent"
         :model-value="localValue"
-        @update:model-value="localValue = $event"
+        @update:model-value="onFieldInput"
         v-bind="$attrs"
         style="flex: 1;"
         v-on:computed-total="onComputedTotal"
@@ -112,22 +112,25 @@
             name="search"
             class="cursor-pointer"
             v-if="fieldSchema.helpContainer"
+            @click="showHelp = true"
           />
           <q-menu
-          ref="helperProxy"
+          v-if="fieldSchema.helpContainer"
+          v-model="showHelp"
+          no-parent-event
+          no-focus
+          no-refocus
           anchor="bottom left"
-          self="top right"
+          self="top left"
           transition-show="scale"
           transition-hide="scale"
         >
-          <HistrixApp
-            :path="helpPath"
-            :query="queryComputedHelpExternal"
-            :value-filter="localValue"
-            :title="'Seleccione ' + label"
+          <HistrixHelp
+            :help-container="fieldSchema.helpContainer"
+            :form-values="row"
+            :label="label"
+            :term="localValue"
             v-on:select-row="selectRow"
-            :search="false"
-            :inner="true"
           />
         </q-menu>
         </template>
@@ -238,6 +241,7 @@ import { resolveFieldKind } from '../core/fieldType.js';
 import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
+import HistrixHelp from './HistrixHelp.vue';
 
 export default {
   name: 'HistrixField',
@@ -258,9 +262,6 @@ export default {
   watch: {
     localValue: {
       handler(newVal, _oldVal) {
-        if (this.fieldSchema.helpContainer) {
-          this.getFieldHelpData(newVal);
-        }
         if (this.fieldSchema.histrix_type === 'File') {
           this.onFileChange(newVal);
         }
@@ -299,7 +300,8 @@ export default {
   },
   components: {
     HistrixApp: defineLazyComponent(() => import('./HistrixApp.vue')),
-    HistrixFileManager: defineLazyComponent(() => import('./widgets/HistrixFileManager.vue'))
+    HistrixFileManager: defineLazyComponent(() => import('./widgets/HistrixFileManager.vue')),
+    HistrixHelp
   },
   emits: ['selectOption', 'computed-total', 'fill-fields', 'update:modelValue', 'field-change'],
   methods: {
@@ -403,8 +405,28 @@ export default {
     },
     showHelper() {
       if (this.fieldSchema.helpContainer) {
-        this.$refs.helperProxy.show();
+        this.showHelp = true;
       }
+    },
+    /**
+     * Input del usuario en el campo. Setea el valor y, si el campo tiene ayuda,
+     * abre el popup con la lista filtrada por lo tipeado (typeahead). NO auto-
+     * selecciona nada: el usuario elige de la lista. Sólo se dispara al tipear
+     * (no en cambios programáticos como el fill al elegir una fila).
+     */
+    onFieldInput(value) {
+      this.localValue = value;
+      if (!this.fieldSchema.helpContainer) {
+        return;
+      }
+      clearTimeout(this.delayTimer);
+      if (value === '' || value === null || value === undefined) {
+        this.showHelp = false;
+        return;
+      }
+      this.delayTimer = setTimeout(() => {
+        this.showHelp = true;
+      }, 350);
     },
     onImageChange(_image) {
       // Hook intencionalmente vacío; se sobreescribe en componentes que lo usan.
@@ -446,7 +468,7 @@ export default {
           });
       }
       this.$emit('fill-fields', row);
-      this.$refs.helperProxy.hide();
+      this.showHelp = false;
     },
     // Wrapper fino: la normalización pura vive en ../core/options.js.
     // Acá sólo se mantiene la parte que depende de `this` (orderData, que usa
@@ -505,37 +527,6 @@ export default {
     formatDate(props) {
       // Descomposición para ordenar combos por fecha — extraída a ../core/dates.js.
       return dateSortParts(props);
-    },
-    getHelpSchema(_url) {
-      if (this.helpPath) {
-        this.getAppSchema(this.helpPath)
-          .then((response) => {
-            this.helpSchema = response.data.schema;
-          })
-          .catch((e) => {
-            // this.dialog = true;
-            this.message = `Error de Carga${e}`;
-          });
-      }
-    },
-    getFieldHelpData(newVal) {
-      clearTimeout(this.delayTimer);
-
-      const params = this.query || {};
-      const helpKey = this.fieldSchema.help_key;
-      params[helpKey] = newVal;
-
-      this.delayTimer = setTimeout(() => {
-        this.getAppData(this.helpPath, params)
-          .then((response) => {
-            const row = response.data.data[0];
-            const schema = this.helpSchema;
-            this.selectRow({ row, schema });
-          })
-          .catch((_e) => {
-            // Búsqueda fallida: se ignora silenciosamente y no se selecciona fila.
-          });
-      }, 500); // Will do the ajax stuff after 1000 ms, or 1 s
     },
     /**
      * Realiza la peticion de busqueda cuando autocomplete es 'true'
@@ -617,9 +608,9 @@ export default {
   data() {
     return {
       delayTimer: 0,
+      showHelp: false, // popup de ayuda (typeahead) abierto
       previewUrl: '--',
       fileManager: false,
-      helpSchema: {},
       showImage: false,
       helpFoundes: true,
       options: [],
@@ -642,7 +633,6 @@ export default {
     // this.getOptions(true);
   },
   mounted() {
-    this.getHelpSchema();
     this.getOptions(true);
     // Validación diferida: NO marcamos el campo como "tocado" al montar. Antes
     // se hacía v$.modelValue.$touch() acá, lo que pintaba los requeridos en rojo
@@ -695,12 +685,6 @@ export default {
         };
       }
       return validations;
-    },
-    queryComputedHelpExternal() {
-      if (this.schema?.help_key) {
-        return { [this.schema.help_key]: this.localValue, ...this.query };
-      }
-      return this.query;
     },
     hint() {
       return this.fieldSchema.placeholder !== this.fieldSchema.title ? this.fieldSchema.placeholder : '';
@@ -798,13 +782,6 @@ export default {
     },
     isViewAddButton() {
       return !!this.fieldSchema?.helpers?.link;
-    },
-    helpPath() {
-      if (this.fieldSchema.helpContainer) {
-        const helper = this.fieldSchema.helpContainer;
-        return `${helper.dir}/${helper.xml}`;
-      }
-      return null;
     },
     size() {
       return this.fieldSchema.size.toString();
