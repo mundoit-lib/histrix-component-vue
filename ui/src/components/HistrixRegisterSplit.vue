@@ -13,8 +13,8 @@
               </span>
               <span class="htx-auth__brand-name">{{ brand }}</span>
             </div>
-            <h1 class="htx-auth__title">{{ title }}</h1>
-            <p class="htx-auth__subtitle">{{ subtitle }}</p>
+            <h1 class="htx-auth__title">{{ txt.title }}</h1>
+            <p class="htx-auth__subtitle">{{ txt.subtitle }}</p>
           </div>
         </slot>
 
@@ -29,7 +29,7 @@
                 />
               </svg>
               <select v-model="db" class="htx-auth__input htx-auth__select">
-                <option value="" disabled>{{ databasePlaceholder }}</option>
+                <option value="" disabled>{{ txt.databasePlaceholder }}</option>
                 <option v-for="opt in databases" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
               <svg class="htx-auth__chevron" viewBox="0 0 24 24" aria-hidden="true">
@@ -52,7 +52,7 @@
                 type="text"
                 autocomplete="name"
                 autofocus
-                :placeholder="namePlaceholder"
+                :placeholder="txt.namePlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.form.name.$error }"
                 @blur="v$.form.name.$touch()"
@@ -74,7 +74,7 @@
                 v-model="form.email"
                 type="email"
                 autocomplete="email"
-                :placeholder="emailPlaceholder"
+                :placeholder="txt.emailPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.form.email.$error }"
                 @blur="v$.form.email.$touch()"
@@ -96,7 +96,7 @@
                 v-model="form.telefono"
                 type="tel"
                 autocomplete="tel"
-                :placeholder="phonePlaceholder"
+                :placeholder="txt.phonePlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.form.telefono.$error }"
                 @blur="v$.form.telefono.$touch()"
@@ -155,7 +155,7 @@
                 v-model="form.password"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="new-password"
-                :placeholder="passwordPlaceholder"
+                :placeholder="txt.passwordPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.form.password.$error }"
                 @blur="v$.form.password.$touch()"
@@ -163,7 +163,7 @@
               <button
                 type="button"
                 class="htx-auth__toggle"
-                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                :aria-label="showPassword ? t('common.hidePassword') : t('common.showPassword')"
                 @click="showPassword = !showPassword"
               >
                 <svg viewBox="0 0 24 24" class="htx-auth__toggle-icon" aria-hidden="true">
@@ -198,7 +198,7 @@
                 v-model="form.confirm_password"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="new-password"
-                :placeholder="confirmPasswordPlaceholder"
+                :placeholder="txt.confirmPasswordPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.form.confirm_password.$error }"
                 @blur="v$.form.confirm_password.$touch()"
@@ -215,12 +215,12 @@
 
           <button type="submit" class="htx-auth__submit" :style="{ backgroundColor: primaryColor }" :disabled="loading">
             <span v-if="loading" class="htx-auth__spinner" aria-hidden="true" />
-            {{ loading ? loadingLabel : submitLabel }}
+            {{ loading ? txt.loadingLabel : txt.submitLabel }}
           </button>
 
           <div class="htx-auth__actions">
             <router-link :to="loginTo" class="htx-auth__link" :style="{ color: primaryColor }">
-              {{ loginLabel }}
+              {{ txt.loginLabel }}
             </router-link>
           </div>
 
@@ -249,6 +249,7 @@ import { email as emailValidator, helpers, minLength, required, sameAs } from '@
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
@@ -269,27 +270,27 @@ export default {
     /** Subtítulo del panel derecho. */
     tagline: { type: String, default: '' },
     /** Encabezado y subtítulo del formulario. */
-    title: { type: String, default: 'Crear cuenta' },
-    subtitle: { type: String, default: 'Completá tus datos para registrarte.' },
+    title: { type: String, default: null },
+    subtitle: { type: String, default: null },
 
     /** Placeholders de los campos obligatorios. */
-    namePlaceholder: { type: String, default: 'Nombre' },
-    emailPlaceholder: { type: String, default: 'Correo electrónico' },
-    phonePlaceholder: { type: String, default: 'Teléfono' },
-    passwordPlaceholder: { type: String, default: 'Contraseña' },
-    confirmPasswordPlaceholder: { type: String, default: 'Repetir contraseña' },
+    namePlaceholder: { type: String, default: null },
+    emailPlaceholder: { type: String, default: null },
+    phonePlaceholder: { type: String, default: null },
+    passwordPlaceholder: { type: String, default: null },
+    confirmPasswordPlaceholder: { type: String, default: null },
 
-    submitLabel: { type: String, default: 'Registrarme' },
-    loadingLabel: { type: String, default: 'Registrando…' },
+    submitLabel: { type: String, default: null },
+    loadingLabel: { type: String, default: null },
 
     /** Enlace de vuelta al login. */
-    loginLabel: { type: String, default: 'Ya tengo cuenta' },
+    loginLabel: { type: String, default: null },
     loginTo: { type: [String, Object], default: () => ({ name: 'login' }) },
 
     /** Muestra el selector de base de datos (busca las DB y configura la elegida). */
     showDatabase: { type: Boolean, default: false },
     /** Placeholder del selector de base de datos. */
-    databasePlaceholder: { type: String, default: 'Seleccioná una base de datos' },
+    databasePlaceholder: { type: String, default: null },
 
     /** profile_id que se envía al backend (obligatorio en el payload). */
     profileId: { type: Number, default: 13 },
@@ -311,6 +312,7 @@ export default {
   setup() {
     const { register, apiDBQuery } = useApi();
     return {
+      t: useHistrixI18n().t,
       storage: useHistrixStorage(),
       register,
       apiDBQuery,
@@ -368,33 +370,50 @@ export default {
     const extraRules = {};
     for (const field of this.extraFields) {
       if (field.required) {
-        extraRules[field.name] = { required: helpers.withMessage('Campo requerido.', required) };
+        extraRules[field.name] = { required: helpers.withMessage(this.t('register.requiredField'), required) };
       }
     }
     return {
       form: {
-        name: { required: helpers.withMessage('Ingresá tu nombre.', required) },
+        name: { required: helpers.withMessage(this.t('register.requiredName'), required) },
         email: {
-          required: helpers.withMessage('Ingresá tu correo.', required),
-          email: helpers.withMessage('Correo inválido.', emailValidator)
+          required: helpers.withMessage(this.t('auth.requiredEmail'), required),
+          email: helpers.withMessage(this.t('auth.invalidEmail'), emailValidator)
         },
-        telefono: { required: helpers.withMessage('Ingresá tu teléfono.', required) },
+        telefono: { required: helpers.withMessage(this.t('register.requiredPhone'), required) },
         password: {
-          required: helpers.withMessage('Ingresá una contraseña.', required),
+          required: helpers.withMessage(this.t('auth.requiredPassword'), required),
           minLength: helpers.withMessage(
-            `Mínimo ${this.passwordMinLength} caracteres.`,
+            this.t('auth.passwordMinLength', { min: this.passwordMinLength }),
             minLength(this.passwordMinLength)
           )
         },
         confirm_password: {
-          required: helpers.withMessage('Repetí la contraseña.', required),
-          sameAsPassword: helpers.withMessage('Las contraseñas no coinciden.', sameAs(this.form.password))
+          required: helpers.withMessage(this.t('auth.requiredConfirm'), required),
+          sameAsPassword: helpers.withMessage(this.t('auth.passwordsMismatch'), sameAs(this.form.password))
         }
       },
       extra: extraRules
     };
   },
   computed: {
+    /** Textos: el prop si se pasó, si no el de i18n. */
+    txt() {
+      const t = this.t;
+      return {
+        title: this.title ?? t('register.title'),
+        subtitle: this.subtitle ?? t('register.subtitle'),
+        namePlaceholder: this.namePlaceholder ?? t('register.name'),
+        emailPlaceholder: this.emailPlaceholder ?? t('auth.email'),
+        phonePlaceholder: this.phonePlaceholder ?? t('register.phone'),
+        passwordPlaceholder: this.passwordPlaceholder ?? t('auth.password'),
+        confirmPasswordPlaceholder: this.confirmPasswordPlaceholder ?? t('auth.confirmPassword'),
+        submitLabel: this.submitLabel ?? t('register.submit'),
+        loadingLabel: this.loadingLabel ?? t('register.loading'),
+        loginLabel: this.loginLabel ?? t('register.haveAccount'),
+        databasePlaceholder: this.databasePlaceholder ?? t('auth.databasePlaceholder')
+      };
+    },
     panelStyle() {
       if (this.image) {
         return {
@@ -445,10 +464,10 @@ export default {
 
       try {
         const resp = await this.register(payload);
-        this.okMsg = resp?.data?.responseText || 'Registro exitoso. Esperá la confirmación de acceso.';
+        this.okMsg = resp?.data?.responseText || this.t('register.done');
         this.$emit('success', { payload, response: resp });
       } catch (e) {
-        this.errorMsg = e?.response?.data?.responseText || 'No se pudo completar el registro.';
+        this.errorMsg = e?.response?.data?.responseText || this.t('register.error');
         this.$emit('error', e);
       } finally {
         this.loading = false;

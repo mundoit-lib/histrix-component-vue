@@ -84,7 +84,8 @@ router.beforeEach((to) => {
   return true;
 });
 
-// 5) Componentes de la librería (registro global vía install()).
-app.use(HistrixPlugin);
+// 5) Componentes de la librería (registro global vía install()). `?lang=en` arranca
+//    en inglés (sirve para las pantallas de auth, que no tienen el toggle del header).
+app.use(HistrixPlugin, { locale: new URLSearchParams(window.location.search).get('lang') || 'es' });
 
 app.mount('#app');

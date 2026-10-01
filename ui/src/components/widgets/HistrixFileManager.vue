@@ -27,18 +27,14 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 import { useHistrixNotify } from '../../services/notify.js';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  confirmDelete: '¿Está seguro que desea borrar el archivo?'
-};
 
 export default {
   name: 'HistrixFileManager',
   setup() {
     const { getFiles, apiUrl, deleteFile, getToken } = useApi();
-    return { notify: useHistrixNotify(), getFiles, apiUrl, deleteFile, getToken };
+    return { t: useHistrixI18n().t, notify: useHistrixNotify(), getFiles, apiUrl, deleteFile, getToken };
   },
   props: ['path'],
   components: {},
@@ -65,7 +61,7 @@ export default {
       });
     },
     async onBeforeDelete(fileRecord) {
-      if (await this.notify.confirm(messages.confirmDelete)) {
+      if (await this.notify.confirm(this.t('files.confirmDelete'))) {
         this.$refs.fileAgent.deleteFileRecord(fileRecord);
       }
     },

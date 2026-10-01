@@ -148,6 +148,48 @@ notify.error(e); // acepta un HistrixApiError
 if (await notify.confirm('¿Eliminar el registro?')) { /* … */ }
 ```
 
+## Idioma (i18n)
+
+Los textos propios de la librería (botones, avisos, validaciones, paginador…) salen de un diccionario por locale. Sin configurar nada se ven en español, como siempre. Lo que manda el backend (labels, títulos, `processButton`) no pasa por acá: lo traduce Histrix.
+
+```js
+app.use(HistrixPlugin, {
+  locale: 'en',                     // default 'es'; acepta un ref para cambiarlo en caliente
+  messages: {                       // se mezcla con los diccionarios de la lib: solo las claves a pisar
+    en: { 'common.search': 'Find' },
+    pt: { 'common.search': 'Pesquisar', 'common.cancel': 'Cancelar' }
+  }
+});
+```
+
+Las claves son planas, con namespace por componente (`table.perPage`, `form.processFinished`, `login.title`…). La lista completa está en `src/locales/es.js` (exportado como `defaultMessages.es`). La librería trae `es` y `en`. Si una clave falta en el locale elegido, se usa la de `es`, y si tampoco está ahí, se muestra la clave. Los parámetros se interpolan con `{nombre}`: `t('export.title', { title })`.
+
+Si la app ya usa **vue-i18n**, puede pasarle su `t`. Para que funcione, tiene que sumar las claves de la lib a sus mensajes. Las que falten caen al `es` de la librería:
+
+```js
+import { defaultMessages } from '@mundoit-lib/histrix-component-vue';
+
+const i18n = createI18n({
+  legacy: false,
+  flatJson: true, // las claves de la lib son planas ('table.perPage')
+  locale: 'es',
+  messages: { es: { ...defaultMessages.es, ...misEs }, en: { ...defaultMessages.en, ...misEn } }
+});
+app.use(HistrixPlugin, { i18n: { t: i18n.global.t, locale: i18n.global.locale } });
+```
+
+Para cambiar el idioma en caliente o usar los textos en la app:
+
+```js
+import { useHistrixI18n } from '@mundoit-lib/histrix-component-vue';
+
+const { t, locale } = useHistrixI18n();
+locale.value = 'en';
+t('common.cancel'); // 'Cancel'
+```
+
+Los props de texto de las pantallas de auth (`title`, `submitLabel`, `emailPlaceholder`…) siguen funcionando: si se pasan, ganan sobre el diccionario.
+
 ## Atajos de teclado
 
 `HistrixApp` replica los atajos del ERP legacy. Atiende las teclas la app más interna que tenga el foco, y si esa no resuelve F9 o Esc, los pasa a la app que la contiene (por ejemplo, del grid de renglones al comprobante).

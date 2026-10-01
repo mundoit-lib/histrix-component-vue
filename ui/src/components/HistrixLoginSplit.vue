@@ -13,8 +13,8 @@
               </span>
               <span class="htx-login__brand-name">{{ brand }}</span>
             </div>
-            <h1 class="htx-login__title">{{ title }}</h1>
-            <p class="htx-login__subtitle">{{ subtitle }}</p>
+            <h1 class="htx-login__title">{{ txt.title }}</h1>
+            <p class="htx-login__subtitle">{{ txt.subtitle }}</p>
           </div>
         </slot>
 
@@ -29,7 +29,7 @@
                 />
               </svg>
               <select v-model="db" class="htx-login__input htx-login__select">
-                <option value="" disabled>{{ databasePlaceholder }}</option>
+                <option value="" disabled>{{ txt.databasePlaceholder }}</option>
                 <option v-for="opt in databases" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
               <svg class="htx-login__chevron" viewBox="0 0 24 24" aria-hidden="true">
@@ -52,7 +52,7 @@
                 type="text"
                 autocomplete="username"
                 autofocus
-                :placeholder="emailPlaceholder"
+                :placeholder="txt.emailPlaceholder"
                 class="htx-login__input"
                 :class="{ 'htx-login__input--error': v$.email.$error }"
                 @blur="v$.email.$touch()"
@@ -74,7 +74,7 @@
                 v-model="password"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="current-password"
-                :placeholder="passwordPlaceholder"
+                :placeholder="txt.passwordPlaceholder"
                 class="htx-login__input"
                 :class="{ 'htx-login__input--error': v$.password.$error }"
                 @blur="v$.password.$touch()"
@@ -82,7 +82,7 @@
               <button
                 type="button"
                 class="htx-login__toggle"
-                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                :aria-label="showPassword ? t('common.hidePassword') : t('common.showPassword')"
                 @click="showPassword = !showPassword"
               >
                 <svg viewBox="0 0 24 24" class="htx-login__toggle-icon" aria-hidden="true">
@@ -108,7 +108,7 @@
           <!-- Botón: color por prop, vía :style -->
           <button type="submit" class="htx-login__submit" :style="{ backgroundColor: primaryColor }" :disabled="loading">
             <span v-if="loading" class="htx-login__spinner" aria-hidden="true" />
-            {{ loading ? loadingLabel : submitLabel }}
+            {{ loading ? txt.loadingLabel : txt.submitLabel }}
           </button>
 
           <!-- Acciones secundarias: registro y recuperar contraseña (opcionales) -->
@@ -119,7 +119,7 @@
               class="htx-login__link"
               :style="{ color: primaryColor }"
             >
-              {{ registerLabel }}
+              {{ txt.registerLabel }}
             </router-link>
             <router-link
               v-if="showForgotPassword"
@@ -127,7 +127,7 @@
               class="htx-login__link"
               :style="{ color: primaryColor }"
             >
-              {{ forgotPasswordLabel }}
+              {{ txt.forgotPasswordLabel }}
             </router-link>
           </div>
 
@@ -157,6 +157,7 @@ import { helpers, required } from '@vuelidate/validators';
 import { useHistrixBus } from '../services/bus.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
@@ -176,29 +177,29 @@ export default {
     /** Subtítulo del panel derecho. */
     tagline: { type: String, default: '' },
     /** Encabezado y subtítulo del formulario. */
-    title: { type: String, default: 'Iniciar sesión' },
-    subtitle: { type: String, default: 'Ingresá tus credenciales para continuar.' },
-    emailPlaceholder: { type: String, default: 'Correo electrónico o usuario' },
-    passwordPlaceholder: { type: String, default: 'Contraseña' },
-    submitLabel: { type: String, default: 'Ingresar' },
-    loadingLabel: { type: String, default: 'Ingresando…' },
+    title: { type: String, default: null },
+    subtitle: { type: String, default: null },
+    emailPlaceholder: { type: String, default: null },
+    passwordPlaceholder: { type: String, default: null },
+    submitLabel: { type: String, default: null },
+    loadingLabel: { type: String, default: null },
 
     /** Muestra el selector de base de datos (busca las DB y configura la elegida). */
     showDatabase: { type: Boolean, default: false },
     /** Placeholder del selector de base de datos. */
-    databasePlaceholder: { type: String, default: 'Seleccioná una base de datos' },
+    databasePlaceholder: { type: String, default: null },
 
     /** Muestra el enlace "Registrarme". */
     showRegister: { type: Boolean, default: false },
     /** Texto del enlace de registro. */
-    registerLabel: { type: String, default: 'Registrarme' },
+    registerLabel: { type: String, default: null },
     /** Destino (router-link `to`) del enlace de registro. */
     registerTo: { type: [String, Object], default: () => ({ name: 'register' }) },
 
     /** Muestra el enlace "Recuperar contraseña". */
     showForgotPassword: { type: Boolean, default: false },
     /** Texto del enlace de recuperar contraseña. */
-    forgotPasswordLabel: { type: String, default: 'Recuperar contraseña' },
+    forgotPasswordLabel: { type: String, default: null },
     /** Destino (router-link `to`) del enlace de recuperar contraseña. */
     forgotPasswordTo: { type: [String, Object], default: () => ({ name: 'mail-reset-password' }) }
   },
@@ -207,6 +208,7 @@ export default {
   setup() {
     const { login, apiDBQuery } = useApi();
     return {
+      t: useHistrixI18n().t,
       storage: useHistrixStorage(),
       login,
       apiDBQuery,
@@ -251,11 +253,26 @@ export default {
   },
   validations() {
     return {
-      email: { required: helpers.withMessage('Ingresá tu usuario o correo.', required) },
-      password: { required: helpers.withMessage('Ingresá tu contraseña.', required) }
+      email: { required: helpers.withMessage(this.t('login.requiredUser'), required) },
+      password: { required: helpers.withMessage(this.t('login.requiredPassword'), required) }
     };
   },
   computed: {
+    /** Textos: el prop si se pasó, si no el de i18n. */
+    txt() {
+      const t = this.t;
+      return {
+        title: this.title ?? t('login.title'),
+        subtitle: this.subtitle ?? t('login.subtitle'),
+        emailPlaceholder: this.emailPlaceholder ?? t('login.user'),
+        passwordPlaceholder: this.passwordPlaceholder ?? t('auth.password'),
+        submitLabel: this.submitLabel ?? t('login.submit'),
+        loadingLabel: this.loadingLabel ?? t('login.loading'),
+        databasePlaceholder: this.databasePlaceholder ?? t('auth.databasePlaceholder'),
+        registerLabel: this.registerLabel ?? t('login.register'),
+        forgotPasswordLabel: this.forgotPasswordLabel ?? t('login.forgotPassword')
+      };
+    },
     panelStyle() {
       if (this.image) {
         return {
@@ -285,7 +302,7 @@ export default {
         }
         this.$emit('success', this.nextUrl);
       } catch (e) {
-        this.errorMsg = 'Usuario o contraseña incorrectos.';
+        this.errorMsg = this.t('login.error');
         this.$emit('error', e);
       } finally {
         this.loading = false;

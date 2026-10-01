@@ -45,12 +45,13 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 
 export default {
   name: 'HistrixMenu',
   setup() {
     const { getMenu } = useApi();
-    return { getMenu };
+    return { t: useHistrixI18n().t, getMenu };
   },
   props: {
     level: '',
@@ -59,7 +60,7 @@ export default {
   data() {
     return {
       filterString: '',
-      tree: [{ nodeKey: '0', label: 'Buscando ...' }],
+      tree: [{ nodeKey: '0', label: this.t('menu.searching') }],
       expanded: [],
       loading: true
     };

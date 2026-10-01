@@ -182,7 +182,7 @@
             <q-popup-proxy transition-show="scale" transition-hide="scale">
               <q-date v-model="localValue" mask="YYYY-MM-DD HH:mm:ss">
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                  <q-btn v-close-popup :label="t('common.close')" color="primary" flat />
                 </div>
               </q-date>
             </q-popup-proxy>
@@ -192,7 +192,7 @@
             <q-popup-proxy transition-show="scale" transition-hide="scale">
               <q-time v-model="localValue" mask="YYYY-MM-DD HH:mm:ss" format24h>
                 <div class="row items-center justify-end">
-                  <q-btn v-close-popup label="Cerrar" color="primary" flat />
+                  <q-btn v-close-popup :label="t('common.close')" color="primary" flat />
                 </div>
               </q-time>
             </q-popup-proxy>
@@ -201,7 +201,7 @@
 
         <template v-slot:no-option>
           <q-item>
-            <q-item-section class="text-grey"> No resultado </q-item-section>
+            <q-item-section class="text-grey"> {{ t('field.noOptions') }} </q-item-section>
           </q-item>
         </template>
       </component>
@@ -243,6 +243,7 @@ import { formatNumber, numberError, numericSpec, toBackendNumber } from '../core
 import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import HistrixHelp from './HistrixHelp.vue';
 
 // Mensajes de validación de los campos numéricos (códigos de numberError).
@@ -268,7 +269,7 @@ export default {
   },
   setup() {
     const { getAppSchema, getAppData, apiUrl, getToken } = useApi();
-    return { v$: useVuelidate(), getAppSchema, getAppData, apiUrl, getToken };
+    return { t: useHistrixI18n().t, v$: useVuelidate(), getAppSchema, getAppData, apiUrl, getToken };
   },
   watch: {
     localValue: {
@@ -659,15 +660,7 @@ export default {
       dialog: {},
       toolbar: [],
       openNew: false,
-      type: 'q-input',
-      dateLocale: {
-        /* starting with Sunday */
-        days: 'Domingo_Lunes_Martes_Miércoles_Jueves_Viernes_Sábado'.split('_'),
-        daysShort: 'Dom_Lun_Mar_Mié_Jue_Vie_Sáb'.split('_'),
-        months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
-        monthsShort: 'Ene_Feb_Mar_Abr_May_Jun_Jul_Ago_Sep_Oct_Nov_Dic'.split('_'),
-        firstDayOfWeek: 1
-      }
+      type: 'q-input'
     };
   },
   created() {
@@ -682,6 +675,16 @@ export default {
     // intenta grabar (HistrixForm.validateAndFocus dispara v$.$validate()).
   },
   computed: {
+    /** Locale del q-date (empieza en domingo), desde el diccionario i18n. */
+    dateLocale() {
+      return {
+        days: this.t('date.days').split('_'),
+        daysShort: this.t('date.daysShort').split('_'),
+        months: this.t('date.months').split('_'),
+        monthsShort: this.t('date.monthsShort').split('_'),
+        firstDayOfWeek: 1
+      };
+    },
     /**
      * Se utiliza para indicar si el campo es autocompletable o no para la busqueda.
      * @options 'on'|'off'|'true'|'false'
@@ -699,7 +702,7 @@ export default {
       if (isRequired) {
         validations.modelValue = {
           ...validations.modelValue,
-          required: helpers.withMessage('* Valor requerido', required)
+          required: helpers.withMessage(this.t('field.required'), required)
         };
       }
       if (this.isNumeric) {
@@ -713,13 +716,16 @@ export default {
         }
       }
       if (this.histrixType === 'email') {
-        validations.modelValue = { ...validations.modelValue, email: helpers.withMessage('Valor email', email) };
+        validations.modelValue = {
+          ...validations.modelValue,
+          email: helpers.withMessage(this.t('field.invalidEmail'), email)
+        };
       }
       if (this.fieldSchema?.max_length && this.fieldSchema?.max_length !== '0') {
         validations.modelValue = {
           ...validations.modelValue,
           maxLength: helpers.withMessage(
-            `No puede tener mas de ${this.fieldSchema.max_length} caracteres`,
+            this.t('field.maxLength', { max: this.fieldSchema.max_length }),
             maxLength(this.fieldSchema.max_length)
           )
         };
@@ -730,7 +736,7 @@ export default {
         );
         validations.modelValue = {
           ...validations.modelValue,
-          mask: helpers.withMessage(this.fieldSchema.errorMessage || 'Valor incorrecto', helpers.regex(regex))
+          mask: helpers.withMessage(this.fieldSchema.errorMessage || this.t('field.invalidValue'), helpers.regex(regex))
         };
       }
       return validations;

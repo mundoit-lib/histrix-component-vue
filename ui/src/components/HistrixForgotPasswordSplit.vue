@@ -13,8 +13,8 @@
               </span>
               <span class="htx-auth__brand-name">{{ brand }}</span>
             </div>
-            <h1 class="htx-auth__title">{{ title }}</h1>
-            <p class="htx-auth__subtitle">{{ subtitle }}</p>
+            <h1 class="htx-auth__title">{{ txt.title }}</h1>
+            <p class="htx-auth__subtitle">{{ txt.subtitle }}</p>
           </div>
         </slot>
 
@@ -22,7 +22,7 @@
         <div v-if="sent" class="htx-auth__sent">
           <p class="htx-auth__ok">{{ okMsg }}</p>
           <router-link :to="loginTo" class="htx-auth__link" :style="{ color: primaryColor }">
-            {{ loginLabel }}
+            {{ txt.loginLabel }}
           </router-link>
         </div>
 
@@ -38,7 +38,7 @@
                 />
               </svg>
               <select v-model="db" class="htx-auth__input htx-auth__select">
-                <option value="" disabled>{{ databasePlaceholder }}</option>
+                <option value="" disabled>{{ txt.databasePlaceholder }}</option>
                 <option v-for="opt in databases" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
               <svg class="htx-auth__chevron" viewBox="0 0 24 24" aria-hidden="true">
@@ -60,7 +60,7 @@
                 type="email"
                 autocomplete="email"
                 autofocus
-                :placeholder="emailPlaceholder"
+                :placeholder="txt.emailPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.email.$error }"
                 @blur="v$.email.$touch()"
@@ -73,12 +73,12 @@
 
           <button type="submit" class="htx-auth__submit" :style="{ backgroundColor: primaryColor }" :disabled="loading">
             <span v-if="loading" class="htx-auth__spinner" aria-hidden="true" />
-            {{ loading ? loadingLabel : submitLabel }}
+            {{ loading ? txt.loadingLabel : txt.submitLabel }}
           </button>
 
           <div class="htx-auth__actions">
             <router-link :to="loginTo" class="htx-auth__link" :style="{ color: primaryColor }">
-              {{ loginLabel }}
+              {{ txt.loginLabel }}
             </router-link>
           </div>
 
@@ -107,6 +107,7 @@ import { email as emailValidator, helpers, required } from '@vuelidate/validator
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
@@ -124,14 +125,14 @@ export default {
     /** Subtítulo del panel derecho. */
     tagline: { type: String, default: '' },
     /** Encabezado y subtítulo del formulario. */
-    title: { type: String, default: 'Recuperar contraseña' },
-    subtitle: { type: String, default: 'Te enviaremos un correo para restablecerla.' },
-    emailPlaceholder: { type: String, default: 'Correo electrónico' },
-    submitLabel: { type: String, default: 'Enviar enlace' },
-    loadingLabel: { type: String, default: 'Enviando…' },
+    title: { type: String, default: null },
+    subtitle: { type: String, default: null },
+    emailPlaceholder: { type: String, default: null },
+    submitLabel: { type: String, default: null },
+    loadingLabel: { type: String, default: null },
 
     /** Enlace de vuelta al login. */
-    loginLabel: { type: String, default: 'Volver al inicio de sesión' },
+    loginLabel: { type: String, default: null },
     loginTo: { type: [String, Object], default: () => ({ name: 'login' }) },
 
     /**
@@ -143,12 +144,13 @@ export default {
     /** Muestra el selector de base de datos (busca las DB y configura la elegida). */
     showDatabase: { type: Boolean, default: false },
     /** Placeholder del selector de base de datos. */
-    databasePlaceholder: { type: String, default: 'Seleccioná una base de datos' }
+    databasePlaceholder: { type: String, default: null }
   },
   emits: ['success', 'error', 'db-change'],
   setup() {
     const { resetPassword, apiDBQuery, currentDb } = useApi();
     return {
+      t: useHistrixI18n().t,
       storage: useHistrixStorage(),
       resetPassword,
       apiDBQuery,
@@ -193,12 +195,25 @@ export default {
   validations() {
     return {
       email: {
-        required: helpers.withMessage('Ingresá tu correo.', required),
-        email: helpers.withMessage('Correo inválido.', emailValidator)
+        required: helpers.withMessage(this.t('auth.requiredEmail'), required),
+        email: helpers.withMessage(this.t('auth.invalidEmail'), emailValidator)
       }
     };
   },
   computed: {
+    /** Textos: el prop si se pasó, si no el de i18n. */
+    txt() {
+      const t = this.t;
+      return {
+        title: this.title ?? t('forgot.title'),
+        subtitle: this.subtitle ?? t('forgot.subtitle'),
+        emailPlaceholder: this.emailPlaceholder ?? t('auth.email'),
+        submitLabel: this.submitLabel ?? t('forgot.submit'),
+        loadingLabel: this.loadingLabel ?? t('forgot.loading'),
+        loginLabel: this.loginLabel ?? t('forgot.backToLogin'),
+        databasePlaceholder: this.databasePlaceholder ?? t('auth.databasePlaceholder')
+      };
+    },
     panelStyle() {
       if (this.image) {
         return {
@@ -225,11 +240,11 @@ export default {
       };
       try {
         const resp = await this.resetPassword(payload);
-        this.okMsg = resp?.data?.responseText || 'Te enviamos un correo con las instrucciones.';
+        this.okMsg = resp?.data?.responseText || this.t('forgot.sent');
         this.sent = true;
         this.$emit('success', { payload, response: resp });
       } catch (e) {
-        this.errorMsg = e?.response?.data?.responseText || 'No se pudo enviar el correo. Verificá los datos.';
+        this.errorMsg = e?.response?.data?.responseText || this.t('forgot.error');
         this.$emit('error', e);
       } finally {
         this.loading = false;

@@ -43,6 +43,7 @@ import { use } from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import VChart from 'vue-echarts';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import HistrixFilters from './HistrixFilters.vue';
 
 // Registra los componentes necesarios de ECharts
@@ -88,7 +89,7 @@ export default {
   },
   setup() {
     const { getData } = useApi();
-    return { getData };
+    return { t: useHistrixI18n().t, getData };
   },
   data() {
     return {
@@ -221,7 +222,7 @@ export default {
         })
         .catch((_e) => {
           this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          this.message = this.t('common.loadError');
         });
     }
   }

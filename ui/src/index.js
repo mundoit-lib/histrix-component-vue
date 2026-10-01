@@ -51,6 +51,7 @@ import {
 import { adaptBus, createHistrixBus, provideHistrixBus, useHistrixBus } from './services/bus.js';
 import config from './services/config';
 import { createHistrixClient } from './services/histrixApi.js';
+import { createHistrixI18n, defaultMessages, provideHistrixI18n, useHistrixI18n } from './services/i18n.js';
 import { useHistrixNavigate } from './services/navigation.js';
 import { createNotifier, provideHistrixNotify, useHistrixNotify } from './services/notify.js';
 import quasarNotifyImpl from './services/notify.quasar.js';
@@ -156,7 +157,11 @@ export {
   createMemoryStorage,
   useHistrixStorage,
   useHistrixNavigate,
-  useHistrixSession
+  useHistrixSession,
+  createHistrixI18n,
+  provideHistrixI18n,
+  useHistrixI18n,
+  defaultMessages
 };
 
 export default {
@@ -205,6 +210,8 @@ export default {
     setHistrixApp(app);
     // Notifier: el que inyecte la app (`app.use(plugin, { notify })`) o el de Quasar.
     provideHistrixNotify(app, options.notify || quasarNotifyImpl);
+    // Textos: `i18n` (instancia o `{ t }` de vue-i18n) o `locale` + `messages` propios; sin nada, es.
+    provideHistrixI18n(app, options.i18n || { locale: options.locale, messages: options.messages });
     // Contratos opcionales: sin pasarlos se usan los plugins de Mundo IT si están.
     if (options.bus) provideHistrixBus(app, options.bus);
     if (options.auth) provideHistrixAuth(app, options.auth);

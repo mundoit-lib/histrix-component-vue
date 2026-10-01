@@ -9,10 +9,10 @@
           class="logo"
         />
       </div>
-            <q-select v-if="isSelectDataBase" outlined v-model="db" map-options emit-value :options="infoDB" label="Database" />
+            <q-select v-if="isSelectDataBase" outlined v-model="db" map-options emit-value :options="infoDB" :label="t('login.database')" />
             <q-input
               inverted-light
-              :label="'Ingrese su correo electrónico'"
+              :label="t('login.emailLabel')"
               id="email"
               autofocus
               required
@@ -34,7 +34,7 @@
           </div>
           <div class="col-xs-12 q-mb-sm">
             <q-input
-              :label="'Ingrese contraseña'"
+              :label="t('login.passwordLabel')"
               id="password"
               inverted-light
               autocomplete="current-password"
@@ -66,7 +66,7 @@
               :loading="btnLoading"
               color="positive"
               size="md"
-              label="Ingresar"
+              :label="t('login.submit')"
             >
             </q-btn>
             <div class="row text-center">
@@ -78,7 +78,7 @@
                 color="white"
                 :to="{ name: 'register', query: { t: new Date().getTime() } }"
               >
-                <span class="q-ml-xs">Registrarme</span>
+                <span class="q-ml-xs">{{ t('login.register') }}</span>
               </q-btn>
 
               <q-btn
@@ -89,7 +89,7 @@
                 v-close-popup
                 :to="{ name: 'mail-reset-password' }"
               >
-                <span class="q-ml-xs">Recuperar contraseña</span>
+                <span class="q-ml-xs">{{ t('login.forgotPassword') }}</span>
               </q-btn>
             </div>
           </div>
@@ -105,13 +105,9 @@ import { required } from '@vuelidate/validators';
 import { useHistrixBus } from '../services/bus.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import { useHistrixStorage } from '../services/storage.js';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  loginError: 'Email o contraseña incorrectos'
-};
 
 export default {
   name: 'FormLoginNotStyles',
@@ -120,6 +116,7 @@ export default {
   setup() {
     const { apiDBQuery, login: loginApi, host } = useApi();
     return {
+      t: useHistrixI18n().t,
       storage: useHistrixStorage(),
       apiDBQuery,
       loginApi,
@@ -356,7 +353,7 @@ export default {
           this.runEventAfter();
         })
         .catch((_error) => {
-          this.notify.error(messages.loginError);
+          this.notify.error(this.t('login.loginError'));
         })
         .finally(() => {
           this.btnLoading = false;

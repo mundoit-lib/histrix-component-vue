@@ -29,22 +29,23 @@
           <q-separator inset />
         </div>
         <q-chip v-if="notificationCount == 0" icon="notifications"
-          >Sin Notificaciones</q-chip
+          >{{ t('notifications.empty') }}</q-chip
         >
       </q-menu>
     </q-avatar>
-    <q-tooltip>Notifications</q-tooltip>
+    <q-tooltip>{{ t('notifications.tooltip') }}</q-tooltip>
   </q-btn>
 </template>
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 
 export default {
   name: 'notificationMenu',
   setup() {
     const { getUserNotifications } = useApi();
-    return { getUserNotifications };
+    return { t: useHistrixI18n().t, getUserNotifications };
   },
   components: {},
   mounted() {

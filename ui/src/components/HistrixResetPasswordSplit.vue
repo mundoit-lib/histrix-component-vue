@@ -13,16 +13,16 @@
               </span>
               <span class="htx-auth__brand-name">{{ brand }}</span>
             </div>
-            <h1 class="htx-auth__title">{{ title }}</h1>
-            <p class="htx-auth__subtitle">{{ subtitle }}</p>
+            <h1 class="htx-auth__title">{{ txt.title }}</h1>
+            <p class="htx-auth__subtitle">{{ txt.subtitle }}</p>
           </div>
         </slot>
 
         <!-- Estado: link expirado -->
         <div v-if="expired" class="htx-auth__sent">
-          <p class="htx-auth__error">{{ expiredLabel }}</p>
+          <p class="htx-auth__error">{{ txt.expiredLabel }}</p>
           <router-link :to="forgotPasswordTo" class="htx-auth__link" :style="{ color: primaryColor }">
-            {{ requestNewLabel }}
+            {{ txt.requestNewLabel }}
           </router-link>
         </div>
 
@@ -30,7 +30,7 @@
         <div v-else-if="done" class="htx-auth__sent">
           <p class="htx-auth__ok">{{ okMsg }}</p>
           <router-link :to="loginTo" class="htx-auth__link" :style="{ color: primaryColor }">
-            {{ loginLabel }}
+            {{ txt.loginLabel }}
           </router-link>
         </div>
 
@@ -46,7 +46,7 @@
                 />
               </svg>
               <select v-model="db" class="htx-auth__input htx-auth__select">
-                <option value="" disabled>{{ databasePlaceholder }}</option>
+                <option value="" disabled>{{ txt.databasePlaceholder }}</option>
                 <option v-for="opt in databases" :key="opt.value" :value="opt.value">{{ opt.label }}</option>
               </select>
               <svg class="htx-auth__chevron" viewBox="0 0 24 24" aria-hidden="true">
@@ -69,7 +69,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="new-password"
                 autofocus
-                :placeholder="passwordPlaceholder"
+                :placeholder="txt.passwordPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.password.$error }"
                 @blur="v$.password.$touch()"
@@ -77,7 +77,7 @@
               <button
                 type="button"
                 class="htx-auth__toggle"
-                :aria-label="showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'"
+                :aria-label="showPassword ? t('common.hidePassword') : t('common.showPassword')"
                 @click="showPassword = !showPassword"
               >
                 <svg viewBox="0 0 24 24" class="htx-auth__toggle-icon" aria-hidden="true">
@@ -110,7 +110,7 @@
                 v-model="confirm_password"
                 :type="showPassword ? 'text' : 'password'"
                 autocomplete="new-password"
-                :placeholder="confirmPasswordPlaceholder"
+                :placeholder="txt.confirmPasswordPlaceholder"
                 class="htx-auth__input"
                 :class="{ 'htx-auth__input--error': v$.confirm_password.$error }"
                 @blur="v$.confirm_password.$touch()"
@@ -125,12 +125,12 @@
 
           <button type="submit" class="htx-auth__submit" :style="{ backgroundColor: primaryColor }" :disabled="loading">
             <span v-if="loading" class="htx-auth__spinner" aria-hidden="true" />
-            {{ loading ? loadingLabel : submitLabel }}
+            {{ loading ? txt.loadingLabel : txt.submitLabel }}
           </button>
 
           <div class="htx-auth__actions">
             <router-link :to="loginTo" class="htx-auth__link" :style="{ color: primaryColor }">
-              {{ loginLabel }}
+              {{ txt.loginLabel }}
             </router-link>
           </div>
 
@@ -159,6 +159,7 @@ import { helpers, minLength, required, sameAs } from '@vuelidate/validators';
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
@@ -176,20 +177,20 @@ export default {
     /** Subtítulo del panel derecho. */
     tagline: { type: String, default: '' },
     /** Encabezado y subtítulo del formulario. */
-    title: { type: String, default: 'Nueva contraseña' },
-    subtitle: { type: String, default: 'Ingresá tu nueva contraseña.' },
-    passwordPlaceholder: { type: String, default: 'Nueva contraseña' },
-    confirmPasswordPlaceholder: { type: String, default: 'Repetir contraseña' },
-    submitLabel: { type: String, default: 'Actualizar contraseña' },
-    loadingLabel: { type: String, default: 'Actualizando…' },
+    title: { type: String, default: null },
+    subtitle: { type: String, default: null },
+    passwordPlaceholder: { type: String, default: null },
+    confirmPasswordPlaceholder: { type: String, default: null },
+    submitLabel: { type: String, default: null },
+    loadingLabel: { type: String, default: null },
 
     /** Enlace de vuelta al login. */
-    loginLabel: { type: String, default: 'Ir al inicio de sesión' },
+    loginLabel: { type: String, default: null },
     loginTo: { type: [String, Object], default: () => ({ name: 'login' }) },
     /** Enlace para volver a pedir el mail de recupero (si el link expiró). */
-    requestNewLabel: { type: String, default: 'Solicitar un nuevo enlace' },
+    requestNewLabel: { type: String, default: null },
     forgotPasswordTo: { type: [String, Object], default: () => ({ name: 'mail-reset-password' }) },
-    expiredLabel: { type: String, default: 'El enlace de cambio de contraseña expiró.' },
+    expiredLabel: { type: String, default: null },
 
     /**
      * token / email del usuario. Si quedan vacíos, se leen de la query de la
@@ -208,12 +209,13 @@ export default {
     /** Muestra el selector de base de datos (busca las DB y configura la elegida). */
     showDatabase: { type: Boolean, default: false },
     /** Placeholder del selector de base de datos. */
-    databasePlaceholder: { type: String, default: 'Seleccioná una base de datos' }
+    databasePlaceholder: { type: String, default: null }
   },
   emits: ['success', 'error', 'db-change'],
   setup() {
     const { resetPassword, getValidToken, apiDBQuery, currentDb } = useApi();
     return {
+      t: useHistrixI18n().t,
       storage: useHistrixStorage(),
       resetPassword,
       getValidToken,
@@ -241,19 +243,35 @@ export default {
   validations() {
     return {
       password: {
-        required: helpers.withMessage('Ingresá una contraseña.', required),
+        required: helpers.withMessage(this.t('auth.requiredPassword'), required),
         minLength: helpers.withMessage(
-          `Mínimo ${this.passwordMinLength} caracteres.`,
+          this.t('auth.passwordMinLength', { min: this.passwordMinLength }),
           minLength(this.passwordMinLength)
         )
       },
       confirm_password: {
-        required: helpers.withMessage('Repetí la contraseña.', required),
-        sameAsPassword: helpers.withMessage('Las contraseñas no coinciden.', sameAs(this.password))
+        required: helpers.withMessage(this.t('auth.requiredConfirm'), required),
+        sameAsPassword: helpers.withMessage(this.t('auth.passwordsMismatch'), sameAs(this.password))
       }
     };
   },
   computed: {
+    /** Textos: el prop si se pasó, si no el de i18n. */
+    txt() {
+      const t = this.t;
+      return {
+        title: this.title ?? t('reset.title'),
+        subtitle: this.subtitle ?? t('reset.subtitle'),
+        passwordPlaceholder: this.passwordPlaceholder ?? t('reset.password'),
+        confirmPasswordPlaceholder: this.confirmPasswordPlaceholder ?? t('auth.confirmPassword'),
+        submitLabel: this.submitLabel ?? t('reset.submit'),
+        loadingLabel: this.loadingLabel ?? t('reset.loading'),
+        loginLabel: this.loginLabel ?? t('reset.goToLogin'),
+        requestNewLabel: this.requestNewLabel ?? t('reset.requestNew'),
+        expiredLabel: this.expiredLabel ?? t('reset.expired'),
+        databasePlaceholder: this.databasePlaceholder ?? t('auth.databasePlaceholder')
+      };
+    },
     panelStyle() {
       if (this.image) {
         return {
@@ -324,11 +342,11 @@ export default {
       };
       try {
         const resp = await this.resetPassword(payload);
-        this.okMsg = resp?.data?.responseText || 'Tu contraseña se actualizó correctamente.';
+        this.okMsg = resp?.data?.responseText || this.t('reset.done');
         this.done = true;
         this.$emit('success', { payload, response: resp });
       } catch (e) {
-        this.errorMsg = e?.response?.data?.responseText || 'No se pudo actualizar la contraseña.';
+        this.errorMsg = e?.response?.data?.responseText || this.t('reset.error');
         this.$emit('error', e);
       } finally {
         this.loading = false;

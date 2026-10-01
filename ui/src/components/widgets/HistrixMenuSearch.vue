@@ -7,11 +7,11 @@
       v-if="variant === 'input'"
       type="button"
       class="hms-trigger"
-      :aria-label="placeholder"
+      :aria-label="placeholderText"
       @click="open = true"
     >
       <q-icon name="search" size="18px" class="hms-trigger-icon" />
-      <span class="hms-trigger-text">{{ placeholder }}</span>
+      <span class="hms-trigger-text">{{ placeholderText }}</span>
       <span v-if="shortcut" class="hms-kbd">{{ shortcutLabel }}</span>
     </button>
     <q-btn
@@ -20,7 +20,7 @@
       round
       dense
       icon="search"
-      :aria-label="placeholder"
+      :aria-label="placeholderText"
       @click="open = true"
     />
 
@@ -40,17 +40,17 @@
             v-model="query"
             class="hms-input"
             type="text"
-            :placeholder="placeholder"
+            :placeholder="placeholderText"
             autocomplete="off"
             spellcheck="false"
-            aria-label="Buscar en el menú"
+            :aria-label="t('menuSearch.inputLabel')"
           />
           <span v-if="loading" class="hms-loading"><q-spinner size="18px" /></span>
           <button
             v-else-if="query"
             type="button"
             class="hms-clear"
-            aria-label="Limpiar búsqueda"
+            :aria-label="t('menuSearch.clear')"
             @click="clearQuery"
           >
             <q-icon name="close" size="16px" />
@@ -95,21 +95,21 @@
 
           <div v-else-if="query" class="hms-empty">
             <q-icon name="search_off" size="30px" class="hms-empty-icon" />
-            <div>Sin resultados para <strong>«{{ query }}»</strong></div>
+            <div>{{ t('menuSearch.noResults') }} <strong>«{{ query }}»</strong></div>
           </div>
           <div v-else class="hms-empty">
             <q-icon name="travel_explore" size="30px" class="hms-empty-icon" />
-            <div>Escribí para buscar en el menú…</div>
+            <div>{{ t('menuSearch.empty') }}</div>
           </div>
         </div>
 
         <div class="hms-footer">
-          <span class="hms-hint"><kbd>↑</kbd><kbd>↓</kbd> navegar</span>
-          <span class="hms-hint"><kbd>↵</kbd> abrir</span>
-          <span class="hms-hint"><kbd>esc</kbd> cerrar</span>
+          <span class="hms-hint"><kbd>↑</kbd><kbd>↓</kbd> {{ t('menuSearch.navigate') }}</span>
+          <span class="hms-hint"><kbd>↵</kbd> {{ t('menuSearch.open') }}</span>
+          <span class="hms-hint"><kbd>esc</kbd> {{ t('menuSearch.close') }}</span>
           <span class="hms-spacer" />
           <span v-if="results.length" class="hms-count">
-            {{ results.length }} resultado{{ results.length === 1 ? '' : 's' }}
+            {{ results.length }} {{ results.length === 1 ? t('menuSearch.result') : t('menuSearch.results') }}
           </span>
         </div>
       </div>
@@ -120,6 +120,7 @@
 <script>
 import { isTypingTarget, matchHotkey } from '../../core/hotkeys.js';
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 import { useHistrixNavigate } from '../../services/navigation.js';
 
 const decodeCache = new Map();
@@ -178,7 +179,7 @@ export default {
     const { getMenu } = useApi();
     // Navega con config.onNavigate o, si no hay, con el router de la app. `@navigate` avisa igual.
     const { navigate } = useHistrixNavigate();
-    return { getMenu, navigate };
+    return { t: useHistrixI18n().t, getMenu, navigate };
   },
   props: {
     // Nivel del menú para pedir el árbol (igual que HistrixExpansionMenu).
@@ -187,7 +188,7 @@ export default {
     tree: { type: Array, default: null },
     // 'input' (barra con atajo) | 'button' (solo lupa)
     variant: { type: String, default: 'input' },
-    placeholder: { type: String, default: 'Buscar…' },
+    placeholder: { type: String, default: null },
     // Atajo global para abrir desde cualquier lado (también `/` fuera de un
     // campo de texto). false lo apaga.
     shortcut: { type: Boolean, default: true },
@@ -208,6 +209,9 @@ export default {
     };
   },
   computed: {
+    placeholderText() {
+      return this.placeholder ?? this.t('menuSearch.placeholder');
+    },
     shortcutLabel() {
       const names = { ctrl: this.isMac ? '⌘' : 'Ctrl', meta: '⌘', alt: this.isMac ? '⌥' : 'Alt', shift: 'Shift' };
       return String(this.hotkey)
