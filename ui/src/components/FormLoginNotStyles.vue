@@ -104,12 +104,18 @@ import { required } from '@vuelidate/validators';
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  loginError: 'Email o contraseña incorrectos'
+};
 
 export default {
   name: 'FormLoginNotStyles',
   setup() {
     const { apiDBQuery, login: loginApi } = useApi();
-    return { apiDBQuery, loginApi, v$: useVuelidate() };
+    return { apiDBQuery, loginApi, notify: useHistrixNotify(), v$: useVuelidate() };
   },
   props: {
     /**
@@ -337,13 +343,7 @@ export default {
           this.runEventAfter();
         })
         .catch((_error) => {
-          this.$q.notify({
-            message: 'email o contraseña incorrectos ',
-            type: 'negative',
-            timeout: 4000,
-            position: 'top',
-            actions: [{ icon: 'close', color: 'white' }]
-          });
+          this.notify.error(messages.loginError);
         })
         .finally(() => {
           this.btnLoading = false;

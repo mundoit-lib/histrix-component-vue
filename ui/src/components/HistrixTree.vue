@@ -124,15 +124,21 @@
 <script>
 import { keyFieldNames } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixFilters from './HistrixFilters.vue';
 import HistrixForm from './HistrixForm.vue';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  confirmDelete: '¿Realmente desea borrar este elemento?'
+};
 
 export default {
   name: 'HistrixTree',
   setup() {
     const { deleteAppData, getAppData } = useApi();
-    return { deleteAppData, getAppData };
+    return { notify: useHistrixNotify(), deleteAppData, getAppData };
   },
   props: {
     inner: false,
@@ -198,9 +204,8 @@ export default {
     xmlUrl(filterQuery) {
       return `${this.path}?${filterQuery}`;
     },
-    deleteItem(item) {
-      const _index = this.data.indexOf(item);
-      if (confirm('Are you sure you want to delete this item?')) {
+    async deleteItem(item) {
+      if (await this.notify.confirm(messages.confirmDelete)) {
         this.delete(item);
       }
     },

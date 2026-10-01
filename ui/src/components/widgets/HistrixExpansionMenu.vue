@@ -192,6 +192,7 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixNotify } from '../../services/notify.js';
 
 const decodeCache = new Map();
 function decodeHTMLcached(text) {
@@ -204,12 +205,19 @@ function decodeHTMLcached(text) {
   return result;
 }
 
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  favoriteSaved: 'Favorito guardado',
+  favoriteError: 'El favorito no se pudo guardar'
+};
+
 export default {
   name: 'HistrixExpansionMenu',
   emits: ['close-drawer'],
   setup() {
     const { removeFavorit, setFavorit, getFavorites, getMenu } = useApi();
     return {
+      notify: useHistrixNotify(),
       apiRemoveFavorit: removeFavorit,
       apiSetFavorit: setFavorit,
       getFavorites,
@@ -277,19 +285,11 @@ export default {
       }
       try {
         await this.apiSetFavorit(menuId, uri, name);
-        this.$q.notify({
-          message: 'Favorito guardado',
-          color: 'positive',
-          icon: 'check'
-        });
+        this.notify.success(messages.favoriteSaved);
         this.favorit.keys.push({ menuId, uri, name });
         this.$events.fire('update-favorit');
       } catch (_error) {
-        this.$q.notify({
-          message: 'El favorito no se pudo guardar',
-          color: 'negative',
-          icon: 'warning'
-        });
+        this.notify.error(messages.favoriteError);
       }
     },
     nodeUri(node) {
