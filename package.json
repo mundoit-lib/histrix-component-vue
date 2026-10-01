@@ -6,7 +6,8 @@
   "keywords": [],
   "author": "",
   "scripts": {
-    "check": "biome check --write --unsafe",
+    "check": "biome check",
+    "check:fix": "biome check --write",
     "lint": "biome lint --write",
     "test": "vitest run",
     "test:watch": "vitest"
