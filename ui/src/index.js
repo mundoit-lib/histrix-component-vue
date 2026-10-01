@@ -34,7 +34,11 @@ import HistrixUsers from './components/widgets/HistrixUsers.vue';
 import notificationMenu from './components/widgets/notificationMenu.vue';
 import profileMenu from './components/widgets/profileMenu.vue';
 import profileMenuItems from './components/widgets/profileMenuItems.vue';
+import { HistrixApiError, isHistrixApiError, normalizeApiError } from './core/apiError.js';
+import { normalizeData } from './core/apiResponse.js';
 import config from './services/config';
+import { createNotifier, provideHistrixNotify, useHistrixNotify } from './services/notify.js';
+import quasarNotifyImpl from './services/notify.quasar.js';
 
 const components = [
   ExportForm,
@@ -109,7 +113,14 @@ export {
   notificationMenu,
   profileMenu,
   profileMenuItems,
-  config
+  config,
+  HistrixApiError,
+  isHistrixApiError,
+  normalizeApiError,
+  normalizeData,
+  createNotifier,
+  provideHistrixNotify,
+  useHistrixNotify
 };
 
 export default {
@@ -148,9 +159,14 @@ export default {
   notificationMenu,
   profileMenu,
   profileMenuItems,
-  install(app, _options) {
+  install(app, options = {}) {
     for (const component of components) {
       app.component(component.name, component);
+    }
+    // Notifier: el que inyecte la app (`app.use(plugin, { notify })`) o el de Quasar.
+    provideHistrixNotify(app, options.notify || quasarNotifyImpl);
+    if (typeof options.onUnauthorized === 'function') {
+      config.onUnauthorized = options.onUnauthorized;
     }
   }
 };
