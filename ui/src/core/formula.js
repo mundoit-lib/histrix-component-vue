@@ -417,14 +417,25 @@ function clean(formula) {
  */
 export function parseFormula(formula) {
   if (!formula || typeof formula !== 'string') return null;
+  if (cache.has(formula)) return cache.get(formula);
+  let tree = null;
   try {
     const tokens = tokenize(clean(formula));
-    if (tokens.length === 0) return null;
-    return parse(tokens);
+    if (tokens.length > 0) tree = parse(tokens);
   } catch (_e) {
-    return null;
+    tree = null;
   }
+  if (cache.size >= CACHE_MAX) cache.clear();
+  cache.set(formula, tree);
+  return tree;
 }
+
+/**
+ * Árboles ya parseados (son inmutables): las tablas evalúan la misma fórmula
+ * en cada fila y en cada render.
+ */
+const cache = new Map();
+const CACHE_MAX = 1000;
 
 /**
  * Evalúa una fórmula reemplazando los nombres de campo por sus valores.
