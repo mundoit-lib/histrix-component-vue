@@ -11,6 +11,7 @@ import HistrixField from './components/HistrixField.vue';
 import HistrixFilters from './components/HistrixFilters.vue';
 import HistrixForgotPasswordSplit from './components/HistrixForgotPasswordSplit.vue';
 import HistrixForm from './components/HistrixForm.vue';
+import HistrixHelp from './components/HistrixHelp.vue';
 import HistrixList from './components/HistrixList.vue';
 import HistrixLoginSplit from './components/HistrixLoginSplit.vue';
 import HistrixPasswordChange from './components/HistrixPasswordChange.vue';
@@ -54,6 +55,7 @@ const components = [
   HistrixFilters,
   HistrixForgotPasswordSplit,
   HistrixForm,
+  HistrixHelp,
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,
@@ -91,6 +93,7 @@ export {
   HistrixFilters,
   HistrixForgotPasswordSplit,
   HistrixForm,
+  HistrixHelp,
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,
@@ -136,6 +139,7 @@ export default {
   HistrixFilters,
   HistrixForgotPasswordSplit,
   HistrixForm,
+  HistrixHelp,
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,

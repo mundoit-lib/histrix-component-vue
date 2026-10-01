@@ -491,9 +491,7 @@ export default {
     this.editedItem = Object.assign({}, this.schema.values);
     // Paginación inicial desde el schema: deshabilitada → mostrar todo
     // (rowsPerPage 0); habilitada → arrancar con el page_size del backend.
-    this.pagination.rowsPerPage = this.paginationConfig.enabled
-      ? this.paginationConfig.pageSize
-      : 0;
+    this.pagination.rowsPerPage = this.paginationConfig.enabled ? this.paginationConfig.pageSize : 0;
     /*
     if (this.modelValue) {
       this.data = JSON.parse(JSON.stringify(this.modelValue))
@@ -576,9 +574,7 @@ export default {
      */
     paginationOptions() {
       const { maxLimit, pageSize } = this.paginationConfig;
-      const values = [5, 10, 15, 20, 25, 50, 100, 200, pageSize].filter(
-        (v) => v > 0 && (!maxLimit || v <= maxLimit)
-      );
+      const values = [5, 10, 15, 20, 25, 50, 100, 200, pageSize].filter((v) => v > 0 && (!maxLimit || v <= maxLimit));
       if (maxLimit && !values.includes(maxLimit)) {
         values.push(maxLimit);
       }
@@ -761,7 +757,16 @@ export default {
       return this.filterObject(this.schema.fields, (field) => !field.update_fields);
     }
   },
-  emits: ['export', 'print', 'computed-total', 'update:modelValue', 'closepopup', 'open-popup', 'select-row'],
+  emits: [
+    'export',
+    'print',
+    'computed-total',
+    'update:modelValue',
+    'closepopup',
+    'open-popup',
+    'open-detail',
+    'select-row'
+  ],
   methods: {
     setEdit(value) {
       this.editValue = value;
