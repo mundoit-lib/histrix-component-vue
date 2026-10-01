@@ -139,7 +139,7 @@ function fold(input) {
   let folded = '';
   const map = [];
   for (let i = 0; i < s.length; i++) {
-    const f = s[i].normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const f = s[i].normalize('NFD').replace(/\p{Mn}/gu, '');
     for (let j = 0; j < f.length; j++) {
       folded += f[j];
       map.push(i);
@@ -151,20 +151,22 @@ function foldStr(input) {
   return fold(input).folded;
 }
 function escapeHTML(s) {
-  return String(s).replace(/[&<>"]/g, (c) => ({
-    '&': '&amp;',
-    '<': '&lt;',
-    '>': '&gt;',
-    '"': '&quot;'
-  }[c]));
+  return String(s).replace(
+    /[&<>"]/g,
+    (c) =>
+      ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;'
+      })[c]
+  );
 }
 // Pasa a "Título Como El Menú" en JS (no por CSS): así el texto ya tiene el
 // caso correcto antes de insertar el <mark>, y el resaltado no parte la palabra
 // dejando mayúsculas raras tipo "MonEdas".
 function titleCase(input) {
-  return (input || '')
-    .toLowerCase()
-    .replace(/(^|[\s/(\-–—])(\p{L})/gu, (_m, sep, ch) => sep + ch.toUpperCase());
+  return (input || '').toLowerCase().replace(/(^|[\s/(\-–—])(\p{L})/gu, (_m, sep, ch) => sep + ch.toUpperCase());
 }
 
 export default {
@@ -195,8 +197,7 @@ export default {
       items: [],
       loading: false,
       isMac:
-        typeof navigator !== 'undefined' &&
-        /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '')
+        typeof navigator !== 'undefined' && /Mac|iPhone|iPad|iPod/.test(navigator.platform || navigator.userAgent || '')
     };
   },
   computed: {
@@ -209,22 +210,21 @@ export default {
       const scored = [];
       for (const it of this.items) {
         let score = -1;
-        let pos = it._labelF.indexOf(q);
-        if (pos === 0) score = 0; // empieza con
-        else if (pos > 0 && /\s/.test(it._labelF[pos - 1])) score = 1; // inicio de palabra
-        else if (pos > 0) score = 2; // contiene (label)
-        else if (it._subF.includes(q)) score = 3; // subtítulo
+        const pos = it._labelF.indexOf(q);
+        if (pos === 0)
+          score = 0; // empieza con
+        else if (pos > 0 && /\s/.test(it._labelF[pos - 1]))
+          score = 1; // inicio de palabra
+        else if (pos > 0)
+          score = 2; // contiene (label)
+        else if (it._subF.includes(q))
+          score = 3; // subtítulo
         else if (it._pathF.includes(q)) score = 4; // ruta/breadcrumb
         if (score >= 0) {
           scored.push({ it, score, pos: pos < 0 ? 9999 : pos });
         }
       }
-      scored.sort(
-        (a, b) =>
-          a.score - b.score ||
-          a.pos - b.pos ||
-          a.it.display.length - b.it.display.length
-      );
+      scored.sort((a, b) => a.score - b.score || a.pos - b.pos || a.it.display.length - b.it.display.length);
       return scored.slice(0, this.limit).map((s) => s.it);
     }
   },
@@ -258,14 +258,14 @@ export default {
             _pathF: foldStr(path.join(' '))
           });
         }
-        if (n.children && n.children.length) {
+        if (n.children?.length) {
           out.push(...this.flatten(n.children, [...path, display]));
         }
       }
       return out;
     },
     loadData() {
-      if (this.tree && this.tree.length) {
+      if (this.tree?.length) {
         this.items = this.flatten(this.tree);
         return;
       }
@@ -292,13 +292,7 @@ export default {
       if (i < 0) return escapeHTML(display);
       const start = map[i];
       const end = map[i + q.length - 1] + 1;
-      return (
-        escapeHTML(display.slice(0, start)) +
-        '<mark>' +
-        escapeHTML(display.slice(start, end)) +
-        '</mark>' +
-        escapeHTML(display.slice(end))
-      );
+      return `${escapeHTML(display.slice(0, start))}<mark>${escapeHTML(display.slice(start, end))}</mark>${escapeHTML(display.slice(end))}`;
     },
     nodeUri(node) {
       if (!node.uri.includes('vue=')) {
@@ -312,9 +306,9 @@ export default {
     go(r) {
       this.open = false;
       this.$emit('navigate', r);
-      this.$router
-        .push(this.nodeUri({ uri: r.uri, label: r.display }))
-        .catch(() => {});
+      this.$router.push(this.nodeUri({ uri: r.uri, label: r.display })).catch(() => {
+        // navegación duplicada o cancelada: no es un error
+      });
     },
     move(delta) {
       const n = this.results.length;

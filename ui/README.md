@@ -21,6 +21,13 @@ npm install vue@^3 quasar@^2 @vuelidate/core @vuelidate/validators \
   @mundoit-lib/plugin-vue-axios @mundoit-lib/plugin-vue-auth
 ```
 
+Peers opcionales (declarados en `peerDependenciesMeta`): algunos componentes los usan si están instalados en la app.
+
+| Paquete | Uso | Componentes |
+| --- | --- | --- |
+| `@mundoit-lib/plugin-vue-event` | bus `this.$events` | `HistrixForm`, `HistrixTable`, `HistrixLoginSplit`, `LoginForm`, `FormLoginNotStyles`, `HistrixExpansionMenu` |
+| `vue-router@^4` | `this.$router` (navegación y redirects) | `HistrixApp`, `HistrixForm`, `HistrixTable`, `HistrixList`, `HistrixTree`, `HistrixMenuSearch`, `HistrixExpansionMenu` |
+
 ## Uso
 
 ```js
