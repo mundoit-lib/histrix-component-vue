@@ -1,6 +1,6 @@
 # 08 — Plan de evolución
 
-> Decisión estratégica tomada el **2026-06-05**. Este doc registra el qué, el porqué y el plan por fases, para no re-litigar la discusión cada seis meses.
+> Decisión estratégica tomada el **2026-06-05**. Este doc registra el qué, el porqué y el plan por fases, para no re-litigar la discusión cada seis meses. Las decisiones posteriores se registran como ADR al final (la primera: [cliente stateless, sin instancias](#adr-2026-10-01--cliente-stateless-sin-instancias)).
 
 ## La decisión
 
@@ -55,16 +55,18 @@ Drop de Vue 2 + limpieza + infraestructura mínima:
 
 > ⚠️ **Breaking (v0.1.0)**: requiere Vue 3 nativo (sin `@vue/compat`) y Quasar 2. Apps Vue 2: quedarse en `0.0.x`.
 
-### Fase 2 — Separar motor de piel (pendiente)
+### Fase 2 — Separar motor de piel (en curso)
 
 El activo del proyecto es el motor schema→pantalla, no la UI. Hoy están amasados en archivos de 1.300 líneas.
 
-- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, instancias, `useApi`) a módulos sin UI.
+- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, `useApi`) a módulos sin UI. Avance al 2026-10-01: 21 módulos puros en `ui/src/core/` con 310 tests (ver `06-estado-actual.md`).
 - `HistrixField` pasa de switch gigante a un **resolver** que delega en renderers chicos (un archivo por tipo de campo).
 - **Tests** contra schemas fixture capturados de la API real (varios clientes/bases, multi-tenant). Sin esto, cualquier evolución es a ciegas.
-- Sacar el `eval()` de `processOperation` (parser aritmético chico o `Function` con whitelist).
+- ~~Sacar el `eval()` de `processOperation`~~ — **hecho** (2026-06-08): `core/formula.js`, tokenizer + shunting-yard sin `eval`. Ver la corrección de abajo sobre su alcance.
 - Resolver el TODO de `config.fixApi` vs `config.apiUrl` (fuente canónica de la URL del backend).
 - Tipos: JSDoc/`.d.ts` para el contrato del schema (el "tipo Schema" documentado en `07-backend-histrix.md` §5).
+
+> **Corrección (2026-10-01): las fórmulas de Histrix no son "aritmética pura".** Al sacar el `eval()` se asumió que los `jseval`/`computed_fields` del backend sólo usaban aritmética, y `core/formula.js` quedó acotado a `+ - * /` y paréntesis. Era falso: el cliente legacy de Histrix evalúa esas fórmulas con `eval` sobre JavaScript arbitrario, y los XML reales usan `toFixed` ~2.000 veces, además de `substring`, `Date.parse`, `Math.round/ceil/abs`, `parseInt` y condicionales. Esas fórmulas no se calculaban en este cliente. La respuesta no fue volver a `eval`: **HD-7523** (mergeada el 2026-10-01) pasó `core/formula.js` a un parser Pratt con funciones en whitelist, ternario y comparaciones, y la cobertura medida sobre los `jseval` reales subió del 55 % al 92 % de los bloques (`ui/dev/scripts/jseval-coverage.mjs`). Queda cablear las validaciones `__EVAL` en `HistrixForm`.
 
 ### Fase 3 — Salida progresiva de Quasar → nativo + UnoCSS (en curso)
 
@@ -90,4 +92,47 @@ Ya que el backend acepta cambios — pedir:
 
 1. **Errores del process siempre JSON** (hoy a veces llegan como fragmento HTML con status 400 — `07-backend-histrix.md` §8.9).
 2. **Formalizar el contrato del schema** (JSON Schema/OpenAPI versionado). Abarata este front y cualquier front futuro.
-3. Documentar la API de instancias (`/instance/{id}`, expiración, serialización de sesión).
+3. ~~Documentar la API de instancias~~ — reemplazado por el ADR de abajo: el cliente **no** usa instancias; lo que se pide al backend son equivalentes stateless.
+
+---
+
+## ADR 2026-10-01 — Cliente stateless, sin instancias
+
+**Estado:** aceptada (2026-10-01). Surge de la auditoría del 2026-09-30 (`09-auditoria-2026-09-30.md`, local).
+
+### Contexto
+
+El backend Histrix tiene dos modos de trabajar una pantalla:
+
+- **Stateless**: `GET /schema/{xml}` + `GET|POST|PUT|PATCH|DELETE /app/{xml}`. Cada request trae todo lo que necesita. Es lo que usa esta librería desde siempre.
+- **Instancias**: el servidor crea una instancia en la sesión PHP (`/instance/...`) y guarda ahí el estado de la pantalla (cabecera, renglones, campos dependientes, proceso). Es como trabaja el cliente legacy, y es lo que da paridad completa en `<actualiza>` (campos dependientes), cabeceras de comprobante, cierre de proceso, autoprint y eventos.
+
+Hoy quedarse stateless limita esas funciones. La alternativa era adoptar instancias para `fichaing`/`ing`/cabecera. En contra:
+
+- **El backend va camino a API pura**: lo consumen esta librería, SPAs/PWAs de clientes (mobile-first) y un servidor **MCP** para terceros y agentes. Ninguno de ellos quiere atarse a una sesión PHP con lock, expiración (un 404 puede ser "instancia vencida") y estado oculto en el servidor.
+- Varios endpoints de instancia responden **XML o HTML con `<script>`**, no JSON: habría que pedir versiones JSON de todos modos.
+- La línea ya tomada en julio fue la contraria: las **ayudas stateless** (`__help` + `context_fields` sobre `GET /app`, `HistrixHelp`) resolvieron sin instancia algo que antes la necesitaba.
+
+### Decisión
+
+**El cliente es y sigue siendo stateless. No se adoptan las instancias del backend.** Cada capacidad que hoy depende de una instancia se resuelve pidiendo al backend un equivalente stateless, acotado a `/schema` y `/app`.
+
+### Consecuencias: qué se le pide al backend
+
+1. **Refresco de campos dependientes sin instancia**: un `POST /app/{xml}/fields/{campo}` (o equivalente) que reciba los valores actuales del form y devuelva valores y opciones (`[{name, value, jsonOptions}]`) de los campos afectados. Es lo que hace hoy el refresco por instancia, pero con el estado en el request, igual que se hizo con `__help`.
+2. **`confirmacion`, `events` y autoprint serializados en el schema**: el mensaje de confirmación antes de procesar, qué hacer después (`{procesar: 'close' | 'refresh' | 'reload'}`) y la impresión post-proceso (`print: {xml, dir, ids}`), en vez de quedar en el JavaScript que arma el servidor.
+3. **Proceso con renglones en un solo request**: que `PATCH /app/{xml}` acepte `{data, rows: {grilla: [...]}}` y devuelva JSON con los ids generados y el autoprint.
+4. **Errores siempre JSON** (`{message, field?}`), también en `400`/`404`/`500`; hoy llegan como `text/plain` o HTML. Mientras tanto, el cliente los normaliza a `HistrixApiError` (HD-7520).
+5. **`type` e `histrix_type` normalizados** en el `/schema` (minúsculas, sin variantes de mayúsculas o guiones) y el tipo de dato expuesto (hoy `TipoDato` no viaja). Mientras tanto, el cliente normaliza con `core/normalize.js` (HD-7518).
+
+Del lado del cliente: el estado de la pantalla vive en los componentes (renglones de grilla acumulados en `HistrixTable`, valores del form), y la librería no guarda ni renueva sesión de servidor. Mientras el backend no tenga (1)–(3), `<actualiza>`, cabeceras y autoprint quedan parciales; las subtareas de HD-7515 avanzan con lo que ya es posible stateless.
+
+### Cómo revisitarla
+
+Reabrir sólo si pasa alguna de estas:
+
+- El backend no puede ofrecer (1) o (3) de forma stateless y una pantalla crítica de un cliente no se puede resolver sin ellos.
+- Aparece un caso que necesita estado de servidor de verdad entre requests (bloqueos de registro, transacciones largas), no sólo "recalcular con los valores del form".
+- Las instancias pasan a responder JSON, sin lock de sesión, y el MCP o las PWAs también las adoptan.
+
+En ese caso la evaluación es por tipo de pantalla (por ejemplo, sólo `ing` con cabecera), no un cambio general.
