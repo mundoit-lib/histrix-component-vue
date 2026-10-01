@@ -6,7 +6,9 @@ const valueConfig = {
   clientId: process.env.CLIENT_ID ? process.env.CLIENT_ID : '',
   clientSecret: process.env.CLIENT_SECRET ? process.env.CLIENT_SECRET : '',
   fixApi: process.env.FIX_API_URL ? process.env.FIX_API_URL : '',
-  axios: undefined
+  axios: undefined,
+  // Callback opcional ante un 401 (sesión expirada). Recibe el HistrixApiError.
+  onUnauthorized: undefined
 };
 
 export const config = new Proxy(valueConfig, {
