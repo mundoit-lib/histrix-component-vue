@@ -80,11 +80,12 @@ describe('resolveFieldKind', () => {
     expect(resolveFieldKind({ histrix_type: 'CustomNumeric', 'data-a-dec': ',' })).toBe('decimal');
     expect(resolveFieldKind({ histrix_type: 'EnclosedNumeric' })).toBe('decimal');
     expect(resolveFieldKind({ histrix_type: 'Hfloat' })).toBe('decimal');
+    expect(resolveFieldKind({ histrix_type: 'Numeric' })).toBe('decimal');
+    expect(resolveFieldKind({ histrix_type: 'EnclosedInteger' })).toBe('integer');
   });
 
   it('tipos sin tratamiento propio caen al default', () => {
     expect(resolveFieldKind({ histrix_type: 'Varchar' })).toBe('q-input');
-    expect(resolveFieldKind({ histrix_type: 'Numeric' })).toBe('q-input');
     expect(resolveFieldKind({ histrix_type: 'Field' })).toBe('q-input');
   });
 

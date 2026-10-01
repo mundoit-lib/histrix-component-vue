@@ -59,6 +59,7 @@
 
 <script>
 import { mapUiIcon } from '../core/icons.js';
+import { formatNumber, isNumericField, numericSpec } from '../core/numeric.js';
 import useApi from '../services/histrixApi.js';
 
 export default {
@@ -187,12 +188,11 @@ export default {
       return aws;
     },
     formatedValue() {
-      if (this.schema.histrix_type === 'Numeric') {
-        return Number.parseFloat(this.col.value._ || 0).toLocaleString('es-AR', {
-          style: 'decimal',
-          maximumFractionDigits: 2,
-          minimumFractionDigits: 2
-        });
+      // Numeric/Decimal/CustomNumeric/Enclosed*: separadores y decimales del
+      // schema, negativos entre paréntesis si data-n-bracket. Sin valor, vacío.
+      if (isNumericField(this.schema) && !this.hasOptions) {
+        const raw = this.col.value !== null && typeof this.col.value === 'object' ? this.col.value._ : this.col.value;
+        return formatNumber(raw, numericSpec(this.schema));
       }
       return this.displayValue;
     },

@@ -217,8 +217,15 @@ import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
 import { normalizeScreenType } from '../core/normalize.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  processFinished: 'Proceso finalizado',
+  loadError: 'Error de carga de datos'
+};
 
 export default {
   name: 'HistrixForm',
@@ -251,7 +258,16 @@ export default {
   },
   setup() {
     const { getAppSchema, upload, processAppForm, insertAppData, updateAppData, getAppData } = useApi();
-    return { v$: useVuelidate(), getAppSchema, upload, processAppForm, insertAppData, updateAppData, getAppData };
+    return {
+      v$: useVuelidate(),
+      notify: useHistrixNotify(),
+      getAppSchema,
+      upload,
+      processAppForm,
+      insertAppData,
+      updateAppData,
+      getAppData
+    };
   },
   computed: {
     insertButton() {
@@ -634,18 +650,12 @@ export default {
       if (this.files) {
         this.upload(this.files);
       }
-      this.processAppForm(this.xmlUrl(), this.postData)
+      // Devuelve la promesa para que HistrixApp libere su flag `processing`
+      // también cuando el proceso falla (en error no se emite process-finish).
+      return this.processAppForm(this.xmlUrl(), this.postData)
         .then((response) => {
           this.submitting = false;
-          this.$q.notify({
-            message: 'PROCESO FINALIZADO',
-            type: 'success',
-            textColor: 'white',
-            color: 'success',
-            icon: 'info',
-            closeBtn: 'cerrar',
-            position: 'top'
-          });
+          this.notify.success(messages.processFinished);
           const data = response?.data?.resourceIds || [];
           this.reset();
           this.refresh();
@@ -653,14 +663,10 @@ export default {
           this.$emit('closepopup');
         })
         .catch((e) => {
-          this.$q.notify({
-            type: 'negative',
-            message: e.response.data,
-            position: 'top'
-          });
+          // El form queda abierto con los datos cargados y el padre no refresca:
+          // el proceso no se grabó. `e` es un HistrixApiError (mensaje sin tags).
           this.submitting = false;
-          this.$events.fire('closepopup');
-          this.$emit('process-finish', true);
+          this.notify.error(e);
         });
     },
     /**
@@ -800,9 +806,8 @@ export default {
             this.$emit('insert-row', this.savedValues, response.data.id);
           })
           .catch((e) => {
-            console.error(e);
             this.submitting = false;
-            this.$events.fire('histrix-error-http', e);
+            this.notify.error(e);
           });
       } else {
         this.updateAppData(this.xmlUrl(), postData)
@@ -812,8 +817,8 @@ export default {
             this.$emit('form-saved', this.savedValues, this.editedIndex);
           })
           .catch((e) => {
-            console.error(e);
             this.submitting = false;
+            this.notify.error(e);
           });
       }
     },
@@ -833,12 +838,13 @@ export default {
     getData() {
       this.getAppData(this.xmlUrl(), this.query)
         .then((response) => {
-          this.localValues = response.data.data[0];
+          // 204 / sin resultados → `data: []`: la ficha arranca vacía.
+          this.localValues = response?.data?.data?.[0] ?? {};
           this.setDefaultValues();
         })
-        .catch((_e) => {
+        .catch((e) => {
           this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          this.message = `${messages.loadError}: ${e.message}`;
         });
     }
   },

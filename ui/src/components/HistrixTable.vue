@@ -446,19 +446,28 @@ import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
 import { normalizeScreenType } from '../core/normalize.js';
+import { formatNumber, isNumericField, numericSpec } from '../core/numeric.js';
 import { buildPageParams, parsePageResponse } from '../core/pagination.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
 import HistrixFilters from './HistrixFilters.vue';
 import HistrixForm from './HistrixForm.vue';
 
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  closeUnsaved: 'Usted está por cerrar el formulario. Recuerde guardar la información o se perderá',
+  confirmDelete: '¿Realmente desea borrar este elemento?',
+  rowSaved: 'Dato guardado'
+};
+
 export default {
   name: 'HistrixTable',
   setup() {
     const { updateAppData, processApp, deleteAppData, getAppData } = useApi();
-    return { updateAppData, processApp, deleteAppData, getAppData };
+    return { notify: useHistrixNotify(), updateAppData, processApp, deleteAppData, getAppData };
   },
   props: {
     inner: { type: Boolean, default: false },
@@ -808,11 +817,10 @@ export default {
       }
       [];
     },
-    showDialog() {
-      // eslint-disable-next-line no-alert
+    async showDialog() {
       let confim = true;
       if (this.editValue) {
-        confim = window.confirm('Usted esta por cerrar el formulario. Recuerde guardar la informacion o se perdera');
+        confim = await this.notify.confirm(messages.closeUnsaved);
       }
       if (!confim) {
         this.edit = true;
@@ -856,8 +864,11 @@ export default {
     isSumColumn(col) {
       return col.sum === true || col.sum === 'true';
     },
-    /** Formato de una celda numérica del pie (hook hasta tener el renderer numérico). */
-    formatCell(_col, value) {
+    /** Formato de una celda numérica del pie: el de la columna si es numérica. */
+    formatCell(col, value) {
+      if (isNumericField(col)) {
+        return formatNumber(value, numericSpec(col));
+      }
       if (Number.isInteger(value)) {
         return String(value);
       }
@@ -953,18 +964,10 @@ export default {
       };
       this.updateAppData(this.xmlUrl(), postData)
         .then((_response) => {
-          this.$q.notify({
-            message: 'Dato Guardado',
-            type: 'accept',
-            textColor: 'white',
-            color: 'info',
-            icon: 'info',
-            closeBtn: 'cerrar',
-            position: 'bottom right'
-          });
+          this.notify.success(messages.rowSaved);
         })
         .catch((e) => {
-          console.error(e);
+          this.notify.error(e);
         });
     },
     formSaved(_row, index) {
@@ -1071,8 +1074,8 @@ export default {
     xmlUrl(filterQuery) {
       return `${this.path}?&_dt=table${filterQuery}`;
     },
-    deleteItem(item) {
-      if (confirm('¿Realmente desea borrar este elemento?')) {
+    async deleteItem(item) {
+      if (await this.notify.confirm(messages.confirmDelete)) {
         this.delete(item);
       }
     },
@@ -1195,7 +1198,6 @@ export default {
               element._id = element.DT_RowAttr.o;
             }
           });
-          // alert('llega')
           if (index) {
             this.data[index] = data[index];
           } else {

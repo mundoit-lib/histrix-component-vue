@@ -51,7 +51,13 @@ import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, sameAs } from '@vuelidate/validators';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import InputPasswordVue from './InputPassword.vue';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  passwordError: 'Ha ocurrido un error reseteando la contraseña'
+};
 
 export default {
   name: 'HistrixPasswordChange',
@@ -66,7 +72,7 @@ export default {
   },
   setup() {
     const { changePassword } = useApi();
-    return { v$: useVuelidate(), changePassword };
+    return { v$: useVuelidate(), notify: useHistrixNotify(), changePassword };
   },
   data: () => ({
     user: '',
@@ -125,22 +131,11 @@ export default {
           this.form.new_password = null;
           this.form.confirm_password = null;
           this.okPassword = resp.data.responseText;
-          this.$q.notify({
-            message: resp.data.responseText,
-            type: 'positive',
-            timeout: 8000,
-            position: 'top'
-          });
+          this.notify.success(resp.data.responseText);
           this.$emit('close');
         })
         .catch((error) => {
-          const resp = error.response.data.responseText || 'Ha ocurrido un error reseteando contraseña';
-          this.$q.notify({
-            message: resp,
-            type: 'negative',
-            timeout: 8000,
-            position: 'top'
-          });
+          this.notify.error(error.response?.data?.responseText || messages.passwordError);
           this.btnLoading = false;
         });
     }

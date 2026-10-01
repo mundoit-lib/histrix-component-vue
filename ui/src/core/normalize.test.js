@@ -39,7 +39,7 @@ describe('normalizeFieldType', () => {
     expect(normalizeFieldType('Email')).toBe('email');
     expect(normalizeFieldType('Date')).toBe('date');
     expect(normalizeFieldType('Datetime')).toBe('datetime');
-    expect(normalizeFieldType('Numeric')).toBe('numeric');
+    expect(normalizeFieldType('Numeric')).toBe('decimal');
     expect(normalizeFieldType('Integer')).toBe('integer');
     expect(normalizeFieldType('Flipswitch')).toBe('flipswitch');
   });
@@ -50,8 +50,8 @@ describe('normalizeFieldType', () => {
     expect(normalizeFieldType('custom_numeric')).toBe('decimal');
     expect(normalizeFieldType('EnclosedNumeric')).toBe('decimal');
     expect(normalizeFieldType('enclosed_numeric')).toBe('decimal');
-    expect(normalizeFieldType('EnclosedInteger')).toBe('decimal');
-    expect(normalizeFieldType('enclosed_integer')).toBe('decimal');
+    expect(normalizeFieldType('EnclosedInteger')).toBe('integer');
+    expect(normalizeFieldType('enclosed_integer')).toBe('integer');
   });
 
   it('resuelve el resto de los sinónimos', () => {

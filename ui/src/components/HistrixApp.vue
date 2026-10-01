@@ -256,6 +256,7 @@
 import { getCurrentInstance } from 'vue';
 
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 
 import { useHistrixKeys } from '../composables/useHistrixKeys.js';
 
@@ -278,6 +279,13 @@ const SCREEN_COMPONENTS = {
 };
 const HistrixUnsupported = defineLazyComponent(() => import('./HistrixUnsupported.vue'));
 
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  schemaError: 'Error al cargar la pantalla',
+  pdfError: 'Error al descargar el PDF',
+  stepPending: 'Hay que finalizar el paso antes de continuar'
+};
+
 export default {
   name: 'HistrixApp',
   setup() {
@@ -290,6 +298,7 @@ export default {
       handle: (action, event) => vm.onHotkey(action, event)
     });
     return {
+      notify: useHistrixNotify(),
       currentDb,
       apiUrl,
       getAppPdf,
@@ -511,9 +520,6 @@ export default {
      */
     vueUrl() {
       return `${this.apiUrl}/vue/${this.path}`;
-    },
-    hash() {
-      return `${this.databaseId}.${this.path}`.replace(/\//g, '__');
     }
   },
   emits: ['update:modelValue', 'advance-step', 'process-finish', 'select-row', 'computed-total', 'closepopup'],
@@ -525,28 +531,6 @@ export default {
           return result & result;
         }, 0)
       );
-    },
-    subscribeWamp() {
-      if (this.$wamp) {
-        this.$wamp.subscribe(
-          this.hash,
-          (_args, _kwArgs, _details) => {
-            // component context is available
-            this.$q.notify({
-              message: 'Xml utilizado',
-              type: 'info',
-              textColor: 'white',
-              color: 'info',
-              icon: 'info',
-              closeBtn: 'cerrar',
-              position: 'top'
-            });
-          },
-          {
-            acknowledge: true // option needed for promise, automatically added
-          }
-        );
-      }
     },
     refreshMaster(data) {
       this.processing = false;
@@ -562,7 +546,7 @@ export default {
      * this will process al containers within STEPS
      */
     finishStep() {
-      alert('must finis step');
+      this.notify.info(messages.stepPending);
     },
     /**
      * emit event to parent component selected Row
@@ -612,7 +596,11 @@ export default {
         }
       }
       this.processing = true;
-      this.$refs.main.processData();
+      try {
+        await this.$refs.main.processData();
+      } finally {
+        this.processing = false;
+      }
     },
     closeDetail() {
       this.isDetailOpened = false;
@@ -767,17 +755,8 @@ export default {
           // set reactive variable
           this.pdfSrc = window.URL.createObjectURL(blob);
         })
-        .catch((err) => {
-          console.error(err);
-          this.$q.notify({
-            message: 'Error downloading PDF',
-            type: 'negative',
-            textColor: 'white',
-            color: 'negative',
-            icon: 'error',
-            closeBtn: 'close',
-            position: 'top'
-          });
+        .catch((e) => {
+          this.notify.error(`${messages.pdfError}: ${e.message}`);
         });
     },
     /**
@@ -810,11 +789,10 @@ export default {
           }
 
           this.schema.api = this.apiUrl;
-          this.subscribeWamp();
         })
         .catch((e) => {
           this.dialog = true;
-          this.message = `Error de Carga${e}`;
+          this.message = `${messages.schemaError}: ${e.message}`;
         });
     },
     /**

@@ -78,6 +78,12 @@ import {
   findFormat
 } from '../core/export.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  downloadError: 'Error al descargar el archivo'
+};
 
 export default {
   name: 'ExportForm',
@@ -89,7 +95,7 @@ export default {
   },
   setup() {
     const { downloadAppData } = useApi();
-    return { downloadAppData };
+    return { notify: useHistrixNotify(), downloadAppData };
   },
   emits: ['close'],
   watch: {
@@ -130,16 +136,8 @@ export default {
         .then(() => {
           this.$emit('close');
         })
-        .catch(() => {
-          this.$q.notify({
-            message: 'Error al descargar el archivo',
-            type: 'negative',
-            textColor: 'white',
-            color: 'negative',
-            icon: 'error',
-            closeBtn: 'close',
-            position: 'top'
-          });
+        .catch((e) => {
+          this.notify.error(`${messages.downloadError}: ${e.message}`);
         })
         .finally(() => {
           this.downloading = false;
