@@ -21,6 +21,13 @@ npm install vue@^3 quasar@^2 @vuelidate/core @vuelidate/validators \
   @mundoit-lib/plugin-vue-axios @mundoit-lib/plugin-vue-auth
 ```
 
+Peers opcionales (declarados en `peerDependenciesMeta`): algunos componentes los usan si están instalados en la app.
+
+| Paquete | Uso | Componentes |
+| --- | --- | --- |
+| `@mundoit-lib/plugin-vue-event` | bus `this.$events` | `HistrixForm`, `HistrixTable`, `HistrixLoginSplit`, `LoginForm`, `FormLoginNotStyles`, `HistrixExpansionMenu` |
+| `vue-router@^4` | `this.$router` (navegación y redirects) | `HistrixApp`, `HistrixForm`, `HistrixTable`, `HistrixList`, `HistrixTree`, `HistrixMenuSearch`, `HistrixExpansionMenu` |
+
 ## Uso
 
 ```js
@@ -50,6 +57,58 @@ config.clientSecret = '...';
 ```vue
 <!-- Montar cualquier pantalla declarada en un XML de Histrix: -->
 <HistrixApp path="ventas/qry/listado.xml" :query="{ id: 123 }" />
+```
+
+## Errores y notificaciones
+
+Todos los métodos de `useApi()` rechazan con un `HistrixApiError`:
+
+```js
+import { isHistrixApiError } from '@mundoit-lib/histrix-component-vue';
+
+try {
+  await api.insertAppData('ventas/ing/cliente.xml', data);
+} catch (e) {
+  // e.status: 400 | 401 | 404 | 500 | 0 (red)
+  // e.kind: 'validation' | 'auth' | 'not_found' | 'server' | 'network' | 'unknown'
+  // e.message: texto legible (sin HTML); e.raw: error original de axios
+}
+```
+
+`getAppData()` resuelve siempre `response.data.data` como array: un `204` o una consulta vacía dan `{ data: [] }`.
+
+Ante un `401` la librería llama a `config.onUnauthorized(error)` (no toca el router):
+
+```js
+app.use(HistrixPlugin, {
+  onUnauthorized: () => router.push('/login')
+});
+```
+
+Las notificaciones pasan por un notifier inyectable con la interfaz
+`{ success(msg), error(msg | HistrixApiError), info(msg), confirm(msg) → Promise<boolean> }`.
+Por defecto el plugin registra uno con Quasar (`Notify` y `Dialog`, que tienen que estar habilitados en
+`quasar.config`). Para usar otro, pasalo al instalar el plugin (los métodos que falten caen a la consola):
+
+```js
+app.use(HistrixPlugin, {
+  notify: {
+    success: (msg) => toast.success(msg),
+    error: (msg, err) => toast.error(msg),
+    info: (msg) => toast.info(msg),
+    confirm: (msg) => miDialogo.confirmar(msg) // Promise<boolean>
+  }
+});
+```
+
+En los componentes:
+
+```js
+import { useHistrixNotify } from '@mundoit-lib/histrix-component-vue';
+
+const notify = useHistrixNotify();
+notify.error(e); // acepta un HistrixApiError
+if (await notify.confirm('¿Eliminar el registro?')) { /* … */ }
 ```
 
 ## Desarrollo

@@ -57,28 +57,35 @@ describe('resolveFieldKind', () => {
     expect(resolveFieldKind({ histrix_type: 'Flipswitch' })).toBe('toggle');
   });
 
-  it('TipoDato pasa tal cual cuando no lo pisa otra condición ("date")', () => {
-    expect(resolveFieldKind({ TipoDato: 'date' })).toBe('date');
+  it('acepta el histrix_type en cualquier grafía', () => {
+    expect(resolveFieldKind({ histrix_type: 'check' })).toBe('check');
+    expect(resolveFieldKind({ histrix_type: 'FILE' })).toBe('q-file');
   });
 
-  it('TipoDato "time" -> "time"', () => {
-    expect(resolveFieldKind({ TipoDato: 'time' })).toBe('time');
+  it('Simpleditor -> "q-editor"', () => {
+    expect(resolveFieldKind({ histrix_type: 'Simpleditor' })).toBe('q-editor');
   });
 
-  it('TipoDato "datetime" -> "datetime"', () => {
-    expect(resolveFieldKind({ TipoDato: 'datetime' })).toBe('datetime');
+  it('tipos de dato: Date/Time/Datetime/Integer/Email', () => {
+    expect(resolveFieldKind({ histrix_type: 'Date', 'data-role': 'datebox' })).toBe('date');
+    expect(resolveFieldKind({ histrix_type: 'Time', mask: '99:99:99' })).toBe('time');
+    expect(resolveFieldKind({ histrix_type: 'Hora' })).toBe('time');
+    expect(resolveFieldKind({ histrix_type: 'Datetime' })).toBe('datetime');
+    expect(resolveFieldKind({ histrix_type: 'Integer', type: 'number' })).toBe('integer');
+    expect(resolveFieldKind({ histrix_type: 'Email', type: 'email' })).toBe('email');
   });
 
-  it('TipoDato "decimal" -> "decimal"', () => {
-    expect(resolveFieldKind({ TipoDato: 'decimal' })).toBe('decimal');
+  it('Decimal y sus variantes -> "decimal"', () => {
+    expect(resolveFieldKind({ histrix_type: 'Decimal', type: 'text', step: '0.01' })).toBe('decimal');
+    expect(resolveFieldKind({ histrix_type: 'CustomNumeric', 'data-a-dec': ',' })).toBe('decimal');
+    expect(resolveFieldKind({ histrix_type: 'EnclosedNumeric' })).toBe('decimal');
+    expect(resolveFieldKind({ histrix_type: 'Hfloat' })).toBe('decimal');
   });
 
-  it('TipoDato "integer" -> "integer"', () => {
-    expect(resolveFieldKind({ TipoDato: 'integer' })).toBe('integer');
-  });
-
-  it('TipoDato "select" se normaliza a "q-select"', () => {
-    expect(resolveFieldKind({ TipoDato: 'select' })).toBe('q-select');
+  it('tipos sin tratamiento propio caen al default', () => {
+    expect(resolveFieldKind({ histrix_type: 'Varchar' })).toBe('q-input');
+    expect(resolveFieldKind({ histrix_type: 'Numeric' })).toBe('q-input');
+    expect(resolveFieldKind({ histrix_type: 'Field' })).toBe('q-input');
   });
 
   it('renderHelper: innerContainer sin options -> "object"', () => {
@@ -105,17 +112,17 @@ describe('resolveFieldKind', () => {
     expect(resolveFieldKind({ histrix_type: 'Flipswitch' })).toBe('toggle');
   });
 
-  it('renderHelper pisa a TipoDato cuando hay innerContainer sin options', () => {
-    expect(resolveFieldKind({ innerContainer: { dir: 'x', xml: 'y' }, TipoDato: 'date' })).toBe('object');
+  it('un select con histrix_type de dato sigue siendo select (FK Integer)', () => {
+    expect(resolveFieldKind({ histrix_type: 'Integer', options: { 1: 'A' } })).toBe('q-select');
+    expect(resolveFieldKind({ histrix_type: 'Date', isSelect: true })).toBe('q-select');
   });
 
-  it('TipoDato NO pisa a "Radio" si Radio viene antes... (Radio luego TipoDato): TipoDato gana', () => {
-    // En el orden original: Radio se setea primero, luego TipoDato lo pisa.
-    expect(resolveFieldKind({ histrix_type: 'Radio', TipoDato: 'integer' })).toBe('integer');
+  it('renderHelper pisa a un tipo de dato', () => {
+    expect(resolveFieldKind({ innerContainer: { dir: 'x', xml: 'y' }, histrix_type: 'Date' })).toBe('object');
   });
 
-  it('histrix_type "Editor" pisa a TipoDato', () => {
-    expect(resolveFieldKind({ histrix_type: 'Editor', TipoDato: 'integer' })).toBe('q-editor');
+  it('Radio pisa a select', () => {
+    expect(resolveFieldKind({ histrix_type: 'Radio', options: { 1: 'A' } })).toBe('radio');
   });
 });
 

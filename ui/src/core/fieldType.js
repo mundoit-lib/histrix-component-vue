@@ -1,26 +1,31 @@
+import { normalizeFieldType } from './normalize.js';
+
+/**
+ * Tipos de dato (`histrix_type` normalizado) que el componente distingue por
+ * su clave: `isDate`, `isTime`, `isDateTime`, `isDecimal`, validación email.
+ * No cambian el componente Vue (siguen siendo QInput).
+ */
+const DATA_KINDS = new Set(['date', 'time', 'datetime', 'decimal', 'integer', 'email']);
+
 /**
  * Decisión pura del "tipo de campo" (qué clase de input es) a partir del
  * fieldSchema, sin depender del estado reactivo del componente.
  *
- * Extraído de HistrixField.vue (computed `histrixType`). Replica EXACTAMENTE
- * el orden y la prioridad de las condiciones originales para no cambiar el
- * comportamiento: cada `if` puede sobrescribir el valor previo, por lo que el
- * último que matchea gana.
+ * Decide sólo con lo que el backend emite: `histrix_type` (nombre de la clase
+ * PHP, normalizado con `normalizeFieldType`), las opciones y el helper anidado.
+ * Cada `if` puede sobrescribir el valor previo: el último que matchea gana.
  *
- * Devuelve la MISMA clave string que usaba el componente, de modo que todas
- * las comparaciones aguas abajo (`=== 'radio'`, `=== 'q-select'`, etc.) y el
- * map kind -> QComponent sigan funcionando idénticos:
+ * Claves devueltas (las compara HistrixField y su map kind -> QComponent):
  *   - 'q-input'  (default)
- *   - 'q-select' (tiene options / options_sorted / isSelect, o TipoDato 'select')
- *   - 'radio'    (histrix_type 'Radio')
- *   - 'q-file'   (histrix_type 'File')
- *   - 'q-editor' (histrix_type 'Editor')
- *   - 'check'    (histrix_type 'Check')
- *   - 'toggle'   (histrix_type 'Flipswitch')
+ *   - 'date' | 'time' | 'datetime' | 'decimal' | 'integer' | 'email'
+ *                (tipos de dato, siguen renderizando QInput)
+ *   - 'q-select' (tiene options / options_sorted / isSelect)
+ *   - 'radio'    (Radio)
  *   - 'object'   (innerContainer presente y sin options)
- *   - además, cualquier valor de fieldSchema.TipoDato (p. ej. 'date', 'time',
- *     'datetime', 'decimal', 'integer') cuando no es pisado por una condición
- *     posterior.
+ *   - 'q-file'   (File)
+ *   - 'q-editor' (Editor, Simpleditor)
+ *   - 'check'    (Check)
+ *   - 'toggle'   (Flipswitch)
  *
  * @param {object} fieldSchema schema del campo ({ ...schema, ...rowSchema }).
  * @param {string} [defaultType='q-input'] valor base (this.type en el componente).
@@ -28,42 +33,39 @@
  */
 export function resolveFieldKind(fieldSchema, defaultType = 'q-input') {
   const schema = fieldSchema || {};
+  const histrixType = normalizeFieldType(schema.histrix_type);
 
   let type = defaultType;
+
+  if (DATA_KINDS.has(histrixType)) {
+    type = histrixType;
+  }
 
   if (hasOptions(schema)) {
     type = 'q-select';
   }
 
-  if (schema.histrix_type === 'Radio') {
+  if (histrixType === 'radio') {
     type = 'radio';
-  }
-
-  if (schema.TipoDato) {
-    type = schema.TipoDato;
-  }
-
-  if (type === 'select') {
-    type = 'q-select';
   }
 
   if (renderHelper(schema)) {
     type = 'object';
   }
 
-  if (schema.histrix_type === 'File') {
+  if (histrixType === 'file') {
     type = 'q-file';
   }
 
-  if (schema.histrix_type === 'Editor') {
+  if (histrixType === 'editor') {
     type = 'q-editor';
   }
 
-  if (schema.histrix_type === 'Check') {
+  if (histrixType === 'check') {
     type = 'check';
   }
 
-  if (schema.histrix_type === 'Flipswitch') {
+  if (histrixType === 'flipswitch') {
     type = 'toggle';
   }
 
