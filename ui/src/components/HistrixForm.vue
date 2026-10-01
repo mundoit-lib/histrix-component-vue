@@ -318,12 +318,14 @@ export default {
       return data.length ? data : null;
     },
     postData() {
-      const data = this.localValues;
-      Object.keys(this.localValues).map((item) => {
-        if (this.localValues[item] && typeof this.localValues[item] === 'object' && this.localValues[item].name) {
-          data[item] = this.localValues[item].name;
-        }
-      });
+      // Copia sin los campos calculados por SQL (isExpression): el backend no
+      // los persiste. Los archivos viajan por su nombre.
+      const fields = this.localSchema.fields || {};
+      const data = {};
+      for (const [item, value] of Object.entries(this.localValues)) {
+        if (fields[item]?.isExpression === true) continue;
+        data[item] = value && typeof value === 'object' && value.name ? value.name : value;
+      }
       return data;
     },
     canUpdate() {

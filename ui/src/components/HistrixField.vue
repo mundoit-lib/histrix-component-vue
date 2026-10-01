@@ -34,8 +34,6 @@
         :label="label"
         :inner="true"
         :mask="fieldMask"
-        :reverse-fill-mask="isDecimal"
-        :fill-mask="fillMask"
         :isFormulation="true"
         :filled="!isDisabled"
         :toolbar="toolbar"
@@ -235,7 +233,7 @@
 import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle } from 'quasar';
 
 import { useVuelidate } from '@vuelidate/core';
-import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
+import { email, helpers, maxLength, required } from '@vuelidate/validators';
 import { computeFormulaFlags, parseDataFormulas } from '../core/dataFormulas.js';
 import { backendDateToDisplay, dateSortParts, displayDateToBackend } from '../core/dates.js';
 import { resolveFieldKind } from '../core/fieldType.js';
@@ -243,6 +241,9 @@ import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/optio
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 import HistrixHelp from './HistrixHelp.vue';
+
+// Número con decimales escrito con punto o con coma (y miles con punto).
+const DECIMAL_RE = /^-?(\d+|\d{1,3}(\.\d{3})+)([.,]\d+)?$/;
 
 export default {
   name: 'HistrixField',
@@ -660,13 +661,13 @@ export default {
           required: helpers.withMessage('* Valor requerido', required)
         };
       }
-      if (this.fieldSchema?.TipoDato === 'decimal' || this.fieldSchema?.histrix_type === 'decimal') {
+      if (this.isDecimal) {
         validations.modelValue = {
           ...validations.modelValue,
-          decimal: helpers.withMessage('* Valor decimal', decimal)
+          decimal: helpers.withMessage('* Valor decimal', helpers.regex(DECIMAL_RE))
         };
       }
-      if (this.fieldSchema?.TipoDato === 'email' || this.fieldSchema?.histrix_type === 'email') {
+      if (this.histrixType === 'email') {
         validations.modelValue = { ...validations.modelValue, email: helpers.withMessage('Valor email', email) };
       }
       if (this.fieldSchema?.max_length && this.fieldSchema?.max_length !== '0') {
@@ -737,16 +738,6 @@ export default {
       }
       if (this.isDateTime) {
         mask = '####-##-## ##:##:##';
-      }
-      if (this.isDecimal) {
-        if (this.totalDecimal === 0) {
-          mask = '#';
-        } else {
-          mask = '#.';
-          for (let i = 0; i < this.totalDecimal; i++) {
-            mask += '#';
-          }
-        }
       }
       return mask;
     },
@@ -827,19 +818,15 @@ export default {
       return this.schema['data-role'] === 'datebox' || this.histrixType === 'date';
     },
     isTime() {
-      return this.fieldSchema.histrix_type === 'Time' || this.histrixType === 'time';
+      return this.histrixType === 'time';
     },
     isDecimal() {
-      return this.fieldSchema.histrix_type === 'decimal' || this.histrixType === 'decimal';
-    },
-    fillMask() {
-      return this.isDecimal ? '0' : '';
-    },
-    totalDecimal() {
-      return Number.parseInt(this.fieldSchema.decimales);
+      // Sólo decide la validación. La máscara numérica (decimales, separadores)
+      // queda para el renderer numérico.
+      return this.histrixType === 'decimal';
     },
     isDateTime() {
-      return this.fieldSchema.histrix_type === 'Datetime' || this.histrixType === 'datetime';
+      return this.histrixType === 'datetime';
     },
     label() {
       // if (!this.isDisabled) {
@@ -951,7 +938,7 @@ export default {
       if (this.fieldComponent?.name === 'QSelect' && this.hasOptions === true) {
         return 'text';
       }
-      if (this.fieldSchema.TipoDato === 'integer') {
+      if (this.fieldSchema.type === 'number') {
         return 'number';
       }
       return this.fieldSchema.type;
