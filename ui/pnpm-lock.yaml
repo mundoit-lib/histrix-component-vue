@@ -14,6 +14,9 @@ importers:
       '@mundoit-lib/plugin-vue-axios':
         specifier: '*'
         version: 1.0.9(axios@1.17.0)
+      '@mundoit-lib/plugin-vue-event':
+        specifier: '*'
+        version: 1.0.2(vue@3.5.35)
       '@quasar/quasar-ui-qcalendar':
         specifier: ^3.4.1
         version: 3.4.1
@@ -35,6 +38,9 @@ importers:
       vue-echarts:
         specifier: ^7.0.3
         version: 7.0.3(@vue/runtime-core@3.5.35)(echarts@5.6.0)(vue@3.5.35)
+      vue-router:
+        specifier: ^4.0.0
+        version: 4.6.4(vue@3.5.35)
 
 packages:
 
@@ -72,6 +78,15 @@ packages:
     peerDependencies:
       axios: ^1.13.3
 
+  '@mundoit-lib/plugin-vue-event@1.0.2':
+    resolution: {integrity: sha512-GTPnwu7mOINi+9ZqsP1bJ1qAyKvsAvFGQ6BgY9LIVF1YKutc3ybvoJulw++QOYakFpe4wqzfssMIKU8OirJVAw==}
+    peerDependencies:
+      '@vue/composition-api': ^1.0.0-rc.1
+      vue: ^2.0.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+
   '@quasar/quasar-ui-qcalendar@3.4.1':
     resolution: {integrity: sha512-+h84x7G/xnAB2qXLtM9/J4fRS19G5KA0XPk6O7zOpd8Hz1SwUvPMUjhPZcdTPzpHxBs+9eXkANsgwHp10+3EMg==}
 
@@ -86,6 +101,9 @@ packages:
 
   '@vue/compiler-ssr@3.5.35':
     resolution: {integrity: sha512-rGhAeXgdM7/ffTJGXT69rCCdTmjDewnFuUZfBQQHTdcEBeWdT5HCGY60y2ytLJr9/Dsu7IntUi5z/w0h6Rjnzw==}
+
+  '@vue/devtools-api@6.6.4':
+    resolution: {integrity: sha512-sGhTPMuXqZ1rVOk32RylztWkfXTRhuS7vgAKv0zjqk8gbsHkJ7xfFf+jbySxt7tWObEJwyKaHMikV/WGDiQm8g==}
 
   '@vue/reactivity@3.5.35':
     resolution: {integrity: sha512-tVc+SsHConvh/Lz64qq1pP3rYArBmK42xonovEcxY74SQtvctZodG/zhq54P5dr38cVuw25d27cPNRdlMidpGQ==}
@@ -248,6 +266,9 @@ packages:
     resolution: {integrity: sha512-ZDY+bPm5zTTF+YpCrAU9nK0UgICYPT0QtT1NZWFv4s++TNkcgVaT0g6+4R2uI4MjQjzysHB1zxuWL50hzaeXiw==}
     engines: {node: '>= 0.6'}
 
+  mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
+
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
@@ -310,6 +331,11 @@ packages:
       '@vue/runtime-core':
         optional: true
 
+  vue-router@4.6.4:
+    resolution: {integrity: sha512-Hz9q5sa33Yhduglwz6g9skT8OBPii+4bFn88w6J+J4MfEo4KRRpmiNG/hHHkdbRFlLBOqxN8y8gf2Fb0MTUgVg==}
+    peerDependencies:
+      vue: ^3.5.0
+
   vue@3.5.35:
     resolution: {integrity: sha512-cx89fnr+0kVGHiNFG6y6s0bdjypJRFNZn6x3WPstNdQR1bi1mbB7h4v5IBGTsPJU3nK1+0Iqj3Zf+hZWMieR4Q==}
     peerDependencies:
@@ -348,6 +374,12 @@ snapshots:
     dependencies:
       axios: 1.17.0
 
+  '@mundoit-lib/plugin-vue-event@1.0.2(vue@3.5.35)':
+    dependencies:
+      mitt: 3.0.1
+      vue: 3.5.35
+      vue-demi: 0.14.10(vue@3.5.35)
+
   '@quasar/quasar-ui-qcalendar@3.4.1': {}
 
   '@vue/compiler-core@3.5.35':
@@ -379,6 +411,8 @@ snapshots:
     dependencies:
       '@vue/compiler-dom': 3.5.35
       '@vue/shared': 3.5.35
+
+  '@vue/devtools-api@6.6.4': {}
 
   '@vue/reactivity@3.5.35':
     dependencies:
@@ -542,6 +576,8 @@ snapshots:
     dependencies:
       mime-db: 1.52.0
 
+  mitt@3.0.1: {}
+
   ms@2.1.3: {}
 
   nanoid@3.3.12: {}
@@ -579,6 +615,11 @@ snapshots:
       '@vue/runtime-core': 3.5.35
     transitivePeerDependencies:
       - '@vue/composition-api'
+
+  vue-router@4.6.4(vue@3.5.35):
+    dependencies:
+      '@vue/devtools-api': 6.6.4
+      vue: 3.5.35
 
   vue@3.5.35:
     dependencies:

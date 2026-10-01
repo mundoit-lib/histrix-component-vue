@@ -445,6 +445,7 @@ import { buildFieldQueries } from '../core/fieldQueries.js';
 import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
+import { normalizeScreenType } from '../core/normalize.js';
 import { buildPageParams, parsePageResponse } from '../core/pagination.js';
 import useApi from '../services/histrixApi.js';
 import HistrixApp from './HistrixApp.vue';
@@ -484,9 +485,7 @@ export default {
     this.editedItem = Object.assign({}, this.schema.values);
     // Paginación inicial desde el schema: deshabilitada → mostrar todo
     // (rowsPerPage 0); habilitada → arrancar con el page_size del backend.
-    this.pagination.rowsPerPage = this.paginationConfig.enabled
-      ? this.paginationConfig.pageSize
-      : 0;
+    this.pagination.rowsPerPage = this.paginationConfig.enabled ? this.paginationConfig.pageSize : 0;
     if (this.serverSide) {
       // rowsNumber presente = q-table en modo server: no ordena ni pagina en
       // memoria y emite @request ante cada cambio de página/orden.
@@ -577,7 +576,7 @@ export default {
      * renglones cliente-side y viajan juntos en el process.
      */
     serverSide() {
-      return this.paginationConfig.enabled && !this.isGrid && this.schema.type !== 'ing';
+      return this.paginationConfig.enabled && !this.isGrid && this.screenType !== 'ing';
     },
     /**
      * Opciones del selector "Por página": valores estándar + `page_size`,
@@ -586,9 +585,7 @@ export default {
      */
     paginationOptions() {
       const { maxLimit, pageSize } = this.paginationConfig;
-      const values = [5, 10, 15, 20, 25, 50, 100, 200, pageSize].filter(
-        (v) => v > 0 && (!maxLimit || v <= maxLimit)
-      );
+      const values = [5, 10, 15, 20, 25, 50, 100, 200, pageSize].filter((v) => v > 0 && (!maxLimit || v <= maxLimit));
       if (maxLimit && !values.includes(maxLimit)) {
         values.push(maxLimit);
       }
@@ -742,8 +739,11 @@ export default {
     filteredData(_cols) {
       return this.data.filter((row) => !row.value);
     },
+    screenType() {
+      return normalizeScreenType(this.schema.type);
+    },
     isGrid() {
-      return this.schema.type === 'grid' || this.schema.type === 'liveGrid';
+      return this.screenType === 'grid' || this.screenType === 'livegrid';
     },
     canInsert() {
       // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
@@ -787,7 +787,16 @@ export default {
       return this.filterObject(this.schema.fields, (field) => !field.update_fields);
     }
   },
-  emits: ['export', 'print', 'computed-total', 'update:modelValue', 'closepopup', 'open-popup', 'select-row'],
+  emits: [
+    'export',
+    'print',
+    'computed-total',
+    'update:modelValue',
+    'closepopup',
+    'open-popup',
+    'open-detail',
+    'select-row'
+  ],
   methods: {
     setEdit(value) {
       this.editValue = value;
@@ -873,7 +882,7 @@ export default {
       this.getData();
     },
     rowChange(row) {
-      if (this.schema.type === 'liveGrid') {
+      if (this.screenType === 'livegrid') {
         this.updateLiveRow(row);
       }
     },
@@ -1109,7 +1118,7 @@ export default {
       return item2;
     },
     addItem() {
-      if (this.schema.type === 'grid' || this.schema.type === 'ing') {
+      if (this.screenType === 'grid' || this.screenType === 'ing') {
         this.insertRow();
       } else {
         this.editedIndex = -1;
