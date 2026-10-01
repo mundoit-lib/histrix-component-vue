@@ -1,20 +1,20 @@
 # 06 — Estado actual y notas
 
-> Snapshot al **2026-10-01**, `main` (hasta `74dcabf`), `ui/package.json` en v**0.1.3** (sin tag todavía; la última publicada en npm es 0.1.2). Base: la auditoría del 2026-09-30 (`09-auditoria-2026-09-30.md`, local), actualizada con lo que se mergeó el 2026-10-01.
+> Snapshot al **2026-10-01**, `main` (hasta `a0c1f95`), `ui/package.json` en v**0.1.3** (sin tag todavía; la última publicada en npm es 0.1.2). Base: la auditoría del 2026-09-30 (`09-auditoria-2026-09-30.md`, local), actualizada con lo que se mergeó el 2026-10-01.
 
 ## Fotografía (2026-10-01)
 
 | Métrica | Valor |
 |---|---|
 | Versión publicada en npm | 0.1.2 (`v0.1.0`, `v0.1.1`, `v0.1.2` en jun/jul 2026) |
-| Sin publicar desde `v0.1.2` | `0cb74fe`, `6501433` y los merges de HD-7517, HD-7520, HD-7518 y HD-7523 (tabla de abajo) |
+| Sin publicar desde `v0.1.2` | `0cb74fe`, `6501433` y los merges de HD-7517, HD-7520, HD-7518, HD-7523 y HD-7524 (tabla de abajo) |
 | Componentes `.vue` | **35** (22 top-level + 13 widgets) |
 | Registrados por `install()` | 34 (todos menos `HistrixUnsupported`, interno de `HistrixApp`) |
 | Subpaths de componentes en `exports` | 34 (+ `plugin`, `.` y 3 services: `config`, `histrixApi`, `notify`) |
-| Módulos puros `core/` | **18** (+18 archivos de test) |
-| Tests | **18 archivos, 277 tests, 0 fallos** (Vitest) |
+| Módulos puros `core/` | **20** (+20 archivos de test) |
+| Tests | **20 archivos, 295 tests, 0 fallos** (Vitest) |
 | Biome (`biome check ui/src`) | 0 errores (desde HD-7517; `pnpm check` en la raíz marca 6 de formato en `ui/dev/` y `skills-lock.json`) |
-| Líneas `ui/src` (components + core + services, sin tests) | ~14.600 |
+| Líneas `ui/src` (components + core + services, sin tests) | ~14.700 |
 | Los 4 core | `HistrixTable` ~1.480 · `HistrixField` ~1.080 · `HistrixForm` ~810 · `HistrixApp` ~790 |
 | `eval` / `new Function` | 0 |
 
@@ -37,6 +37,7 @@ Consumidores en Vue 3 (`@mundoit-lib/histrix-component-vue`): tork-frontend (0.1
 | 10-01 | `f78a06e` | **Errores y notificaciones en servicios (HD-7520)**: `core/apiError.js` (`HistrixApiError`), `core/apiResponse.js` (`normalizeData`, 204 → `{data: []}`), `config.onUnauthorized`, `services/notify.js` + `notify.quasar.js`. |
 | 10-01 | `fe1c06a` | **Capa de contrato (HD-7518)**: `core/normalize.js` (`type`/`histrix_type` normalizados, sinónimos y typos reales), `fieldType` sin `TipoDato`, `HistrixUnsupported` como fallback visible, grabado sin campos `isExpression`. |
 | 10-01 | `74dcabf` | **Fórmulas reales (HD-7523)**: `core/formula.js` pasa a parser Pratt con whitelist (`toFixed`, `substring`, `Math.*`, `aFecha`, `Date.parse`…), ternario, `row.`/`parent.` y `evaluateValidation` (`__EVAL`, sin cablear). Cobertura sobre los `jseval` reales: 55 % → 92 % de bloques (`ui/dev/scripts/jseval-coverage.mjs`). |
+| 10-01 | `a0c1f95` | **Tabla (HD-7524)**: paginación server-side con `schema.pagination` (`core/pagination.js`), totales al pie sólo para `suma="true"`, combos dependientes en grilla (`core/fieldQueries.js`). |
 
 
 ## Fase 1 del plan de evolución (2026-06-05)
@@ -66,7 +67,7 @@ Historia previa (era `0.0.x`): v0.0.199 `close-drawer` en `HistrixExpansionMenu`
 
 ## Avance Fase 2 (separar el motor) — desde 2026-06-08
 
-Se extrajo el motor schema→pantalla a módulos puros testeables en `ui/src/core/`, con **Vitest** montado en la raíz (`pnpm test`). Arrancó el 2026-06-08 con 8 módulos y 119 tests (réplicas exactas, cero cambio de comportamiento); al 2026-10-01 son **18 módulos y 277 tests**:
+Se extrajo el motor schema→pantalla a módulos puros testeables en `ui/src/core/`, con **Vitest** montado en la raíz (`pnpm test`). Arrancó el 2026-06-08 con 8 módulos y 119 tests (réplicas exactas, cero cambio de comportamiento); al 2026-10-01 son **20 módulos y 295 tests**:
 
 | Módulo | Qué | Tests |
 |---|---|---|
@@ -88,6 +89,8 @@ Se extrajo el motor schema→pantalla a módulos puros testeables en `ui/src/cor
 | `core/normalize.js` | `normalizeScreenType`/`normalizeFieldType`: minúsculas, sin guiones, sinónimos y typos de XML reales | 8 |
 | `core/apiError.js` | `normalizeApiError` → `HistrixApiError {status, kind, message, raw}`; mensaje sin HTML | 15 |
 | `core/apiResponse.js` | `normalizeData`: 204/body vacío → `{data: []}`; `{data}`, `{data, pagination}`, DataTables | 8 |
+| `core/pagination.js` | `buildPageParams` (`page`/`page_size`/`with_total` + `_limit` legacy) y `parsePageResponse` (DataTables y `pagination{}`; total desconocido → "de N+") | 12 |
+| `core/fieldQueries.js` | `buildFieldQueries`: query de cada combo con la fila y los `update_fields` del padre | 6 |
 
 > Lección recurrente: las "duplicaciones" del motor NO siempre eran idénticas (`getKeys`, `options`) — se extrajo cada variante fiel, sin unificar a la fuerza.
 
@@ -114,7 +117,7 @@ Al 2026-10-01; ✅ = mergeada.
 | HD-7521 | Errores y notificaciones en componentes: proceso que no cierra en error, update visible, 204, sin `alert`/`confirm` |
 | HD-7522 | Fixtures reales de schema y tipos (`schema.d.ts` + JSDoc) para el core |
 | ~~HD-7523~~ | ✅ Fórmulas reales en `core/formula.js`: funciones con whitelist, condicionales, `__EVAL` y medición sobre los `jseval` reales |
-| HD-7524 | Tabla: paginación server-side, totales al pie y campos dependientes en grilla |
+| ~~HD-7524~~ | ✅ Tabla: paginación server-side, totales al pie y campos dependientes en grilla |
 | HD-7525 | Atajos de teclado y foco: F9 procesar, Esc cerrar, F2 ayuda, Enter siguiente campo, foco inicial, Ctrl+K |
 | HD-7526 | Higiene de integración: sin `$events`/`$router`, `HistrixPage`, `HistrixAppDialog`, `useHistrixSession`, `useApi` sin `localStorage` |
 | HD-7527 | Calendario: pedir eventos por rango visible (`start`/`end`) |
@@ -126,7 +129,7 @@ La decisión de arquitectura que encuadra estas subtareas está en el ADR de [`0
 
 ## Deuda técnica / cosas que rascan
 
-1. ~~**Sin tests**~~ — **parcial**: Vitest + **277 tests** sobre la lógica pura (`core/`). Falta cobertura de componentes (el bug de v-model no lo agarró ningún test) y fixtures de schema reales (HD-7522).
+1. ~~**Sin tests**~~ — **parcial**: Vitest + **295 tests** sobre la lógica pura (`core/`). Falta cobertura de componentes (el bug de v-model no lo agarró ningún test) y fixtures de schema reales (HD-7522).
 2. ~~**`eval()`**~~ — **resuelto**: extraído a `core/formula.js` (evaluador seguro, sin `eval`), usado por `HistrixForm` y `HistrixTable`. Desde HD-7523 cubre funciones en whitelist, ternario y comparaciones (~92 % de los `jseval` reales). Falta cablear `__EVAL` en `HistrixForm`.
 3. **`config.apiUrl` vs `config.fixApi`** — sigue el TODO en `histrixApi.js -> host()`: decidir la fuente canónica de la URL del backend.
 4. **Componentes core importados estática Y dinámicamente** (registrados en `index.js` y lazy-cargados vía `defineLazyComponent`): el code-splitting es no-op para ellos (Vite lo advierte). Decisión arquitectural para Fase 2 (¿el plugin registra todo o solo lo liviano?).

@@ -57,7 +57,9 @@ histrix-quasar-client/
         │   ├── normalize.js          # type / histrix_type normalizados
         │   ├── apiError.js           # HistrixApiError (errores de API normalizados)
         │   ├── apiResponse.js        # normalizeData (204, envoltorios de paginación)
-        │   └── *.test.js             # tests colocalizados (Vitest, 18 archivos, 277 tests)
+        │   ├── pagination.js         # parámetros y respuesta de la paginación server-side
+        │   ├── fieldQueries.js       # query de cada combo de una fila (update_fields)
+        │   └── *.test.js             # tests colocalizados (Vitest, 20 archivos, 295 tests)
         ├── services/            # Cliente API + helpers (ver 04-servicios.md)
         │   ├── histrixApi.js         # useApi(): todos los endpoints (agnóstico de Quasar)
         │   ├── config.js             # Config runtime (Proxy sobre process.env)
