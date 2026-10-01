@@ -483,7 +483,7 @@ export default {
       return `${this.databaseId}.${this.path}`.replace(/\//g, '__');
     }
   },
-  emits: ['input', 'advance-step', 'process-finish', 'select-row', 'computed-total', 'closepopup'],
+  emits: ['update:modelValue', 'advance-step', 'process-finish', 'select-row', 'computed-total', 'closepopup'],
   methods: {
     hashcode(s) {
       return Math.abs(
