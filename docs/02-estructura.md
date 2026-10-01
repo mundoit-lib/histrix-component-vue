@@ -39,7 +39,7 @@ histrix-quasar-client/
         ├── components/          # Componentes top-level (ver 03-componentes.md)
         │   └── widgets/         # Subcomponentes UI
         ├── core/                # Lógica PURA del motor (sin Vue/Quasar), testeada (Fase 2)
-        │   ├── formula.js            # evaluador de computed_fields/jseval sin eval (hoy sólo aritmética, HD-7523)
+        │   ├── formula.js            # evaluador de computed_fields/jseval sin eval (parser Pratt + whitelist)
         │   ├── condition.js          # condiciones booleanas sin eval (comparaciones, && ||, and/or)
         │   ├── dataFormulas.js       # data-formulas → {required, visible, enabled}
         │   ├── keys.js               # claves primarias del schema
@@ -54,10 +54,15 @@ histrix-quasar-client/
         │   ├── links.js              # destino de un helpers.link
         │   ├── schemaUri.js          # uri del schema → {path, params}; data-helpdetail
         │   ├── values.js             # compactValues / pick / omit
-        │   └── *.test.js             # tests colocalizados (Vitest, 15 archivos, 203 tests)
+        │   ├── normalize.js          # type / histrix_type normalizados
+        │   ├── apiError.js           # HistrixApiError (errores de API normalizados)
+        │   ├── apiResponse.js        # normalizeData (204, envoltorios de paginación)
+        │   └── *.test.js             # tests colocalizados (Vitest, 18 archivos, 277 tests)
         ├── services/            # Cliente API + helpers (ver 04-servicios.md)
         │   ├── histrixApi.js         # useApi(): todos los endpoints (agnóstico de Quasar)
         │   ├── config.js             # Config runtime (Proxy sobre process.env)
+        │   ├── notify.js             # notifier inyectable (sin Quasar)
+        │   ├── notify.quasar.js      # notifier por defecto con Quasar Notify/Dialog
         │   ├── histrix-bearer.js     # Driver bearer para plugin-vue-auth
         │   └── asyncComponents.js    # defineLazyComponent (async + loading/error states)
         └── utils/               # Helpers puros sin Vue (compartidos por componentes)

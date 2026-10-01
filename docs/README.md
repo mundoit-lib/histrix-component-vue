@@ -1,6 +1,6 @@
 # histrix-quasar-client — Documentación interna
 
-> Actualizado al **2026-10-01** (rama `main`, paquete `@mundoit-lib/histrix-component-vue` v**0.1.2**; Vue 3 only desde v0.1.0).
+> Actualizado al **2026-10-01** (rama `main`, paquete `@mundoit-lib/histrix-component-vue` v**0.1.3** en `ui/package.json`, última publicada 0.1.2; Vue 3 only desde v0.1.0).
 
 Esta carpeta es una mini-guía para entrar rápido al proyecto: qué es, cómo está organizado, qué hace cada pieza, y por dónde tocar cuando hay que cambiar algo.
 
@@ -24,8 +24,8 @@ Esta carpeta es una mini-guía para entrar rápido al proyecto: qué es, cómo e
 - Es una **librería de componentes Vue 3 + Quasar 2** pensada para consumir el backend Histrix (XML/JSON schema-driven). Desde v0.1.0 **no soporta Vue 2** (esas apps quedan en `0.0.x`).
 - Se publica en npm como `@mundoit-lib/histrix-component-vue` (repo `mundoit-lib/histrix-component-vue`).
 - **Consumo source-only**: las apps clientes importan los `.vue` (import raíz, subpath o plugin) y los **compila el bundler de la app**. Solo se publica `ui/src/` (`files: ["src"]`); no hay build step.
-- La superficie pública son **34 componentes** (21 top-level + 13 widgets), re-exportados desde `ui/src/index.js` (que también provee `install()` para `app.use`) y declarados como subpaths en `ui/package.json -> exports` (ver `03-componentes.md` para los que todavía faltan registrar).
-- La lógica del motor (fórmulas, condiciones, tipos de pantalla/campo, filtros, export, fechas…) vive en **`ui/src/core/`: 15 módulos puros con 203 tests** (Vitest, `pnpm test`).
+- La superficie pública son **35 componentes** (22 top-level + 13 widgets). 34 son públicos: re-exportados desde `ui/src/index.js` (que también provee `install()` para `app.use`) y declarados como subpaths en `ui/package.json -> exports`; `HistrixUnsupported` es interno de `HistrixApp`.
+- La lógica del motor (fórmulas, condiciones, normalización de tipos, errores de API, filtros, export, fechas…) vive en **`ui/src/core/`: 18 módulos puros con 277 tests** (Vitest, `pnpm test`).
 - **El cliente es stateless**: no usa las instancias de sesión del backend; lo que necesita se pide como endpoints/atributos stateless (ver el ADR en 08).
 - El **dev playground** vive en `ui/dev/`: Vite + Quasar 2, consume la librería vía `link:..` (symlink vivo) y permite abrir cualquier XML contra un backend real (`pnpm dev` adentro de `ui/dev/`). Todo el repo usa **pnpm**.
 - Lint/format unificado con **Biome** (`pnpm check` / `pnpm lint` en la raíz).

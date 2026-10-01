@@ -59,14 +59,14 @@ Drop de Vue 2 + limpieza + infraestructura mínima:
 
 El activo del proyecto es el motor schema→pantalla, no la UI. Hoy están amasados en archivos de 1.300 líneas.
 
-- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, `useApi`) a módulos sin UI. Avance al 2026-10-01: 15 módulos puros en `ui/src/core/` con 203 tests (ver `06-estado-actual.md`).
+- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, `useApi`) a módulos sin UI. Avance al 2026-10-01: 18 módulos puros en `ui/src/core/` con 277 tests (ver `06-estado-actual.md`).
 - `HistrixField` pasa de switch gigante a un **resolver** que delega en renderers chicos (un archivo por tipo de campo).
 - **Tests** contra schemas fixture capturados de la API real (varios clientes/bases, multi-tenant). Sin esto, cualquier evolución es a ciegas.
 - ~~Sacar el `eval()` de `processOperation`~~ — **hecho** (2026-06-08): `core/formula.js`, tokenizer + shunting-yard sin `eval`. Ver la corrección de abajo sobre su alcance.
 - Resolver el TODO de `config.fixApi` vs `config.apiUrl` (fuente canónica de la URL del backend).
 - Tipos: JSDoc/`.d.ts` para el contrato del schema (el "tipo Schema" documentado en `07-backend-histrix.md` §5).
 
-> **Corrección (2026-10-01): las fórmulas de Histrix no son "aritmética pura".** Al sacar el `eval()` se asumió que los `jseval`/`computed_fields` del backend sólo usaban aritmética, y `core/formula.js` quedó acotado a `+ - * /` y paréntesis (su cabecera todavía lo dice). Es falso: el cliente legacy de Histrix evalúa esas fórmulas con `eval` sobre JavaScript arbitrario, y los XML reales usan `toFixed` ~2.000 veces, además de `substring`, `Date.parse`, `Math.round/ceil/abs`, `parseInt` y condicionales. Hoy esas fórmulas no se calculan en este cliente. La respuesta no es volver a `eval`, sino ampliar el parser con funciones en whitelist, ternario y comparaciones (reusando `core/condition.js`) y medir cuántos de los `jseval` reales acepta: subtarea **HD-7523**.
+> **Corrección (2026-10-01): las fórmulas de Histrix no son "aritmética pura".** Al sacar el `eval()` se asumió que los `jseval`/`computed_fields` del backend sólo usaban aritmética, y `core/formula.js` quedó acotado a `+ - * /` y paréntesis. Era falso: el cliente legacy de Histrix evalúa esas fórmulas con `eval` sobre JavaScript arbitrario, y los XML reales usan `toFixed` ~2.000 veces, además de `substring`, `Date.parse`, `Math.round/ceil/abs`, `parseInt` y condicionales. Esas fórmulas no se calculaban en este cliente. La respuesta no fue volver a `eval`: **HD-7523** (mergeada el 2026-10-01) pasó `core/formula.js` a un parser Pratt con funciones en whitelist, ternario y comparaciones, y la cobertura medida sobre los `jseval` reales subió del 55 % al 92 % de los bloques (`ui/dev/scripts/jseval-coverage.mjs`). Queda cablear las validaciones `__EVAL` en `HistrixForm`.
 
 ### Fase 3 — Salida progresiva de Quasar → nativo + UnoCSS (en curso)
 
@@ -122,8 +122,8 @@ Hoy quedarse stateless limita esas funciones. La alternativa era adoptar instanc
 1. **Refresco de campos dependientes sin instancia**: un `POST /app/{xml}/fields/{campo}` (o equivalente) que reciba los valores actuales del form y devuelva valores y opciones (`[{name, value, jsonOptions}]`) de los campos afectados. Es lo que hace hoy el refresco por instancia, pero con el estado en el request, igual que se hizo con `__help`.
 2. **`confirmacion`, `events` y autoprint serializados en el schema**: el mensaje de confirmación antes de procesar, qué hacer después (`{procesar: 'close' | 'refresh' | 'reload'}`) y la impresión post-proceso (`print: {xml, dir, ids}`), en vez de quedar en el JavaScript que arma el servidor.
 3. **Proceso con renglones en un solo request**: que `PATCH /app/{xml}` acepte `{data, rows: {grilla: [...]}}` y devuelva JSON con los ids generados y el autoprint.
-4. **Errores siempre JSON** (`{message, field?}`), también en `400`/`404`/`500`; hoy llegan como `text/plain` o HTML.
-5. **`type` e `histrix_type` normalizados** en el `/schema` (minúsculas, sin variantes de mayúsculas o guiones) y el tipo de dato expuesto (hoy `TipoDato` no viaja).
+4. **Errores siempre JSON** (`{message, field?}`), también en `400`/`404`/`500`; hoy llegan como `text/plain` o HTML. Mientras tanto, el cliente los normaliza a `HistrixApiError` (HD-7520).
+5. **`type` e `histrix_type` normalizados** en el `/schema` (minúsculas, sin variantes de mayúsculas o guiones) y el tipo de dato expuesto (hoy `TipoDato` no viaja). Mientras tanto, el cliente normaliza con `core/normalize.js` (HD-7518).
 
 Del lado del cliente: el estado de la pantalla vive en los componentes (renglones de grilla acumulados en `HistrixTable`, valores del form), y la librería no guarda ni renueva sesión de servidor. Mientras el backend no tenga (1)–(3), `<actualiza>`, cabeceras y autoprint quedan parciales; las subtareas de HD-7515 avanzan con lo que ya es posible stateless.
 

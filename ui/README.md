@@ -30,12 +30,12 @@ Peers opcionales (declarados en `peerDependenciesMeta`): algunos componentes los
 
 ## Componentes
 
-34 componentes Vue 3. Salvo `HistrixHelp` (interno de `HistrixField`), todos se registran con el plugin y se exportan desde la raíz.
+35 componentes Vue 3. Salvo `HistrixUnsupported` (aviso interno de `HistrixApp` para tipos de pantalla sin componente), todos se registran con el plugin y se exportan desde la raíz y por subpath.
 
 | Grupo | Componentes |
 |---|---|
 | Pantallas schema-driven | `HistrixApp` (raíz: monta la pantalla según el schema), `HistrixForm`, `HistrixTable`, `HistrixTree`, `HistrixList`, `HistrixCalendar`, `HistrixDashboard`, `HistrixChart` |
-| Piezas internas | `HistrixField`, `HistrixCell`, `HistrixFilters`, `HistrixHelp`, `ExportForm` |
+| Piezas de pantalla | `HistrixField`, `HistrixCell`, `HistrixFilters`, `HistrixHelp` (picker de ayudas), `ExportForm`, `HistrixUnsupported` |
 | Auth nativa (sin Quasar) | `HistrixLoginSplit`, `HistrixRegisterSplit`, `HistrixForgotPasswordSplit`, `HistrixResetPasswordSplit` |
 | Auth con Quasar | `LoginForm`, `FormLoginNotStyles`, `HistrixPasswordChange`, `InputPassword` |
 | Menú y shell | `HistrixMenu`, `HistrixExpansionMenu`, `HistrixMenuSearch` (buscador con Ctrl/⌘+K), `FavoritItems`, `profileMenu`, `profileMenuItems`, `notificationMenu` |
