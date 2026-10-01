@@ -430,12 +430,12 @@ exports[`fixture 'chart' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "cantidad_cotizada": {
       "editable": true,
       "histrix_type": "Numeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "cantidad_no_cotizada": {
       "editable": true,
       "histrix_type": "Numeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "estado": {
       "editable": true,
@@ -1321,7 +1321,7 @@ exports[`fixture 'fichaing-ing' > resuelve los kinds sin tirar (snapshot) 1`] = 
     "nro_movimiento": {
       "editable": true,
       "histrix_type": "Numeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "para": {
       "editable": true,
