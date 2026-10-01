@@ -4,7 +4,7 @@
 // `provideHistrixNotify(app, impl)`.
 //
 // Interfaz: { success(msg), error(msg | HistrixApiError), info(msg), confirm(msg) → Promise<boolean> }
-import { inject } from 'vue';
+import { getCurrentInstance, inject } from 'vue';
 
 export const HISTRIX_NOTIFY_KEY = Symbol('histrixNotify');
 
@@ -48,5 +48,6 @@ export function provideHistrixNotify(app, impl) {
 
 // Fuera de setup (o sin plugin instalado) devuelve el último registrado.
 export function useHistrixNotify() {
+  if (!getCurrentInstance()) return defaultNotifier;
   return inject(HISTRIX_NOTIFY_KEY, null) || defaultNotifier;
 }
