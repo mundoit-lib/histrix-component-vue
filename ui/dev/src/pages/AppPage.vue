@@ -6,6 +6,9 @@
         XML: <code>{{ path }}</code>
       </div>
       <q-space />
+      <q-btn flat dense round icon="open_in_new" :disable="!path" @click="dialog = true">
+        <q-tooltip>Abrir en HistrixAppDialog</q-tooltip>
+      </q-btn>
       <q-btn flat dense round icon="refresh" @click="reloadKey++" />
     </div>
     <q-separator class="q-mb-md" />
@@ -15,19 +18,22 @@
     </q-banner>
 
     <!--
-      HistrixApp es el componente raíz de la librería: recibe `path`, pide el
-      schema a /api/db/{db}/schema/{path}, mira schema.type y monta el
-      componente concreto (HistrixForm/Table/Chart/...). Usa $route.query
-      internamente, por eso vive bajo el router. `query` permite pasar
-      filtros/valores iniciales (?id=123 abre una ficha).
+      HistrixPage es lo que reemplaza el pages/Histrix.vue de cada app: monta
+      HistrixApp con el path (prop o $route.params.path), la query de la URL
+      (?id=123 abre una ficha) y el título de query._title. Acá le pasamos el
+      path ya limpio (sin el prefijo auth/ de los menús legacy) y page=false
+      porque ya estamos dentro de un q-page.
       key fuerza el remount al cambiar de path o al apretar refresh.
     -->
-    <HistrixApp
+    <HistrixPage
       v-else
       :key="`${path}#${reloadKey}`"
       :path="path"
-      :query="query"
+      :page="false"
     />
+
+    <!-- Misma app en un diálogo: se cierra sola en process-finish/closepopup. -->
+    <HistrixAppDialog v-model="dialog" :path="path" :query="$route.query" :width="900" @finish="reloadKey++" />
   </q-page>
 </template>
 
@@ -40,6 +46,7 @@ export default {
   setup() {
     const route = useRoute();
     const reloadKey = ref(0);
+    const dialog = ref(false);
 
     const path = computed(() => {
       let p = route.params.path;
@@ -51,10 +58,7 @@ export default {
       return p;
     });
 
-    // Pasamos la query string de la URL como query props del componente.
-    const query = computed(() => ({ ...route.query }));
-
-    return { path, query, reloadKey };
+    return { path, reloadKey, dialog };
   }
 };
 </script>

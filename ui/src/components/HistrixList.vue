@@ -34,6 +34,8 @@ const messages = {
 
 export default {
   name: 'HistrixList',
+  // select({ path, query }): el usuario eligió un renglón para editar.
+  emits: ['select'],
   setup() {
     const { getAppData } = useApi();
     return { notify: useHistrixNotify(), getAppData };
@@ -93,15 +95,8 @@ export default {
       }
 
       this.editedItem = Object.assign({}, item2);
-      this.$router.push({
-        name: 'form',
-        params: {
-          path: this.path,
-          editedItem: item2,
-          schema: this.schema,
-          resources: this.resources
-        }
-      });
+      // La app decide cómo abrir la ficha (antes: push a una ruta `form` que no existía).
+      this.$emit('select', { path: this.path, query: item2 });
     },
     close() {
       setTimeout(() => {

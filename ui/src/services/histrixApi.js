@@ -1,9 +1,11 @@
-import { useAuth } from '@mundoit-lib/plugin-vue-auth';
-import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
 import { normalizeApiError } from '../core/apiError.js';
 import { normalizeData } from '../core/apiResponse.js';
+import { buildApiUrl, resolveHost } from '../core/apiUrl.js';
 import { buildExportUrl, parseQueryString } from '../core/export.js';
+import { globalProperty } from './appContext.js';
+import { adaptAuth, useHistrixAuth } from './auth.js';
 import config from './config';
+import { useHistrixStorage } from './storage.js';
 
 // Convierte cualquier rechazo en HistrixApiError. Un 401 además avisa a la app
 // vía `config.onUnauthorized` (la librería no toca el router).
@@ -19,40 +21,79 @@ const rejectWithApiError = (error, { notifyUnauthorized = true } = {}) => {
   return Promise.reject(apiError);
 };
 
-// Interceptor local: envuelve la instancia compartida de plugin-vue-axios sin
-// registrar interceptores globales (otras partes de la app la usan tal cual).
+// Interceptor local: envuelve la instancia http sin registrar interceptores
+// globales (otras partes de la app la usan tal cual). No refresca tokens: eso
+// lo hacen plugin-vue-axios o el AuthService.
 const METHODS = ['get', 'delete', 'head', 'options', 'post', 'put', 'patch'];
 export function withApiErrors(instance) {
-  const wrapped = (...args) => instance(...args).catch((e) => rejectWithApiError(e));
+  // `instance` puede ser la instancia o una función que la devuelve (resolución diferida).
+  const resolve = typeof instance === 'function' && typeof instance.get !== 'function' ? instance : () => instance;
+  const target = () => {
+    const http = resolve();
+    if (!http) {
+      throw new Error(
+        'Histrix: no hay cliente http. Instalá plugin-vue-axios o pasá `http` a createHistrixClient / config.http.'
+      );
+    }
+    return http;
+  };
+  const run = (fn) => {
+    try {
+      return Promise.resolve(fn()).catch((e) => rejectWithApiError(e));
+    } catch (e) {
+      return rejectWithApiError(e);
+    }
+  };
+  const wrapped = (...args) => run(() => target()(...args));
   for (const method of METHODS) {
-    wrapped[method] = (...args) => instance[method](...args).catch((e) => rejectWithApiError(e));
+    wrapped[method] = (...args) => run(() => target()[method](...args));
   }
   return wrapped;
 }
 
-export default function useApi() {
-  /**
-   * Histrix Methods
-   */
-  const auth = useAuth();
-  const axios = withApiErrors(axiosInstance);
+let fixApiWarned = false;
+const warnFixApi = () => {
+  if (fixApiWarned || !config.fixApi) return;
+  fixApiWarned = true;
+  console.warn('[histrix] `config.fixApi` (FIX_API_URL) está deprecado: usá `config.apiUrl`.');
+};
 
-  // Helper functions que antes usaban 'this'
+/** http por defecto: config.http → config.axios → `$axios` de la app (plugin-vue-axios). */
+const defaultHttp = () => config.http || config.axios || globalProperty('$axios') || globalProperty('$api');
+
+/**
+ * Cliente de la API de Histrix. Todas las dependencias son opcionales:
+ *   http    instancia tipo axios (get/post/put/delete + callable)
+ *   host    string o función → host del servidor Histrix
+ *   db      string o función → base de datos
+ *   auth    adaptador de auth (ver services/auth.js) o `$auth`
+ *   storage { get, set, remove } (ver services/storage.js)
+ * Lo que no se pasa sale de `config` y de los plugins instalados en la app.
+ */
+export function createHistrixClient(options = {}) {
+  // Los defaults se resuelven siempre (inject sólo funciona en setup).
+  const defaultStorage = useHistrixStorage();
+  const defaultAuth = useHistrixAuth();
+  const storage = options.storage || defaultStorage;
+  const auth = options.auth ? adaptAuth(options.auth) : defaultAuth;
+  // Se resuelve ya (dentro de setup hay instancia) y, si no estaba, en cada pedido.
+  const initialHttp = options.http || defaultHttp();
+  const axios = withApiErrors(() => initialHttp || defaultHttp());
+
+  const read = (value) => (typeof value === 'function' ? value() : value);
+
   const currentDb = () => {
-    return localStorage.getItem('database') || config.db;
+    if (options.db !== undefined) return read(options.db);
+    return storage.get('database') || config.db;
   };
 
   const host = () => {
-    //TODO: Change fixApi to config.apiUrl in production
-    return localStorage.getItem('host') || config.fixApi;
+    if (options.host !== undefined) return read(options.host);
+    if (config.fixApi) warnFixApi();
+    return resolveHost({ storedHost: storage.get('host'), fixApi: config.fixApi, apiUrl: config.apiUrl });
   };
 
-  const apiUrl = () => {
-    if (currentDb()) {
-      return `${host()}/api/db/${currentDb()}`;
-    }
-    return config.apiUrl;
-  };
+  const apiUrl = () => buildApiUrl({ host: host(), db: currentDb(), apiUrl: config.apiUrl });
 
   const getData = async (url) => {
     return axios.get(url);
@@ -62,12 +103,12 @@ export default function useApi() {
     return axios.get(`${apiUrl()}/me`);
   };
 
-  // Definir getUser como función helper antes del return
   const getUser = async (_verify = false) => {
     return getBasicDataUser().then((resp) => {
       const userObject = resp.data;
-      localStorage.setItem('user', JSON.stringify(resp.data));
-      auth.user(userObject);
+      // Compat: las apps leen el usuario guardado en la clave `user`.
+      storage.set('user', JSON.stringify(resp.data));
+      auth.setUser(userObject);
       if (userObject.verified == null) {
         return '/auth/verify';
       }
@@ -167,28 +208,27 @@ export default function useApi() {
      */
     async login(username, password, redirect) {
       const token = null;
+      const request = {
+        url: `${apiUrl()}/token`,
+        data: {
+          username,
+          password,
+          grant_type: 'password',
+          client_id: config.clientId,
+          client_secret: config.clientSecret,
+          notification_token: token
+        },
+        method: 'POST',
+        rememberMe: true,
+        staySignedIn: true,
+        headers: {
+          Accept: 'application/json, text/plain',
+          'Content-Type': 'application/json'
+        }
+      };
       return (
         auth
-          .login({
-            url: `${apiUrl()}/token`,
-            data: {
-              username,
-              password,
-              grant_type: 'password',
-              client_id: config.clientId,
-              client_secret: config.clientSecret,
-              notification_token: token
-            },
-            method: 'POST',
-            rememberMe: true,
-            staySignedIn: true,
-            headers: {
-              Accept: 'application/json, text/plain',
-              'Content-Type': 'application/json'
-            },
-            redirect: redirect ? redirect : '',
-            fetchUser: false
-          })
+          .login({ username, password, request, redirect })
           // Credenciales inválidas también responden 401: no es sesión expirada,
           // así que no se dispara onUnauthorized.
           .catch((e) => rejectWithApiError(e, { notifyUnauthorized: false }))
@@ -196,6 +236,17 @@ export default function useApi() {
             return getUser();
           })
       );
+    },
+
+    /** Cierra la sesión en el adaptador de auth y borra el usuario guardado. */
+    logout(options) {
+      storage.remove('user');
+      return auth.logout(options);
+    },
+
+    /** Token de acceso actual (para headers de uploads, etc.). */
+    getToken() {
+      return auth.getToken() || storage.get('accessToken');
     },
 
     getData,
@@ -451,4 +502,9 @@ export default function useApi() {
       return infoDB;
     }
   };
+}
+
+/** Cliente con las dependencias por defecto (config + plugins de la app). */
+export default function useApi() {
+  return createHistrixClient();
 }

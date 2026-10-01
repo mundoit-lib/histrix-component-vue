@@ -102,9 +102,11 @@
 import { useVuelidate } from '@vuelidate/core';
 import { required } from '@vuelidate/validators';
 
+import { useHistrixBus } from '../services/bus.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
 import { useHistrixNotify } from '../services/notify.js';
+import { useHistrixStorage } from '../services/storage.js';
 
 // Textos del componente (centralizados para la futura i18n, HD-7530).
 const messages = {
@@ -113,9 +115,19 @@ const messages = {
 
 export default {
   name: 'FormLoginNotStyles',
+  // login-ok, loaded-user y el `eventAfter` también salen por el bus (compat).
+  emits: ['login-ok', 'loaded-user', 'event-after'],
   setup() {
-    const { apiDBQuery, login: loginApi } = useApi();
-    return { apiDBQuery, loginApi, notify: useHistrixNotify(), v$: useVuelidate() };
+    const { apiDBQuery, login: loginApi, host } = useApi();
+    return {
+      storage: useHistrixStorage(),
+      apiDBQuery,
+      loginApi,
+      host,
+      bus: useHistrixBus(),
+      notify: useHistrixNotify(),
+      v$: useVuelidate()
+    };
   },
   props: {
     /**
@@ -214,14 +226,14 @@ export default {
   },
   watch: {
     /**
-     * @description Si se cambia la base de datos, se guarda en el localStorage, se cambia la configuracion y se cambia la imagen
+     * @description Si se cambia la base de datos, se guarda en el storage, se cambia la configuracion y se cambia la imagen
      * @param {String} newVal - Valor nuevo de la base de datos
      * @returns {void}
      */
     db(newVal) {
       if (!newVal) return;
       config.db = newVal;
-      localStorage.setItem('database', newVal);
+      this.storage.set('database', newVal);
       this.img = this.infoDB.find((val) => val.value === newVal).img;
     },
     /**
@@ -314,16 +326,15 @@ export default {
       if (this.redirectParent && this.redirectParent !== '') return this.redirectParent;
       if (this.redirectParent === false) return null;
       if (this.nextUrl === false) return null;
-      return this.$route.params.nextUrl
-        ? { path: `${this.$route.params.nextUrl}` }
-        : { path: this.nextUrl, query: { t: new Date().getTime() } };
+      const routeNext = this.$route?.params?.nextUrl;
+      return routeNext ? { path: `${routeNext}` } : { path: this.nextUrl, query: { t: new Date().getTime() } };
     },
     /**
      * @description Imagen de la base de datos seleccionada
      * @returns {String} - Url de la imagen
      */
     imglogo() {
-      return `${config.fixApi}${this.img}`;
+      return `${this.host()}${this.img}`;
     }
   },
   methods: {
@@ -338,8 +349,10 @@ export default {
       this.btnLoading = true;
       this.loginApi(formData.email, formData.password, this.redirect)
         .then((_success) => {
-          this.$events.fire('loaded-user');
-          this.$events.fire('login-ok');
+          for (const name of ['loaded-user', 'login-ok']) {
+            this.$emit(name);
+            this.bus.emit(name);
+          }
           this.runEventAfter();
         })
         .catch((_error) => {
@@ -376,7 +389,10 @@ export default {
      * this.runEventAfter();
      */
     runEventAfter() {
-      if (this.copyEvent) this.$events.fire(this.copyEvent);
+      if (this.copyEvent) {
+        this.$emit('event-after', this.copyEvent);
+        this.bus.emit(this.copyEvent);
+      }
       this.copyEvent = '';
     }
   }

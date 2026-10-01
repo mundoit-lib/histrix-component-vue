@@ -191,8 +191,11 @@
 </template>
 
 <script>
+import { useHistrixBus } from '../../services/bus.js';
 import useApi from '../../services/histrixApi.js';
+import { useHistrixNavigate } from '../../services/navigation.js';
 import { useHistrixNotify } from '../../services/notify.js';
+import { useHistrixStorage } from '../../services/storage.js';
 
 const decodeCache = new Map();
 function decodeHTMLcached(text) {
@@ -213,11 +216,16 @@ const messages = {
 
 export default {
   name: 'HistrixExpansionMenu',
-  emits: ['close-drawer'],
+  // update-favorit también sale por el bus (compat; el menú es recursivo y la app lo escucha ahí).
+  emits: ['close-drawer', 'update-favorit'],
   setup() {
     const { removeFavorit, setFavorit, getFavorites, getMenu } = useApi();
+    const { navigate } = useHistrixNavigate();
     return {
       notify: useHistrixNotify(),
+      bus: useHistrixBus(),
+      storage: useHistrixStorage(),
+      navigate,
       apiRemoveFavorit: removeFavorit,
       apiSetFavorit: setFavorit,
       getFavorites,
@@ -244,8 +252,8 @@ export default {
       favorit: { keys: [] },
       loading: true,
       locationCurrent: '',
-      featuredOpen: localStorage.getItem('menu.featuredOpen') !== '0',
-      favoritesOpen: localStorage.getItem('menu.favoritesOpen') !== '0'
+      featuredOpen: this.storage.get('menu.featuredOpen') !== '0',
+      favoritesOpen: this.storage.get('menu.favoritesOpen') !== '0'
     };
   },
   computed: {
@@ -261,10 +269,10 @@ export default {
       this.favorit = newval?.keys ? newval : { keys: [] };
     },
     featuredOpen(val) {
-      localStorage.setItem('menu.featuredOpen', val ? '1' : '0');
+      this.storage.set('menu.featuredOpen', val ? '1' : '0');
     },
     favoritesOpen(val) {
-      localStorage.setItem('menu.favoritesOpen', val ? '1' : '0');
+      this.storage.set('menu.favoritesOpen', val ? '1' : '0');
     }
   },
   methods: {
@@ -280,17 +288,21 @@ export default {
         await this.apiRemoveFavorit(menuId);
         const index = this.favorit.keys.findIndex((item) => item.menuId === menuId);
         this.favorit.keys.splice(index, 1);
-        this.$events.fire('update-favorit');
+        this.notifyFavorit();
         return;
       }
       try {
         await this.apiSetFavorit(menuId, uri, name);
         this.notify.success(messages.favoriteSaved);
         this.favorit.keys.push({ menuId, uri, name });
-        this.$events.fire('update-favorit');
+        this.notifyFavorit();
       } catch (_error) {
         this.notify.error(messages.favoriteError);
       }
+    },
+    notifyFavorit() {
+      this.$emit('update-favorit');
+      this.bus.emit('update-favorit');
     },
     nodeUri(node) {
       if (!node.uri.includes('vue=')) {
@@ -324,8 +336,8 @@ export default {
       const queryIndex = localitation.indexOf('?');
       const newLocation = localitation.slice(1, queryIndex);
       if (newLocation === this.locationCurrent) {
-        this.$router.replace({ ...url, hash: '#update' });
-        this.$router.replace({ ...url, hash: ' ', params: { a: 100 } });
+        this.navigate({ ...url, hash: '#update' }, { replace: true });
+        this.navigate({ ...url, hash: ' ', params: { a: 100 } }, { replace: true });
         return;
       }
       this.locationCurrent = url.path;

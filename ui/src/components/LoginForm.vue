@@ -15,9 +15,13 @@
 </template>
 
 <script>
+import { useHistrixBus } from '../services/bus.js';
 import FormLoginNotStyles from './FormLoginNotStyles.vue';
 
 export default {
+  setup() {
+    return { bus: useHistrixBus() };
+  },
   props: {
     /**
      * @description Url para redirecionar despues de login
@@ -109,19 +113,26 @@ export default {
     };
   },
   mounted() {
-    //
+    // Escucha por el bus de la librería (funciona con o sin plugin-vue-event).
+    this.busOff = Object.entries(this.$options.busEvents).map(([name, handler]) =>
+      this.bus.on(name, handler.bind(this))
+    );
+  },
+  beforeUnmount() {
+    for (const off of this.busOff || []) off();
+    this.busOff = null;
   },
   computed: {},
   watch: {},
   methods: {},
-  events: {
+  busEvents: {
     /**
      * @description Evento para redirecionar despues de login
      * @param {String | null} redirect - Url para redirecionar despues de login default null
      * @param {String | null} eventAfter - Evento para ejecutar despues de login default null
      * @returns {void}
      * @example
-     * this.$events.fire('login-modal', '/home', 'event-after');
+     * bus.emit('login-modal', '/home', 'event-after');
      */
     'login-modal'(redirect = null, eventAfter = null) {
       this.redir = redirect;
@@ -132,7 +143,7 @@ export default {
      * @param {String | null} eventAfter - Evento para ejecutar despues de login default null
      * @returns {void}
      * @example
-     * this.$events.fire('event-after', 'event-after');
+     * bus.emit('event-after', 'event-after');
      */
     'event-after'(eventAfter) {
       this.redir = null;

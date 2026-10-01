@@ -120,6 +120,7 @@
 <script>
 import { isTypingTarget, matchHotkey } from '../../core/hotkeys.js';
 import useApi from '../../services/histrixApi.js';
+import { useHistrixNavigate } from '../../services/navigation.js';
 
 const decodeCache = new Map();
 function decodeHTMLcached(text) {
@@ -175,7 +176,9 @@ export default {
   emits: ['navigate'],
   setup() {
     const { getMenu } = useApi();
-    return { getMenu };
+    // Navega con config.onNavigate o, si no hay, con el router de la app. `@navigate` avisa igual.
+    const { navigate } = useHistrixNavigate();
+    return { getMenu, navigate };
   },
   props: {
     // Nivel del menú para pedir el árbol (igual que HistrixExpansionMenu).
@@ -314,9 +317,7 @@ export default {
     go(r) {
       this.open = false;
       this.$emit('navigate', r);
-      this.$router.push(this.nodeUri({ uri: r.uri, label: r.display })).catch(() => {
-        // navegación duplicada o cancelada: no es un error
-      });
+      this.navigate(this.nodeUri({ uri: r.uri, label: r.display }));
     },
     move(delta) {
       const n = this.results.length;

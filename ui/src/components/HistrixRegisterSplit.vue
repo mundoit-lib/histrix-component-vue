@@ -249,6 +249,7 @@ import { email as emailValidator, helpers, minLength, required, sameAs } from '@
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
 // Punto por defecto para el ícono de los campos extra.
@@ -309,7 +310,12 @@ export default {
   emits: ['success', 'error', 'db-change'],
   setup() {
     const { register, apiDBQuery } = useApi();
-    return { register, apiDBQuery, v$: useVuelidate() };
+    return {
+      storage: useHistrixStorage(),
+      register,
+      apiDBQuery,
+      v$: useVuelidate()
+    };
   },
   data() {
     // Inicializa el objeto de campos extra con sus defaults.
@@ -342,7 +348,7 @@ export default {
     db(newVal) {
       if (!newVal) return;
       config.db = newVal;
-      localStorage.setItem('database', newVal);
+      this.storage.set('database', newVal);
       this.$emit('db-change', newVal);
     }
   },

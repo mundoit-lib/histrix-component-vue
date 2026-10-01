@@ -267,8 +267,8 @@ export default {
     path: null
   },
   setup() {
-    const { getAppSchema, getAppData, apiUrl } = useApi();
-    return { v$: useVuelidate(), getAppSchema, getAppData, apiUrl };
+    const { getAppSchema, getAppData, apiUrl, getToken } = useApi();
+    return { v$: useVuelidate(), getAppSchema, getAppData, apiUrl, getToken };
   },
   watch: {
     localValue: {
@@ -316,6 +316,16 @@ export default {
   },
   emits: ['selectOption', 'computed-total', 'fill-fields', 'update:modelValue', 'field-change'],
   methods: {
+    /**
+     * Vacía el campo si su nombre está en `names` (string o array). Antes era el
+     * evento global `reset-field`; ahora se llama por ref (`fieldRef.resetField('x')`).
+     */
+    resetField(names) {
+      const namesArray = typeof names === 'string' ? [names] : names || [];
+      if (namesArray.includes(this.fieldSchema.name)) {
+        this.localValue = '';
+      }
+    },
     showDialog() {
       this.openNew = false;
     },
@@ -825,7 +835,7 @@ export default {
       return this.fieldSchema.innerContainer && !this.hasOptions;
     },
     headers() {
-      return [{ name: 'Authorization', value: `Bearer ${localStorage.accessToken}` }];
+      return [{ name: 'Authorization', value: `Bearer ${this.getToken()}` }];
     },
     uploadUrl() {
       return `${this.apiUrl()}/files/${this.path}`;
@@ -1111,14 +1121,6 @@ export default {
         }
 
         this.$emit('field-change', this.row);
-      }
-    }
-  },
-  events: {
-    'reset-field'(names) {
-      const namesArray = typeof names === 'string' ? [names] : names;
-      if (namesArray.includes(this.fieldSchema.name)) {
-        this.localValue = '';
       }
     }
   },

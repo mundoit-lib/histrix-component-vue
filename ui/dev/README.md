@@ -33,7 +33,7 @@ plugin de Vue de Vite (por eso está en `optimizeDeps.exclude`).
 
    | Variable | Para qué |
    |---|---|
-   | `VITE_HISTRIX_HOST` | Host del backend, sin slash final. Se vuelca a `config.fixApi` (host efectivo) y `config.apiUrl`. |
+   | `VITE_HISTRIX_HOST` | Host del backend, sin slash final. Se vuelca a `config.apiUrl` (clave canónica; `fixApi` está deprecado). |
    | `VITE_HISTRIX_DB` | Base/cliente Histrix por defecto (el `{db}` de `/api/db/{db}/...`). |
    | `VITE_CLIENT_ID` | `client_id` OAuth2 (password grant). |
    | `VITE_CLIENT_SECRET` | `client_secret` OAuth2. |
@@ -43,7 +43,7 @@ plugin de Vue de Vite (por eso está en `optimizeDeps.exclude`).
    [`src/setup.js`](./src/setup.js) (no se toca `config.js` de la librería).
 
    Recordá la resolución de URL de `histrixApi.js`:
-   - `host()` = `localStorage.host` || `config.fixApi`
+   - `host()` = `localStorage.host` || `config.fixApi` (deprecado) || host de `config.apiUrl`
    - `currentDb()` = `localStorage.database` || `config.db`
    - `apiUrl()` = `` `${host()}/api/db/${currentDb()}` ``
 
@@ -90,7 +90,11 @@ pnpm dev         # http://localhost:5180
   correctos para Histrix (`tokenDefaultKey: 'accessToken'`, driver que extrae
   `res.data.access_token`).
 - `$events` lo provee `@mundoit-lib/plugin-vue-event` (v1.0.2: named export
-  `eventsPlugin`; la 1.0.0 de apps viejas usaba default export). La librería lo
-  usa para `login-ok`, `loaded-user`, `closepopup`, `update-favorit`, etc.
+  `eventsPlugin`; la 1.0.0 de apps viejas usaba default export). La librería
+  avisa por ahí `login-ok`, `loaded-user`, `update-favorit`, etc. Es opcional:
+  con `VITE_NO_EVENTS=1 pnpm dev` no se instala y la librería usa su bus interno
+  (así se prueba una app sin `plugin-vue-event`).
+- `AppPage` usa `HistrixPage` y tiene un botón para abrir el mismo XML en
+  `HistrixAppDialog`; el header usa `useHistrixSession` para `isLogged`/logout.
 - `setup.js` además pre-setea `localStorage.host`/`localStorage.database`
   (igual que el boot de axios de las apps reales).

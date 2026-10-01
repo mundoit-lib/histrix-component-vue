@@ -46,7 +46,7 @@ export default {
       return typeof r === 'string' && r ? r : '/';
     });
 
-    const host = computed(() => config.fixApi || '');
+    const host = computed(() => config.apiUrl || '');
     const db = computed(() => config.db || '(sin db)');
     const testEmail = import.meta.env.VITE_TEST_EMAIL || '';
     const testPassword = import.meta.env.VITE_TEST_PASSWORD || '';

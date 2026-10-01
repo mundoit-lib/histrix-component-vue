@@ -8,7 +8,7 @@
  * acá seteamos los valores en runtime sobre el Proxy `config`.
  *
  * Recordar (de histrixApi.js):
- *   host()      = localStorage.host     || config.fixApi
+ *   host()      = storage.host (localStorage) || config.apiUrl
  *   currentDb() = localStorage.database || config.db
  *   apiUrl()    = `${host()}/api/db/${currentDb()}`
  */
@@ -20,8 +20,7 @@ const host = (env.VITE_HISTRIX_HOST || '').replace(/\/$/, '');
 const db = env.VITE_HISTRIX_DB || '';
 const mainUrl = env.VITE_HISTRIX_MAIN_URL || (host ? `${host}/api/db/` : '');
 
-// Host efectivo (host() usa fixApi) y fallback apiUrl.
-config.fixApi = host;
+// Host del servidor: `apiUrl` es la clave canónica (fixApi está deprecado).
 config.baseUrl = host;
 config.apiUrl = host;
 config.mainUrl = mainUrl;

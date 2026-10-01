@@ -107,6 +107,7 @@ import { email as emailValidator, helpers, required } from '@vuelidate/validator
 
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
 export default {
@@ -147,7 +148,13 @@ export default {
   emits: ['success', 'error', 'db-change'],
   setup() {
     const { resetPassword, apiDBQuery, currentDb } = useApi();
-    return { resetPassword, apiDBQuery, currentDb, v$: useVuelidate() };
+    return {
+      storage: useHistrixStorage(),
+      resetPassword,
+      apiDBQuery,
+      currentDb,
+      v$: useVuelidate()
+    };
   },
   data() {
     return {
@@ -167,7 +174,7 @@ export default {
     db(newVal) {
       if (!newVal) return;
       config.db = newVal;
-      localStorage.setItem('database', newVal);
+      this.storage.set('database', newVal);
       this.$emit('db-change', newVal);
     }
   },

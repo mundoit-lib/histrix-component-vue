@@ -3,6 +3,7 @@ import { version } from '../package.json';
 import ExportForm from './components/ExportForm.vue';
 import FormLoginNotStyles from './components/FormLoginNotStyles.vue';
 import HistrixApp from './components/HistrixApp.vue';
+import HistrixAppDialog from './components/HistrixAppDialog.vue';
 import HistrixCalendar from './components/HistrixCalendar.vue';
 import HistrixCell from './components/HistrixCell.vue';
 import HistrixChart from './components/HistrixChart.vue';
@@ -14,6 +15,7 @@ import HistrixForm from './components/HistrixForm.vue';
 import HistrixHelp from './components/HistrixHelp.vue';
 import HistrixList from './components/HistrixList.vue';
 import HistrixLoginSplit from './components/HistrixLoginSplit.vue';
+import HistrixPage from './components/HistrixPage.vue';
 import HistrixPasswordChange from './components/HistrixPasswordChange.vue';
 import HistrixRegisterSplit from './components/HistrixRegisterSplit.vue';
 import HistrixResetPasswordSplit from './components/HistrixResetPasswordSplit.vue';
@@ -34,16 +36,31 @@ import HistrixUsers from './components/widgets/HistrixUsers.vue';
 import notificationMenu from './components/widgets/notificationMenu.vue';
 import profileMenu from './components/widgets/profileMenu.vue';
 import profileMenuItems from './components/widgets/profileMenuItems.vue';
+import { useHistrixSession } from './composables/useHistrixSession.js';
 import { HistrixApiError, isHistrixApiError, normalizeApiError } from './core/apiError.js';
 import { normalizeData } from './core/apiResponse.js';
+import { setHistrixApp } from './services/appContext.js';
+import {
+  adaptAuth,
+  authServiceAdapter,
+  createAuthAdapter,
+  provideHistrixAuth,
+  useHistrixAuth,
+  websanovaAuthAdapter
+} from './services/auth.js';
+import { adaptBus, createHistrixBus, provideHistrixBus, useHistrixBus } from './services/bus.js';
 import config from './services/config';
+import { createHistrixClient } from './services/histrixApi.js';
+import { useHistrixNavigate } from './services/navigation.js';
 import { createNotifier, provideHistrixNotify, useHistrixNotify } from './services/notify.js';
 import quasarNotifyImpl from './services/notify.quasar.js';
+import { createBrowserStorage, createMemoryStorage, useHistrixStorage } from './services/storage.js';
 
 const components = [
   ExportForm,
   FormLoginNotStyles,
   HistrixApp,
+  HistrixAppDialog,
   HistrixCalendar,
   HistrixCell,
   HistrixChart,
@@ -59,6 +76,7 @@ const components = [
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,
+  HistrixPage,
   HistrixMenu,
   HistrixMenuSearch,
   HistrixNews,
@@ -82,6 +100,7 @@ export {
   ExportForm,
   FormLoginNotStyles,
   HistrixApp,
+  HistrixAppDialog,
   HistrixCalendar,
   HistrixCell,
   HistrixChart,
@@ -97,6 +116,7 @@ export {
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,
+  HistrixPage,
   HistrixMenu,
   HistrixMenuSearch,
   HistrixNews,
@@ -120,7 +140,23 @@ export {
   normalizeData,
   createNotifier,
   provideHistrixNotify,
-  useHistrixNotify
+  useHistrixNotify,
+  createHistrixBus,
+  adaptBus,
+  provideHistrixBus,
+  useHistrixBus,
+  createAuthAdapter,
+  adaptAuth,
+  websanovaAuthAdapter,
+  authServiceAdapter,
+  provideHistrixAuth,
+  useHistrixAuth,
+  createHistrixClient,
+  createBrowserStorage,
+  createMemoryStorage,
+  useHistrixStorage,
+  useHistrixNavigate,
+  useHistrixSession
 };
 
 export default {
@@ -128,6 +164,7 @@ export default {
   ExportForm,
   FormLoginNotStyles,
   HistrixApp,
+  HistrixAppDialog,
   HistrixCalendar,
   HistrixCell,
   HistrixChart,
@@ -143,6 +180,7 @@ export default {
   HistrixList,
   HistrixLog,
   HistrixLoginSplit,
+  HistrixPage,
   HistrixMenu,
   HistrixMenuSearch,
   HistrixNews,
@@ -163,8 +201,16 @@ export default {
     for (const component of components) {
       app.component(component.name, component);
     }
+    // Permite resolver los plugins de la app (bus, auth, http, router) fuera de setup.
+    setHistrixApp(app);
     // Notifier: el que inyecte la app (`app.use(plugin, { notify })`) o el de Quasar.
     provideHistrixNotify(app, options.notify || quasarNotifyImpl);
+    // Contratos opcionales: sin pasarlos se usan los plugins de Mundo IT si están.
+    if (options.bus) provideHistrixBus(app, options.bus);
+    if (options.auth) provideHistrixAuth(app, options.auth);
+    if (options.http) config.http = options.http;
+    if (options.storage !== undefined) config.storage = options.storage;
+    if (typeof options.onNavigate === 'function') config.onNavigate = options.onNavigate;
     if (typeof options.onUnauthorized === 'function') {
       config.onUnauthorized = options.onUnauthorized;
     }

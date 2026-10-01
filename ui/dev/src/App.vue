@@ -78,7 +78,8 @@
 </template>
 
 <script>
-import { computed, getCurrentInstance, onMounted, onUnmounted, ref } from 'vue';
+import { useHistrixSession, useHistrixStorage } from '@mundoit-lib/histrix-component-vue';
+import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
 import config from './setup.js';
@@ -88,44 +89,28 @@ export default {
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const { proxy } = getCurrentInstance();
+    // Sesión de la librería: única fuente de `user` (sin leer localStorage a mano).
+    const session = useHistrixSession();
+    const storage = useHistrixStorage();
 
     // Pantallas full-screen sin chrome (login/registro/recupero/reset).
     const isAuthScreen = computed(() => route.meta.fullscreen === true);
 
     const drawer = ref(false);
-    const loggedIn = ref(!!localStorage.getItem('user') || !!localStorage.getItem('accessToken'));
-
-    const refresh = () => {
-      loggedIn.value = !!localStorage.getItem('user') || !!localStorage.getItem('accessToken');
-    };
+    const loggedIn = session.isLogged;
 
     const dbLabel = computed(() => {
-      const db = localStorage.getItem('database') || config.db || '(sin db)';
-      const host = (localStorage.getItem('host') || config.fixApi || '').replace(/^https?:\/\//, '');
+      const db = storage.get('database') || config.db || '(sin db)';
+      const host = (storage.get('host') || config.apiUrl || '').replace(/^https?:\/\//, '');
       return host ? `${db} @ ${host}` : db;
     });
 
     const logout = () => {
-      localStorage.removeItem('accessToken');
-      localStorage.removeItem('refreshToken');
-      localStorage.removeItem('tokenExpireDate');
-      localStorage.removeItem('user');
-      refresh();
+      session.logout();
       router.push({ name: 'login' });
     };
 
-    // El form de login de la librería dispara estos eventos al loguear OK.
-    onMounted(() => {
-      proxy.$events?.on('login-ok', refresh);
-      proxy.$events?.on('loaded-user', refresh);
-    });
-    onUnmounted(() => {
-      proxy.$events?.off('login-ok', refresh);
-      proxy.$events?.off('loaded-user', refresh);
-    });
-
-    return { drawer, loggedIn, isAuthScreen, dbLabel, logout, refresh };
+    return { drawer, loggedIn, isAuthScreen, dbLabel, logout };
   }
 };
 </script>

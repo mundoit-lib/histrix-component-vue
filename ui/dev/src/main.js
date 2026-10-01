@@ -41,11 +41,11 @@ app.use(Quasar, {
 // 1) Axios — mapeo idéntico al boot/axios.js de referencia:
 //    baseURL = host pelado (FIX_API_URL), fixURL = URL completa /api/db/{db}.
 app.use(axiosPlugin, {
-  baseURL: config.fixApi || '',
+  baseURL: config.apiUrl || '',
   db: config.db || '',
   clientID: config.clientId || '',
   clientSecret: config.clientSecret || '',
-  fixURL: `${config.fixApi || ''}/api/db/${config.db || ''}`
+  fixURL: `${config.apiUrl || ''}/api/db/${config.db || ''}`
 });
 app.config.globalProperties.$axios = axiosInstance;
 app.config.globalProperties.$api = axiosInstance;
@@ -62,8 +62,14 @@ app.use(authPlugin, {
 });
 
 // 3) Eventos — $events.fire/on/off + option `events:` en componentes.
-//    La librería lo usa (login-ok, loaded-user, closepopup, update-favorit...).
-app.use(eventsPlugin);
+//    La librería avisa por acá login-ok, loaded-user, update-favorit... Es
+//    opcional: con VITE_NO_EVENTS=1 no se instala y la librería usa su bus interno
+//    (sirve para probar una app sin plugin-vue-event).
+if (!import.meta.env.VITE_NO_EVENTS) {
+  app.use(eventsPlugin);
+} else {
+  console.info('[playground] plugin-vue-event deshabilitado (VITE_NO_EVENTS): bus interno de la librería.');
+}
 
 // 4) Router + guard de auth (patrón boot/router.js de referencia, simplificado:
 //    acá no hay denyRoles). Las rutas con meta.public no requieren login.
