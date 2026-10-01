@@ -571,7 +571,11 @@ export default {
         }
       }
       this.processing = true;
-      this.$refs.main.processData();
+      try {
+        await this.$refs.main.processData();
+      } finally {
+        this.processing = false;
+      }
     },
     closeDetail() {
       this.isDetailOpened = false;

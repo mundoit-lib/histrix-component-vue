@@ -641,7 +641,9 @@ export default {
       if (this.files) {
         this.upload(this.files);
       }
-      this.processAppForm(this.xmlUrl(), this.postData)
+      // Devuelve la promesa para que HistrixApp libere su flag `processing`
+      // también cuando el proceso falla (en error no se emite process-finish).
+      return this.processAppForm(this.xmlUrl(), this.postData)
         .then((response) => {
           this.submitting = false;
           this.notify.success(messages.processFinished);
