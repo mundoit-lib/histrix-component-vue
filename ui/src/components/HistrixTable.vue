@@ -22,14 +22,17 @@
       row-key="_id"
       class=" fit"
       v-model:expanded="expanded"
-      :hide-bottom="data.length < pagination.rowsPerPage"
+      :hide-bottom="data.length > 0"
       :_hide-top="data.length < pagination.rowsPerPage"
       v-on:closepopup="closePopup"
       @update:pagination="updatePagination"
     >
       <!-- TOP LEFT: FILTERS -->
       <template v-slot:top-left="">
-        <div v-if="!inner" class="row full-width items-center q-gutter-y-xs">
+        <!-- Los filtros se muestran siempre que el schema los traiga, incluso en
+             modo inner (grid embebido con filtros propios). El título y el buscador
+             siguen siendo sólo para página completa (!inner). -->
+        <div v-if="!inner || schema.filters.length" class="row full-width items-center q-gutter-y-xs">
           <HistrixFilters
             v-if="schema.filters.length"
             class="col-xs-12 col-sm-auto"
@@ -38,11 +41,11 @@
             v-on:filter-data="histrixFilter"
             :show="openFilter"
           />
-          <q-item v-else _class="text-body1">
+          <q-item v-else-if="!inner" _class="text-body1">
             {{ schema.title }}
           </q-item>
           <q-input
-            v-if="search"
+            v-if="search && !inner"
             class="col-xs-12 col-sm-auto"
             v-model="searchStr"
             type="search"
@@ -58,11 +61,11 @@
 
       <!-- TOP right: BUTTONS -->
       <template v-slot:top-right="props">
-        <div v-if="data.length > 50" class="histrix-pagination">
+        <div v-if="paginationConfig.enabled && data.length" class="histrix-pagination">
           <div class="histrix-pagination__size">
             <span class="histrix-pagination__label">Por página</span>
             <q-select
-              :options="optionsPagination"
+              :options="paginationOptions"
               hide-bottom-space
               dense
               borderless
@@ -73,6 +76,7 @@
               class="histrix-pagination__select"
             />
           </div>
+          <span class="histrix-pagination__range">{{ paginationLabel }}</span>
           <div class="histrix-pagination__nav">
             <q-btn
               v-if="props.pagesNumber > 2"
@@ -485,6 +489,11 @@ export default {
   },
   mounted() {
     this.editedItem = Object.assign({}, this.schema.values);
+    // Paginación inicial desde el schema: deshabilitada → mostrar todo
+    // (rowsPerPage 0); habilitada → arrancar con el page_size del backend.
+    this.pagination.rowsPerPage = this.paginationConfig.enabled
+      ? this.paginationConfig.pageSize
+      : 0;
     /*
     if (this.modelValue) {
       this.data = JSON.parse(JSON.stringify(this.modelValue))
@@ -495,6 +504,10 @@ export default {
     if (this.schema.preFetch === true /* && this.data.length == 0 */) {
       this.getData();
     } else {
+      // Sin preFetch no hay carga automática al montar: apagamos el "Cargando..."
+      // para no dejar la tabla colgada. Si más tarde carga (filtro aplicado o el
+      // padre pasa la relación), getData vuelve a encender el loading.
+      this.loading = false;
       // Open filter
       if (!this.data.length) {
         this.openFilter = true;
@@ -502,6 +515,11 @@ export default {
     }
   },
   watch: {
+    // Al cambiar el tamaño de página volvemos a la primera, para que el rango
+    // ("1-50 de N") y la vista de la q-table queden siempre consistentes.
+    'pagination.rowsPerPage'() {
+      this.pagination.page = 1;
+    },
     path: {
       handler(_newVal, _oldVal) {
         // Cambió el XML (nueva pantalla): re-aplicamos la regla de preFetch del
@@ -537,6 +555,55 @@ export default {
     }
   },
   computed: {
+    /**
+     * Configuración de paginación provista por el backend (`schema.pagination`).
+     * Defaults conservadores si el schema no la trae: habilitada, 50 por página,
+     * sin tope. `max_limit` acota el default y las opciones del selector.
+     */
+    paginationConfig() {
+      const p = this.schema.pagination || {};
+      const maxLimit = Number(p.max_limit) || 0;
+      let pageSize = Number(p.page_size) || 50;
+      if (maxLimit && pageSize > maxLimit) {
+        pageSize = maxLimit;
+      }
+      return { enabled: p.enabled !== false, pageSize, maxLimit };
+    },
+    /**
+     * Opciones del selector "Por página": valores estándar + `page_size`,
+     * descartando los que superen `max_limit` (que además se agrega como tope).
+     * "Todos" (0) se mantiene siempre.
+     */
+    paginationOptions() {
+      const { maxLimit, pageSize } = this.paginationConfig;
+      const values = [5, 10, 15, 20, 25, 50, 100, 200, pageSize].filter(
+        (v) => v > 0 && (!maxLimit || v <= maxLimit)
+      );
+      if (maxLimit && !values.includes(maxLimit)) {
+        values.push(maxLimit);
+      }
+      const unique = [...new Set(values)].sort((a, b) => a - b);
+      const options = unique.map((v) => ({ label: String(v), value: v }));
+      options.push({ label: 'Todos', value: 0 });
+      return options;
+    },
+    /**
+     * Rango + total de registros para el paginador superior ("1-50 de 82").
+     * La data es client-side, por lo que el total es `data.length`.
+     */
+    paginationLabel() {
+      const total = this.data.length;
+      if (total === 0) {
+        return '0 de 0';
+      }
+      const rpp = this.pagination.rowsPerPage;
+      if (!rpp) {
+        return `1-${total} de ${total}`;
+      }
+      const start = (this.pagination.page - 1) * rpp + 1;
+      const end = Math.min(this.pagination.page * rpp, total);
+      return `${start}-${end} de ${total}`;
+    },
     contentItem() {
       return this.isFormulation ? 'div' : 'q-card';
     },
@@ -857,6 +924,12 @@ export default {
       // let item = this.defaultItem;
       item._id = this.data.length;
       item._ajax_ = false;
+      // _ORDEN se numera cliente-side. En Histrix normal el servidor hace el +1
+      // por cada renglón; acá el grid es cliente-side (los renglones se acumulan
+      // y viajan juntos en el process), así que la librería asigna el correlativo.
+      if (Object.prototype.hasOwnProperty.call(item, '_ORDEN')) {
+        item._ORDEN = this.nextOrden();
+      }
       // this.data.push(item);
       this.editedIndex = item._id;
       this.editedItem = item;
@@ -864,6 +937,21 @@ export default {
       // Grabar y que saveForm() haga INSERT (POST a la instancia), no UPDATE.
       this.newRecord = true;
       this.edit = true;
+    },
+    /**
+     * Siguiente valor de _ORDEN para un renglón nuevo del grid: máximo existente
+     * + 1. Se usa el máximo (no data.length) para que no se repita el número si
+     * se borró un renglón del medio (removeItem hace splice y deja huecos). La
+     * celda puede venir como valor plano o como objeto {value, _}.
+     */
+    nextOrden() {
+      const max = this.data.reduce((acc, row) => {
+        const cell = row._ORDEN;
+        const value = cell?.value ?? cell?._ ?? cell;
+        const n = Number.parseInt(value, 10);
+        return Number.isNaN(n) ? acc : Math.max(acc, n);
+      }, 0);
+      return max + 1;
     },
     updateLiveRow(row) {
       const postData = {
@@ -1092,6 +1180,7 @@ export default {
       return result;
     },
     getData(index) {
+      this.loading = true;
       const url = this.xmlUrl(this.fullQuery);
       const filters = { ...this.query, ...this.localFilters };
 
@@ -1140,15 +1229,6 @@ export default {
       newRecord: false,
       defaultItem: {},
       dataContainer: null,
-      optionsPagination: [
-        { label: '5', value: 5 },
-        { label: '10', value: 10 },
-        { label: '15', value: 15 },
-        { label: '20', value: 20 },
-        { label: '25', value: 25 },
-        { label: '50', value: 50 },
-        { label: 'Todos', value: 0 }
-      ],
       data: [],
       openFilter: false,
       autoFetchArmed: false, // el usuario ya "armó" la carga (aplicó filtro, etc.)
@@ -1333,6 +1413,13 @@ export default {
 }
 
 .histrix-table .histrix-pagination__label {
+  font-size: 0.8rem;
+  color: #667085;
+  white-space: nowrap;
+}
+
+/* Rango + total de registros ("1-50 de 82") */
+.histrix-table .histrix-pagination__range {
   font-size: 0.8rem;
   color: #667085;
   white-space: nowrap;

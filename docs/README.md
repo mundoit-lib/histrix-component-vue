@@ -16,6 +16,7 @@ Esta carpeta es una mini-guía para entrar rápido al proyecto: qué es, cómo e
 - [06 — Estado actual y notas](06-estado-actual.md)
 - [07 — El backend Histrix, explicado para frontenders](07-backend-histrix.md) ← **empezar acá si no conocés Histrix** *(local, no versionado)*
 - [08 — Plan de evolución](08-plan-evolucion.md) ← **la decisión estratégica y las fases**
+- [09 — Auditoría vs. Histrix (2026-09-30)](09-auditoria-2026-09-30.md) ← **gaps, bugs y qué hacer antes de seguir** *(local, no versionado)*
 
 ## TL;DR
 

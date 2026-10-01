@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-show="isVisible">
     <div v-if="isRadio">
       <div class="header-check">
         <b>{{ rowSchema.label }}</b>
@@ -236,6 +236,7 @@ import { QCheckbox, QEditor, QFile, QInput, QOptionGroup, QSelect, QToggle } fro
 
 import { useVuelidate } from '@vuelidate/core';
 import { decimal, email, helpers, maxLength, required } from '@vuelidate/validators';
+import { computeFormulaFlags, parseDataFormulas } from '../core/dataFormulas.js';
 import { backendDateToDisplay, dateSortParts, displayDateToBackend } from '../core/dates.js';
 import { resolveFieldKind } from '../core/fieldType.js';
 import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
@@ -450,24 +451,22 @@ export default {
       this.$emit('computed-total', data);
     },
     selectRow(args) {
-      const targets = {};
       const { row } = args;
-
-      if (row) {
-        const firstkey = Object.keys(row)[0];
-        targets[this.fieldSchema.name] = row[firstkey];
+      if (!row) {
+        this.showHelp = false;
+        return;
       }
-      // @TODO: Verificar si se puede hacer de otra forma
-      if (this.fieldSchema.fields) {
-        Object.entries(this.fieldSchema.fields)
-          .filter((field) => field[1].detail.length !== 0)
-          .map((field) => {
-            field[1].detail.map((target) => {
-              targets[target] = row ? row[field[0]] : '';
-            });
-          });
+      const fill = { ...row };
+      // El campo de búsqueda toma el valor de su `help_key` en la fila elegida.
+      // El mapa del backend (data-helpdetail) rellena los campos "detalle" pero
+      // no siempre el propio campo de búsqueda: p. ej. `codigo_detalle`
+      // (help_key: id_stkarticulo) queda vacío porque la ayuda mapea a
+      // `id_stkarticulo`, no a `codigo_detalle`. Acá lo reflejamos.
+      const helpKey = this.fieldSchema.help_key;
+      if (helpKey && fill[helpKey] != null && !fill[this.fieldSchema.name]) {
+        fill[this.fieldSchema.name] = fill[helpKey];
       }
-      this.$emit('fill-fields', row);
+      this.$emit('fill-fields', fill);
       this.showHelp = false;
     },
     // Wrapper fino: la normalización pura vive en ../core/options.js.
@@ -651,7 +650,11 @@ export default {
     },
     rules() {
       const validations = {};
-      if (this.fieldSchema?.required === 'required' || this.fieldSchema?.required === 'true') {
+      const isRequired =
+        this.fieldSchema?.required === 'required' ||
+        this.fieldSchema?.required === 'true' ||
+        this.dataFormulaFlags.required === true; // data-formulas: __REQUIRED dinámico
+      if (isRequired) {
         validations.modelValue = {
           ...validations.modelValue,
           required: helpers.withMessage('* Valor requerido', required)
@@ -691,6 +694,28 @@ export default {
     },
     fieldSchema() {
       return { ...this.schema, ...this.rowSchema };
+    },
+    /**
+     * Directivas dinámicas del campo (data-formulas): { required?, visible?, enabled? }.
+     * Se evalúan contra los valores actuales del form (this.row), así que reaccionan
+     * cuando cambian los campos referenciados en las fórmulas.
+     */
+    dataFormulaFlags() {
+      const formulas = parseDataFormulas(this.fieldSchema['data-formulas']);
+      if (!formulas.length) {
+        return {};
+      }
+      return computeFormulaFlags(formulas, (name) => {
+        const value = this.row?.[name];
+        if (value !== null && typeof value === 'object') {
+          return value.value !== undefined ? value.value : value._;
+        }
+        return value;
+      });
+    },
+    /** __VISIBLE: el campo se oculta si una fórmula de visibilidad da false. */
+    isVisible() {
+      return this.dataFormulaFlags.visible !== false;
     },
     clearable() {
       return this.fieldComponent?.name === 'QSelect' && this.fieldSchema.innerContainer.empty === true;
@@ -739,6 +764,10 @@ export default {
     },
     isDisabled() {
       if (this.submitting) {
+        return true;
+      }
+      // data-formulas: __ENABLED dinámico. Si una fórmula lo deshabilita, gana.
+      if (this.dataFormulaFlags.enabled === false) {
         return true;
       }
       if (this.histrixType === 'object') {

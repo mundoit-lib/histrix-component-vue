@@ -65,6 +65,7 @@
                   v-bind:key="field.name"
                   :name="field.name"
                   :class="fieldClass(field)"
+                  :style="field.form_style"
                 >
                   <q-item dense>
                     <q-item-section>
