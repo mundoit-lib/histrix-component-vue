@@ -253,8 +253,12 @@
 </template>
 
 <script>
+import { getCurrentInstance } from 'vue';
+
 import useApi from '../services/histrixApi.js';
 import { useHistrixNotify } from '../services/notify.js';
+
+import { useHistrixKeys } from '../composables/useHistrixKeys.js';
 
 import ExportForm from './ExportForm.vue';
 
@@ -286,6 +290,13 @@ export default {
   name: 'HistrixApp',
   setup() {
     const { currentDb, apiUrl, getAppPdf, getAppSchema } = useApi();
+    // Atajos de teclado (F9, Esc, F2, F4, Enter): ver core/hotkeys.js.
+    const vm = getCurrentInstance().proxy;
+    useHistrixKeys({
+      el: () => vm.$el,
+      enabled: () => vm.keyboardEnabled(),
+      handle: (action, event) => vm.onHotkey(action, event)
+    });
     return {
       notify: useHistrixNotify(),
       currentDb,
@@ -313,7 +324,21 @@ export default {
       type: String,
       required: false
     },
-    finalStep: Boolean
+    finalStep: Boolean,
+    // Atajos de teclado y foco automático. false los apaga en esta app y en
+    // todo lo que contiene (forms, apps embebidas o abiertas en popups).
+    keyboard: {
+      type: Boolean,
+      default: true
+    }
+  },
+  inject: {
+    parentKeyboard: { from: 'histrixKeyboard', default: () => () => true }
+  },
+  provide() {
+    return {
+      histrixKeyboard: () => this.keyboardEnabled()
+    };
   },
   components: {
     ExportForm
@@ -592,6 +617,86 @@ export default {
     },
     dirname(path) {
       return path.match(/.*\//);
+    },
+    /**
+     * Ejecuta un atajo de teclado (lo llama useHistrixKeys). Devuelve true si
+     * consumió la tecla. F9 y Esc suben a la app que nos embebe (p. ej. el
+     * grid de renglones dentro de un comprobante) si ésta no los resuelve.
+     */
+    onHotkey(action, event) {
+      if (action === 'close' && this.escapeBelongsToDialog(event)) {
+        return false;
+      }
+      if (action === 'process' || action === 'close') {
+        const handled = action === 'process' ? this.processOnHotkey() : this.closeOnEscape();
+        if (handled) {
+          return true;
+        }
+        const parentApp = this.embeddingApp();
+        return parentApp ? parentApp.onHotkey(action, event) : false;
+      }
+      if (action === 'help' || action === 'clear') {
+        // Los resuelve el campo / filtro que tiene el foco (HistrixField,
+        // HistrixFilters): le avisamos con un evento DOM que burbujea y que
+        // ellos cancelan si lo atendieron.
+        const target = event.target;
+        if (!target || typeof target.dispatchEvent !== 'function') {
+          return false;
+        }
+        const notice = new CustomEvent(`histrix-${action}`, { bubbles: true, cancelable: true });
+        target.dispatchEvent(notice);
+        return notice.defaultPrevented;
+      }
+      if (action === 'nextField') {
+        const main = this.$refs.main;
+        return typeof main?.focusNextField === 'function' && main.focusNextField(event.target) === true;
+      }
+      return false;
+    },
+    keyboardEnabled() {
+      return this.keyboard !== false && this.parentKeyboard() !== false;
+    },
+    processOnHotkey() {
+      // Mismas condiciones que el botón Procesar.
+      if (!this.schema.can_process || this.inner || this.isUnsupported || this.hasStepper) {
+        return false;
+      }
+      this.process();
+      return true;
+    },
+    /**
+     * Esc: los diálogos abiertos los cierra QDialog solo. Acá sólo resolvemos
+     * el caso de una app `inner` abierta en un popup: emitimos `closepopup`
+     * para que quien la abrió refresque y la cierre.
+     */
+    closeOnEscape() {
+      if (!this.inner || !this.$el?.closest?.('.q-dialog')) {
+        return false;
+      }
+      if (this.embeddingApp()) {
+        return false;
+      }
+      this.$emit('closepopup');
+      return true;
+    },
+    /**
+     * ¿Hay un diálogo abierto por esta app, o el foco está en un diálogo
+     * abierto encima de ella (ayuda, alta rápida…)? Entonces Esc es de QDialog.
+     */
+    escapeBelongsToDialog(event) {
+      if (this.linkDialog || this.exportDialog || this.dialog || this.showIframe || this.showPdfPopup) {
+        return true;
+      }
+      const focusDialog = event.target?.closest?.('.q-dialog');
+      return Boolean(focusDialog && !focusDialog.contains(this.$el));
+    },
+    /** HistrixApp ancestro cuyo DOM nos contiene (no una abierta en un diálogo). */
+    embeddingApp() {
+      let parent = this.$parent;
+      while (parent && parent.$options?.name !== 'HistrixApp') {
+        parent = parent.$parent;
+      }
+      return parent?.$el?.contains?.(this.$el) ? parent : null;
     },
     closePopup() {
       this.refreshMaster();

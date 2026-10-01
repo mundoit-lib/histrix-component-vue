@@ -1,5 +1,5 @@
 <template>
-  <div class="histrix-filters full-width">
+  <div class="histrix-filters full-width" @histrix-clear="onClearKey">
 
     <!-- Búsqueda avanzada: varios filtros dentro de un acordeón -->
     <template v-if="filterCount > 1">
@@ -125,6 +125,23 @@ export default {
       field.valor = value;
       if (this.autoFilter) {
         this.filterData();
+      }
+    },
+    /**
+     * F4 con el foco en un filtro (atajo de HistrixApp): limpia los filtros
+     * editables, como el legacy. No dispara la búsqueda.
+     */
+    onClearKey(event) {
+      event.stopPropagation();
+      event.preventDefault();
+      this.clearFilters();
+    },
+    clearFilters() {
+      for (const field of this.filters) {
+        // `deshabilitado` viaja como string del XML: 'true' | 'false' | ''.
+        if (field.deshabilitado !== 'true' && field.deshabilitado !== true) {
+          field.valor = '';
+        }
       }
     },
     initFilters() {
