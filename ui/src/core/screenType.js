@@ -2,27 +2,32 @@
  * Resolución pura del "tipo de pantalla" (kind) a partir de `schema.type`.
  *
  * Histrix describe cada pantalla con un `schema.type` (ficha, consulta, crud,
- * tree, chart, calendar, dashboard, list, etc.). Históricamente HistrixApp
- * mezclaba esa DECISIÓN (qué clase de pantalla es) con el RENDER (qué componente
- * Vue montar) en un único objeto `type → defineLazyComponent(...)`.
+ * arbol, chart, calendar, dashboard, list, etc.). Este módulo sólo toma la
+ * DECISIÓN: mapea cada tipo a una clave de pantalla (`kind`). El componente
+ * Vue concreto se resuelve en HistrixApp.
  *
- * Este módulo extrae sólo la DECISIÓN: mapea cada `schema.type` a una clave de
- * tipo de pantalla (`kind`) string. El componente concreto a renderizar se
- * resuelve en el componente, manteniendo intactos los `defineLazyComponent`.
+ * `schema.type` llega crudo del XML, así que primero pasa por
+ * `normalizeScreenType` (minúsculas, sin guiones, typos corregidos): las
+ * claves del mapa están en esa forma canónica.
  *
- * El agrupamiento refleja EXACTAMENTE el mapa original de HistrixApp.vue:
- *   - HistrixForm     → 'form'      (ficha, fichaing, cabecera)
- *   - HistrixTable    → 'table'     (consulta, crud, abm, abm-mini, ing, grid,
- *                                    liveGrid, help, ayuda)
- *   - HistrixTree     → 'tree'      (tree, arbol)
- *   - HistrixChart    → 'chart'     (chart, map, treeView)
- *   - HistrixCalendar → 'calendar'  (calendar, gantt)
- *   - HistrixDashboard→ 'dashboard' (dashboard)
- *   - HistrixList     → 'list'      (list)
+ * Agrupamiento:
+ *   - HistrixForm      → 'form'      (ficha, fichaing, cabecera)
+ *   - HistrixTable     → 'table'     (consulta, crud, abm, abm-mini, ing, grid,
+ *                                     liveGrid, ayuda, help)
+ *   - HistrixTree      → 'tree'      (arbol, tree)
+ *   - HistrixChart     → 'chart'     (chart)
+ *   - HistrixCalendar  → 'calendar'  (calendar, gantt)
+ *   - HistrixDashboard → 'dashboard' (dashboard)
+ *   - HistrixList      → 'list'      (list)
+ *   - sin componente todavía: 'map', 'treeview', 'treetable', 'orgchart',
+ *     'card', 'kanban', 'horizontalgrid' (HistrixApp muestra HistrixUnsupported)
  */
 
+import { normalizeScreenType } from './normalize.js';
+
 /**
- * @typedef {'form'|'table'|'chart'|'tree'|'calendar'|'dashboard'|'list'} ScreenKind
+ * @typedef {'form'|'table'|'chart'|'tree'|'calendar'|'dashboard'|'list'
+ *   |'map'|'treeview'|'treetable'|'orgchart'|'card'|'kanban'|'horizontalgrid'} ScreenKind
  */
 
 /** @type {Record<string, ScreenKind>} */
@@ -40,8 +45,6 @@ export const SCREEN_TYPE_TO_KIND = {
   tree: 'tree',
   arbol: 'tree',
   // HistrixChart
-  treeView: 'chart',
-  map: 'chart',
   chart: 'chart',
   // HistrixList
   list: 'list',
@@ -49,19 +52,27 @@ export const SCREEN_TYPE_TO_KIND = {
   consulta: 'table',
   crud: 'table',
   abm: 'table',
+  abmmini: 'table',
   ing: 'table',
   grid: 'table',
-  liveGrid: 'table',
+  livegrid: 'table',
   help: 'table',
   ayuda: 'table',
-  'abm-mini': 'table'
+  // Sin componente todavía
+  map: 'map',
+  treeview: 'treeview',
+  treetable: 'treetable',
+  orgchart: 'orgchart',
+  card: 'card',
+  kanban: 'kanban',
+  horizontalgrid: 'horizontalgrid'
 };
 
 /**
  * Devuelve el kind de pantalla para un `schema.type`, o `null` si no se conoce.
- * @param {import('../../types').HistrixScreenType} type
+ * @param {import('../../types').HistrixScreenType} type `schema.type` tal cual llega (cualquier grafía).
  * @returns {ScreenKind|null}
  */
 export function resolveScreenKind(type) {
-  return SCREEN_TYPE_TO_KIND[type] ?? null;
+  return SCREEN_TYPE_TO_KIND[normalizeScreenType(type)] ?? null;
 }

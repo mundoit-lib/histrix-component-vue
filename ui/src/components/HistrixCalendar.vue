@@ -1,38 +1,17 @@
 <template>
   <q-page>
     <q-dialog v-model="displayEvent">
-      <q-card v-if="event">
-        <q-toolbar style="min-width: 400px">
-          <q-toolbar-title>
+      <q-card v-if="event" style="min-width: 400px">
+        <q-toolbar :style="eventStyle(event)">
+          <q-toolbar-title class="ellipsis">
             {{ event.title }}
           </q-toolbar-title>
-          <q-btn
-            flat
-            round
-            icon="delete"
-            v-close-popup
-            @click="deleteEvent(event)"
-          ></q-btn>
-          <q-btn
-            flat
-            round
-            icon="edit"
-            v-close-popup
-            @click="editEvent(event)"
-          ></q-btn>
-          <q-btn flat round icon="cancel" v-close-popup></q-btn>
+          <q-btn flat round icon="close" v-close-popup></q-btn>
         </q-toolbar>
         <q-card-section class="inset-shadow">
-          <div v-if="event.allDay" class="text-caption">
-            {{ getEventDate(event) }}
-          </div>
-          {{ event.details }}
-          <div v-if="event.time" class="text-caption">
-            <pre>
-              Start Time: {{ event.time }}
-              End Time:   {{ getEndTime(event) }}
-              Duration:   {{ event.duration }}
-            </pre>
+          <div class="text-caption">{{ getEventDate(event) }}</div>
+          <div v-if="event.fulltitle && event.fulltitle !== event.title"class="q-mt-sm" style="white-space: pre-line">
+            {{ event.fulltitle }}
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -45,14 +24,14 @@
         <HistrixFilters
           dense
           :schema="schema"
-          v-on:filter-data="getData(xmlUrl($event))"
+          v-on:filter-data="applyFilter"
         />
       </q-toolbar-title>
 
       <q-btn
         flat
         dense
-        label="Today"
+        label="Hoy"
         class="q-mx-md"
         @click="calendarToday"
       ></q-btn>
@@ -83,96 +62,85 @@
       ></q-select>
     </q-toolbar>
 
-    <q-calendar
+    <q-calendar-month
+      v-if="calendarView === 'month'"
+      ref="calendar"
+      v-model="selectedDate"
+      :locale="locale"
+      :day-min-height="80"
+      bordered
+      animated
+      @change="onRangeChange"
+    >
+      <template #day="{ scope: { timestamp } }">
+        <q-badge
+          v-for="event in getEvents(timestamp.date)"
+          :key="`${event.id}|${event.start}`"
+          :style="eventStyle(event)"
+          class="full-width ellipsis cursor-pointer q-mb-xs"
+          @click.stop.prevent="showEvent(event)"
+        >
+          <span class="ellipsis">
+            <template v-if="event.time">{{ event.time }} </template>{{ event.title }}
+          </span>
+          <q-tooltip>{{ event.fulltitle }}</q-tooltip>
+        </q-badge>
+      </template>
+    </q-calendar-month>
+
+    <q-calendar-day
+      v-else
+      ref="calendar"
       v-model="selectedDate"
       :view="calendarView"
-      :resources="calendarResources"
-      ref="calendar"
       :locale="locale"
+      bordered
+      animated
+      @change="onRangeChange"
     >
-      <!-- Events in month View -->
-
-      <template v-slot:day="day">
-        <q-badge
-          v-for="event in getEvents(day)"
-          :key="event.id"
-          :style="
-            'width: 100%; cursor: pointer; background-color:' + event.color
-          "
-          class="ellipsis"
-          :draggable="true"
-          @click.stop.prevent="showEvent(event)"
-        >
-          <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon
-          ><span class="ellipsis">{{ event.title }}</span>
-        </q-badge>
-      </template>
-      <template v-slot:intervals-header="day">
-        <q-badge
-          v-for="event in getEvents(day)"
-          :key="event.id"
-          :style="
-            'width: 100%; cursor: pointer; background-color:' + event.color
-          "
-          class="ellipsis"
-          :draggable="true"
-          @click.stop.prevent="showEvent(event)"
-        >
-          <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon
-          ><span class="ellipsis">{{ event.title }}</span>
-        </q-badge>
-      </template>
-
-      <template v-slot:day-header="day">
-        <div class="row justify-center">
-          <template v-for="(event, index) in getEvents(day)">
-            <q-badge
-              v-if="!event.time"
-              :key="index"
-              style="width: 100%; cursor: pointer"
-            >
-              <q-icon
-                v-if="event.icon"
-                :name="event.icon"
-                class="q-mr-xs"
-              ></q-icon
-              ><span class="ellipsis">{{ event.title }}</span>
-            </q-badge>
-            <q-badge
-              v-else
-              :key="index - 1000"
-              class="q-ma-xs"
-              style="
-                width: 10px;
-                max-width: 10px;
-                height: 10px;
-                max-height: 10px;
-              "
-            />
-          </template>
+      <template #head-day-event="{ scope: { timestamp } }">
+        <div class="q-pa-xs">
+          <q-badge
+            v-for="event in getAllDayEvents(timestamp.date)"
+            :key="`${event.id}|${event.start}`"
+            :style="eventStyle(event)"
+            class="full-width ellipsis cursor-pointer q-mb-xs"
+            @click.stop.prevent="showEvent(event)"
+          >
+            <span class="ellipsis">{{ event.title }}</span>
+            <q-tooltip>{{ event.fulltitle }}</q-tooltip>
+          </q-badge>
         </div>
       </template>
-
-      <template v-slot:interval="day">
-        <q-badge
-          v-for="(event, index) in getDayEvents(day)"
-          :key="index"
-          :style="
-            'width: 100%; cursor: pointer; background-color:' + event.color
-          "
-          class="ellipsis"
-          :draggable="true"
+      <template #day-body="{ scope: { timestamp, timeStartPos, timeDurationHeight } }">
+        <div
+          v-for="event in getTimedEvents(timestamp.date)"
+          :key="`${event.id}|${event.start}`"
+          class="histrix-calendar-event ellipsis cursor-pointer"
+          :style="timedEventStyle(event, timeStartPos, timeDurationHeight)"
           @click.stop.prevent="showEvent(event)"
         >
-          <q-icon v-if="event.icon" :name="event.icon" class="q-mr-xs"></q-icon
-          ><span class="ellipsis">{{ event.title }}</span>
-        </q-badge>
+          <span class="ellipsis">{{ event.time }} {{ event.title }}</span>
+          <q-tooltip>{{ event.fulltitle }}</q-tooltip>
+        </div>
       </template>
-    </q-calendar>
+    </q-calendar-day>
   </q-page>
 </template>
 
 <script>
+import { QCalendarDay, QCalendarMonth, today } from '@quasar/quasar-ui-qcalendar';
+import '@quasar/quasar-ui-qcalendar/index.css';
+import {
+  eventDurationMinutes,
+  eventSelectPayload,
+  isRangeLoaded,
+  mapDefaultView,
+  mergeEvents,
+  normalizeEvent,
+  rangeWithMargin
+} from '../core/calendar.js';
+import { backendDateToDisplay } from '../core/dates.js';
 import useApi from '../services/histrixApi.js';
 import HistrixFilters from './HistrixFilters.vue';
 
@@ -188,74 +156,25 @@ export default {
     resources: {}
   },
   components: {
-    HistrixFilters
+    HistrixFilters,
+    QCalendarMonth,
+    QCalendarDay
   },
+  emits: ['update:modelValue', 'select-row'],
   computed: {
-    view() {
-      /*
-        day
-        2day
-        3day
-        4day
-        5day
-        6day
-        week
-        month
-        scheduler
-        day-scheduler
-        2day-scheduler
-        3day-scheduler
-        4day-scheduler
-        5day-scheduler
-        6day-scheduler
-        week-scheduler
-        month-scheduler
-        custom-scheduler
-        day-agenda
-        2day-agenda
-        3day-agenda
-        4day-agenda
-        5day-agenda
-        6day-agenda
-        month-agenda
-        week-agenda
-        custom-agenda
-        month-interval
-        custom-interval
-      */
-      let view = 'month';
-      switch (this.schema.defaultView) {
-        case 'basicWeek':
-          view = 'week';
-          break;
-
-        default:
-          view = this.schema.defaultView;
-          break;
-      }
-      return view;
-    },
-    localValue: {
-      get() {
-        return this.value;
-      },
-      set(localValue) {
-        this.$emit('update:modelValue', localValue);
-      }
-    },
     title() {
-      if (this.titleFormatter && this.locale && this.selectedDate) {
-        const date = new Date(this.selectedDate);
-        return this.titleFormatter.format(date);
+      if (!this.selectedDate) return '';
+      const [y, m, d] = this.selectedDate.split('-').map(Number);
+      try {
+        return new Intl.DateTimeFormat(this.locale || void 0, { month: 'long', year: 'numeric' }).format(
+          new Date(y, m - 1, d)
+        );
+      } catch (_e) {
+        return this.selectedDate.slice(0, 7);
       }
-      return '';
     }
   },
-  emits: ['update:modelValue'],
   methods: {
-    onTitlebarResized(size) {
-      this.titlebarHeight = size.height;
-    },
     calendarNext() {
       this.$refs.calendar.next();
     },
@@ -263,141 +182,115 @@ export default {
       this.$refs.calendar.prev();
     },
     calendarToday() {
-      this.selectedDate = this.formatDate();
+      this.$refs.calendar.moveToToday();
     },
-    formatDate(date) {
-      const d = date !== void 0 ? new Date(date) : new Date();
-      const month = `${d.getMonth() + 1}`;
-      const day = `${d.getDate()}`;
-      const year = d.getFullYear();
-      return [year, this.padTime(month), this.padTime(day)].join('-');
+    eventStyle(event) {
+      const style = {};
+      if (event.color) style.backgroundColor = event.color;
+      if (event.textColor) style.color = event.textColor;
+      return style;
     },
-    padTime(_val) {
-      const val = Math.floor(_val);
-      if (val < 10) {
-        return `0${val}`;
-      }
-      return `${val}`;
-    },
-    isCssColor(color) {
-      return !!color && !!color.match(/^(#|(rgb|hsl)a?\()/);
+    timedEventStyle(event, timeStartPos, timeDurationHeight) {
+      return {
+        ...this.eventStyle(event),
+        top: `${timeStartPos(event.time)}px`,
+        height: `${timeDurationHeight(eventDurationMinutes(event))}px`
+      };
     },
     showEvent(event) {
       this.event = event;
       this.displayEvent = true;
+      const payload = eventSelectPayload(event, this.schema);
+      if (payload) this.$emit('select-row', payload);
     },
     getEventDate(event) {
-      const parts = event.start.split('-');
-      const date = new Date(parts[0], parts[1] - 1, parts[2]);
-      return this.dateFormatter.format(date);
+      const from = backendDateToDisplay(event.date);
+      const to = backendDateToDisplay(event.endDate);
+      const start = event.time ? `${from} ${event.time}` : from;
+      if (event.endDate === event.date) {
+        return event.endTime ? `${start} - ${event.endTime}` : start;
+      }
+      return `${start} - ${to}${event.endTime ? ` ${event.endTime}` : ''}`;
     },
-    xmlUrl(query) {
-      return `${this.schema.api}/app/${this.path}?${query || ''}&_dt=!&start=2020-01-01`;
+    xmlUrl(start, end) {
+      const query = this.query ? `${this.query}&` : '';
+      // HistrixApp deja en schema.api la función apiUrl de useApi (su computed
+      // homónimo queda pisado por el de setup), así que se aceptan ambas formas.
+      const api = typeof this.schema.api === 'function' ? this.schema.api() : this.schema.api;
+      return `${api}/app/${this.path}?${query}_dt=!&start=${start}&end=${end}`;
     },
-    getData(url) {
-      this.getData(url)
+    onRangeChange({ start, end }) {
+      this.visible = { start, end };
+      this.loadRange(start, end);
+    },
+    loadRange(visibleStart, visibleEnd) {
+      if (isRangeLoaded(this.loadedRanges, visibleStart, visibleEnd)) return;
+      const range = rangeWithMargin(visibleStart, visibleEnd);
+      const generation = this.generation;
+      this.loadedRanges.push(range);
+      this.getData(this.xmlUrl(range.start, range.end))
         .then((response) => {
-          this.data = response.data;
+          // Si cambiaron los filtros mientras volvía, la respuesta ya no vale.
+          if (generation !== this.generation) return;
+          const incoming = Array.isArray(response.data) ? response.data.map(normalizeEvent) : [];
+          this.events = mergeEvents(this.events, incoming);
         })
         .catch((_e) => {
-          this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          if (generation !== this.generation) return;
+          this.loadedRanges = this.loadedRanges.filter((r) => r !== range);
+          this.$q.notify({ type: 'negative', message: 'Error de Carga de Datos' });
         });
     },
-    getDayEvents(day) {
-      return this.data.filter(
-        (item) => item.start.substring(0, 10) === day.date && item.start.substring(11, 20) === day.time
-      );
+    applyFilter(query) {
+      this.query = query || '';
+      this.generation++;
+      this.loadedRanges = [];
+      this.events = [];
+      if (this.visible) this.loadRange(this.visible.start, this.visible.end);
     },
-
-    getEvents(day) {
-      return this.data.filter((item) => item.start.substring(0, 10) === day.date);
+    getEvents(date) {
+      return this.events.filter((ev) => ev.date === date);
     },
-    updateFormatter() {
-      try {
-        this.dateFormatter = new Intl.DateTimeFormat(this.locale || void 0, {
-          weekday: this.shortWeekdayLabel ? 'short' : 'long',
-          month: this.shortMonthLabel ? 'short' : 'long',
-          day: 'numeric',
-          year: 'numeric',
-          timeZone: 'UTC'
-        });
-      } catch (_e) {
-        console.error('Intl.DateTimeFormat not supported');
-        this.dateFormatter = void 0;
-      }
+    getAllDayEvents(date) {
+      return this.events.filter((ev) => !ev.time && ev.date === date);
+    },
+    getTimedEvents(date) {
+      return this.events.filter((ev) => ev.time && ev.date === date);
     }
   },
   beforeMount() {
     this.locale = this.$q.lang.getLocale() || 'es';
   },
-  mounted() {
-    this.updateFormatter();
-    const url = this.xmlUrl();
-    this.getData(url);
-  },
-
   data() {
     return {
-      data: [],
-      selectedDate: null,
-      titleFormater: undefined,
-      dateFormatter: null,
+      events: [],
+      loadedRanges: [],
+      visible: null,
+      generation: 0,
+      query: '',
+      selectedDate: today(),
       displayEvent: false,
       event: null,
       locale: undefined,
-      calendarView: 'day-resource',
-      calendarResources: [
-        { label: 'John' },
-        { label: 'Mary' },
-        { label: 'Susan' },
-        { label: 'Olivia' },
-        { label: 'Board Room' },
-        { label: 'Room-1' },
-        { label: 'Room-2' }
-      ],
+      calendarView: mapDefaultView(this.schema?.defaultView),
       viewOptions: [
         { label: 'Día', value: 'day' },
         { label: 'Semana', value: 'week' },
-        { label: 'Mes', value: 'month' },
-        { label: 'Month Interval', value: 'month-interval' },
-        { label: 'Custom Interval', value: 'custom-interval' },
-        { label: 'Scheduler', value: 'scheduler' },
-        { label: 'Week Scheduler', value: 'week-scheduler' },
-        { label: 'Month Scheduler', value: 'month-scheduler' },
-        { label: 'Agenda', value: 'agenda' },
-        { label: 'Week Agenda', value: 'week-agenda' },
-        { label: 'Month Agenda', value: 'month-agenda' },
-        { label: 'Custom Agenda', value: 'custom-agenda' },
-        { label: 'Recursos', value: 'day-resource' }
+        { label: 'Mes', value: 'month' }
       ]
     };
   }
 };
 </script>
 <style>
-.calendar-container {
-  position: relative;
-}
-
-.my-event {
-  width: 100%;
+.histrix-calendar-event {
   position: absolute;
+  left: 2px;
+  right: 2px;
+  padding: 0 4px;
   font-size: 12px;
-}
-
-.full-width {
-  left: 0;
-  width: 100%;
-}
-
-.left-side {
-  left: 0;
-  width: 49.75%;
-}
-
-.right-side {
-  left: 50.25%;
-  width: 49.75%;
+  border-radius: 4px;
+  color: white;
+  background-color: var(--q-primary);
 }
 </style>

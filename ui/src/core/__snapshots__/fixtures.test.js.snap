@@ -5,7 +5,7 @@ exports[`fixture 'abm' > resuelve los kinds sin tirar (snapshot) 1`] = `
   "fields": {
     "id_presup_motivo": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "motivo": {
       "editable": true,
@@ -42,7 +42,7 @@ exports[`fixture 'abm-mini' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "id_stklista": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "moneda_id": {
       "hasOptions": true,
@@ -77,7 +77,7 @@ exports[`fixture 'abm-mini' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "vencimiento_vigencia": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
   },
   "keys": [
@@ -140,7 +140,7 @@ exports[`fixture 'arbol' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "esmadre": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "estado_resultado_id": {
       "editable": true,
@@ -193,7 +193,7 @@ exports[`fixture 'arbol' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "porc_s_venta": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "resultado": {
       "editable": true,
@@ -234,7 +234,7 @@ exports[`fixture 'arbol' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "valor_min": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
   },
   "keys": [
@@ -271,7 +271,7 @@ exports[`fixture 'ayuda' > resuelve los kinds sin tirar (snapshot) 1`] = `
     },
     "tipo_id": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
   },
   "keys": [
@@ -292,7 +292,7 @@ exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "acreditacion_valor": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "carbanco_id": {
       "editable": true,
@@ -319,7 +319,7 @@ exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "cuenta_valor": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "cuit_valor": {
       "editable": true,
@@ -328,25 +328,25 @@ exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
     },
     "fecha_calendario": {
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "fecha_cobro": {
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "fecha_valor": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "id_carvalor": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "importe_valor": {
       "editable": true,
       "histrix_type": "CustomNumeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "moneda_id": {
       "hasOptions": true,
@@ -361,11 +361,11 @@ exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "nro_valor": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "propio": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "regcuenta_id": {
       "editable": true,
@@ -399,7 +399,7 @@ exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "vencimiento_valor": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
   },
   "keys": [
@@ -475,7 +475,7 @@ exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`
     "cantidad_compra": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "cpsdetalle": {
       "editable": true,
@@ -496,7 +496,7 @@ exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`
     "cpsfecha": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "estado_autorizacion": {
       "histrix_type": "Field",
@@ -506,11 +506,11 @@ exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`
     "fecha_requerido": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "id_cpsmovimiento": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "id_cpsmovimiento2": {
       "histrix_type": "Field",
@@ -519,12 +519,12 @@ exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`
     "importe_total2": {
       "editable": true,
       "histrix_type": "CustomNumeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "mov_pen2": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "nombre_cuenta": {
       "editable": true,
@@ -549,7 +549,7 @@ exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`
     "pendiente_compra": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "regcuenta_id": {
       "editable": true,
@@ -819,17 +819,17 @@ exports[`fixture 'crud' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "porc_bonificacion_max": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "precio_costo": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "precio_origen": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "proveedores": {
       "histrix_type": "Field",
@@ -935,17 +935,17 @@ exports[`fixture 'crud' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "stock_maximo": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "stock_minimo": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "stock_reposicion": {
       "editable": true,
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "tipocalculo_costo": {
       "editable": true,
@@ -1001,7 +1001,7 @@ exports[`fixture 'crud-helper-link' > resuelve los kinds sin tirar (snapshot) 1`
     "id_ctb_indice": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "valores": {
       "histrix_type": "Field",
@@ -1064,7 +1064,7 @@ exports[`fixture 'crud-update-fields' > resuelve los kinds sin tirar (snapshot) 
     },
     "id_gensucursal": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "nombre_sucursal": {
       "editable": true,
@@ -1142,7 +1142,7 @@ exports[`fixture 'ficha-prefetch' > resuelve los kinds sin tirar (snapshot) 1`] 
     "nro_cuenta": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "ops_grid": {
       "editable": true,
@@ -1179,7 +1179,7 @@ exports[`fixture 'fichaing-formulas' > resuelve los kinds sin tirar (snapshot) 1
   "fields": {
     "cantidad": {
       "histrix_type": "Decimal",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "cliente": {
       "editable": true,
@@ -1199,7 +1199,7 @@ exports[`fixture 'fichaing-formulas' > resuelve los kinds sin tirar (snapshot) 1
     "fecha_movimiento": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "nombre_cuenta": {
       "editable": true,
@@ -1254,7 +1254,7 @@ exports[`fixture 'fichaing-ing' > resuelve los kinds sin tirar (snapshot) 1`] = 
   "fields": {
     "alta_movimiento": {
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "cantidad_bultos": {
       "histrix_type": "Field",
@@ -1304,11 +1304,11 @@ exports[`fixture 'fichaing-ing' > resuelve los kinds sin tirar (snapshot) 1`] = 
     "fecha_movimiento": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "id_stkmovimiento": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "impresion": {
       "histrix_type": "Field",
@@ -1394,7 +1394,7 @@ exports[`fixture 'fichaing-ing' > resuelve los kinds sin tirar (snapshot) 1`] = 
     },
     "stkconcepto_id": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "stkconcepto_origen": {
       "editable": true,
@@ -1475,12 +1475,12 @@ exports[`fixture 'grid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "acreditacion_valor": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "cuenta_valor": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "cuit_valor": {
       "editable": true,
@@ -1489,22 +1489,22 @@ exports[`fixture 'grid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     },
     "egreso_valor": {
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "fecha_valor": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "id_carvalor": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "importe_valor": {
       "editable": true,
       "histrix_type": "CustomNumeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
     "imputar": {
       "editable": true,
@@ -1537,11 +1537,11 @@ exports[`fixture 'grid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "nro_valor": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "propio": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "tipo_movimiento": {
       "histrix_type": "Field",
@@ -1555,7 +1555,7 @@ exports[`fixture 'grid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "total_imputado": {
       "editable": true,
       "histrix_type": "CustomNumeric",
-      "kind": "q-input",
+      "kind": "decimal",
     },
   },
   "keys": [
@@ -1666,7 +1666,7 @@ exports[`fixture 'livegrid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     },
     "concepto_id": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "cuenta_filtro": {
       "histrix_type": "Field",
@@ -1707,11 +1707,11 @@ exports[`fixture 'livegrid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "fecha_movimiento": {
       "editable": true,
       "histrix_type": "Date",
-      "kind": "q-input",
+      "kind": "date",
     },
     "id_regmovim": {
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
     },
     "imprime_concepto1": {
       "histrix_type": "Field",
@@ -1729,7 +1729,7 @@ exports[`fixture 'livegrid' > resuelve los kinds sin tirar (snapshot) 1`] = `
     "nro_movimiento": {
       "editable": true,
       "histrix_type": "Integer",
-      "kind": "q-input",
+      "kind": "integer",
       "link": "",
     },
     "ot_centro_sel": {
@@ -1814,7 +1814,7 @@ exports[`fixture 'treetable' > resuelve los kinds sin tirar (snapshot) 1`] = `
   "keys": [
     "id_cuenta",
   ],
-  "screenKind": null,
+  "screenKind": "treetable",
   "type": "TreeTable",
   "visibleColumns": [
     "id_cuenta",
