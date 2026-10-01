@@ -193,6 +193,8 @@ export interface HistrixFieldSchema {
   decimales?: string | number;
   step?: string;
   mask?: string;
+  /** Mensaje de la validación `mask` (atributo `errorMessage` del XML), si el backend lo manda. */
+  errorMessage?: string;
   multiple?: HistrixBool;
   placeholder?: string;
   style?: string;
