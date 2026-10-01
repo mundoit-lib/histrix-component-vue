@@ -13,6 +13,9 @@
         v-bind:is="fieldComponent"
         :model-value="localValue"
         @update:model-value="onFieldInput"
+        @focus="onNumericFocus"
+        @blur="onNumericBlur"
+        :inputmode="numericInputMode"
         v-bind="$attrs"
         style="flex: 1;"
         v-on:computed-total="onComputedTotal"
@@ -237,14 +240,20 @@ import { email, helpers, maxLength, required } from '@vuelidate/validators';
 import { computeFormulaFlags, parseDataFormulas } from '../core/dataFormulas.js';
 import { backendDateToDisplay, dateSortParts, displayDateToBackend } from '../core/dates.js';
 import { resolveFieldKind } from '../core/fieldType.js';
+import { formatNumber, numberError, numericSpec, toBackendNumber } from '../core/numeric.js';
 import { mapArrayOptions, mapDictOptions, mapRemoteOptions } from '../core/options.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 import HistrixHelp from './HistrixHelp.vue';
 
-// Número con decimales: separador decimal punto o coma, miles opcionales con
-// el otro separador, signo, espacios alrededor y notación exponencial.
-const DECIMAL_RE = /^\s*[-+]?(?=[.,]?\d)(\d+|\d{1,3}([.,]\d{3})+)?([.,]\d*)?([eE][-+]?\d+)?\s*$/;
+// Mensajes de validación de los campos numéricos (códigos de numberError).
+const NUMBER_MESSAGES = {
+  numeric: () => '* Valor numérico',
+  integer: () => '* Valor entero, sin decimales',
+  decimals: (spec) => `* Hasta ${spec.decimals} decimales`,
+  min: (spec) => `* Mínimo ${formatNumber(spec.min, spec)}`,
+  max: (spec) => `* Máximo ${formatNumber(spec.max, spec)}`
+};
 
 export default {
   name: 'HistrixField',
@@ -410,6 +419,15 @@ export default {
       if (this.fieldSchema.helpContainer) {
         this.showHelp = true;
       }
+    },
+    /** Al entrar a un campo numérico se edita el valor sin separador de miles (1234,50). */
+    onNumericFocus() {
+      if (!this.isNumeric) return;
+      this.numericText = formatNumber(this.modelValue, this.numericSpec, { grouping: false });
+      this.numericFocused = true;
+    },
+    onNumericBlur() {
+      this.numericFocused = false;
     },
     /**
      * Input del usuario en el campo. Setea el valor y, si el campo tiene ayuda,
@@ -607,6 +625,8 @@ export default {
   data() {
     return {
       delayTimer: 0,
+      numericFocused: false, // campo numérico en edición: se muestra el texto tipeado
+      numericText: '',
       showHelp: false, // popup de ayuda (typeahead) abierto
       previewUrl: '--',
       fileManager: false,
@@ -660,11 +680,15 @@ export default {
           required: helpers.withMessage('* Valor requerido', required)
         };
       }
-      if (this.isDecimal) {
-        validations.modelValue = {
-          ...validations.modelValue,
-          decimal: helpers.withMessage('* Valor decimal', helpers.regex(DECIMAL_RE))
-        };
+      if (this.isNumeric) {
+        const spec = this.numericSpec;
+        validations.modelValue = { ...validations.modelValue };
+        for (const [code, message] of Object.entries(NUMBER_MESSAGES)) {
+          validations.modelValue[code] = helpers.withMessage(
+            message(spec),
+            (value) => numberError(value, spec) !== code
+          );
+        }
       }
       if (this.histrixType === 'email') {
         validations.modelValue = { ...validations.modelValue, email: helpers.withMessage('Valor email', email) };
@@ -721,6 +745,9 @@ export default {
       return this.fieldComponent?.name === 'QSelect' && this.fieldSchema.innerContainer.empty === true;
     },
     inputClass() {
+      if (this.isNumeric) {
+        return 'text-right';
+      }
       return `text-${this.fieldSchema.align}`;
     },
     fieldMask() {
@@ -819,10 +846,17 @@ export default {
     isTime() {
       return this.histrixType === 'time';
     },
-    isDecimal() {
-      // Sólo decide la validación. La máscara numérica (decimales, separadores)
-      // queda para el renderer numérico.
-      return this.histrixType === 'decimal';
+    /** Decimal o entero: input de texto con formato, alineado a la derecha y validado. */
+    isNumeric() {
+      return this.histrixType === 'decimal' || this.histrixType === 'integer';
+    },
+    /** Formato del campo numérico (separadores, decimales, min/max) según el schema. */
+    numericSpec() {
+      return numericSpec(this.fieldSchema);
+    },
+    numericInputMode() {
+      if (!this.isNumeric) return undefined;
+      return this.numericSpec.integer ? 'numeric' : 'decimal';
     },
     isDateTime() {
       return this.histrixType === 'datetime';
@@ -931,7 +965,7 @@ export default {
       if (this.histrixType === 'radio') {
         return this.histrixType;
       }
-      if (this.isDateTime) {
+      if (this.isDateTime || this.isNumeric) {
         return 'text';
       }
       if (this.fieldComponent?.name === 'QSelect' && this.hasOptions === true) {
@@ -974,6 +1008,10 @@ export default {
             return !Number.isNaN(this.modelValue) && this.modelValue !== '' ? Number(this.modelValue) : this.modelValue;
           }
           return this.modelValue;
+        }
+        if (this.isNumeric) {
+          // Sin foco: formateado (1.234,50). En edición: lo que tipea el usuario.
+          return this.numericFocused ? this.numericText : formatNumber(this.modelValue, this.numericSpec);
         }
         if (this.isDate) {
           // Conversión backend → display extraída a ../core/dates.js (sin Quasar).
@@ -1051,6 +1089,10 @@ export default {
               this.$emit('field-change', this.row);
               return;
             }
+          } else if (this.isNumeric) {
+            // Al backend viaja punto decimal sin miles ('1234.5'); vacío sigue vacío (NULL ≠ 0).
+            this.numericText = localValue ?? '';
+            this.$emit('update:modelValue', toBackendNumber(localValue, this.numericSpec));
           } else {
             this.$emit('update:modelValue', localValue);
           }

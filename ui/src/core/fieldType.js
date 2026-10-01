@@ -2,7 +2,7 @@ import { normalizeFieldType } from './normalize.js';
 
 /**
  * Tipos de dato (`histrix_type` normalizado) que el componente distingue por
- * su clave: `isDate`, `isTime`, `isDateTime`, `isDecimal`, validación email.
+ * su clave: `isDate`, `isTime`, `isDateTime`, `isNumeric`, validación email.
  * No cambian el componente Vue (siguen siendo QInput).
  */
 const DATA_KINDS = new Set(['date', 'time', 'datetime', 'decimal', 'integer', 'email']);
