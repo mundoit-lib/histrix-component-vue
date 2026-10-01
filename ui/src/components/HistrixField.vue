@@ -556,8 +556,6 @@ export default {
      * @returns void
      */
     getOptions(_refresh = false) {
-      // this.$emit("refreshFieldSchema", {value: localValue.value, selected_option: option})
-      // this.getFieldSchema(query)
       let refresh = _refresh;
       const opt = this.fieldSchema?.options_sorted ?? this.fieldSchema?.options;
       if (!refresh && this.rowSchema && opt) {
