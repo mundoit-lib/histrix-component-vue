@@ -38,11 +38,13 @@ import { HistrixApp, HistrixForm, HistrixTable } from '@mundoit-lib/histrix-comp
 | Validaciones | `@vuelidate/core` + `@vuelidate/validators` (peer) |
 | HTTP | `@mundoit-lib/plugin-vue-axios` (peer) |
 | Auth | `@mundoit-lib/plugin-vue-auth` (peer) |
+| Bus de eventos | `@mundoit-lib/plugin-vue-event` (peer opcional) |
+| Router | `vue-router ^4` (peer opcional) |
 | Charts | `echarts ^5.6.0` + `vue-echarts ^7.0.3` |
-| Calendar | `@quasar/quasar-ui-qcalendar ^3.4.1` |
-| Lint/format | Biome 1.9.4 (CRLF, single-quote, 120 cols, sin trailing commas) |
+| Calendar | `@quasar/quasar-ui-qcalendar ^4.1.2` |
+| Lint/format | Biome 1.9 (CRLF, single-quote, 120 cols, sin trailing commas) |
 | Package manager raíz | pnpm 10.33.0 |
-| Package manager `ui/` y `ui/dev/` | npm |
+| Package manager `ui/` y `ui/dev/` | pnpm |
 | Playground | Vite + `@quasar/vite-plugin` en `ui/dev/` |
 | CI | GitHub Actions → publica a npm en tags `v*` |
 
