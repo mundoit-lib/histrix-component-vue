@@ -49,6 +49,15 @@ export interface HistrixStorage {
 /** Navegación (services/navigation.js). `to` es null cuando `back` es true. */
 export type HistrixNavigate = (to: unknown, options: { replace: boolean; back: boolean }) => void;
 
+/** Textos de la librería (services/i18n.js). vue-i18n cumple con `{ t: i18n.global.t }`. */
+export interface HistrixI18n {
+  t(key: string, params?: Record<string, unknown>): string;
+  locale?: { value: string };
+}
+
+/** Diccionarios por locale: claves planas con namespace ('table.perPage'). */
+export type HistrixMessages = Record<string, Record<string, string>>;
+
 /** Opciones de `app.use(HistrixPlugin, options)`. */
 export interface HistrixPluginOptions {
   notify?: Record<string, (...args: unknown[]) => unknown>;
@@ -60,6 +69,12 @@ export interface HistrixPluginOptions {
   storage?: HistrixStorage | false;
   onNavigate?: HistrixNavigate;
   onUnauthorized?: (error: unknown) => void;
+  /** Locale inicial (default 'es'). */
+  locale?: string;
+  /** Mensajes propios que se mezclan con los de la lib, por locale. */
+  messages?: HistrixMessages;
+  /** Implementación propia (p. ej. `{ t: i18n.global.t }`); pisa locale y messages. */
+  i18n?: HistrixI18n;
 }
 
 export interface HistrixClientOptions {

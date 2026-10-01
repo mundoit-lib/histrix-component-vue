@@ -4,21 +4,21 @@
         class="col q-pa-md
                  text-center "
       >
-        <h5>Datos de Conexión</h5>
+        <h5>{{ t('connection.title') }}</h5>
         <q-form @submit="save">
           <q-input
             v-model="host"
             class="q-mt-sm"
-            label="Ruta de su Histrix"
-            hint="Indique la Ruta al servidor Histrix. Ej: http://localhost/"
+            :label="t('connection.path')"
+            :hint="t('connection.pathHint')"
           ></q-input>
 
           <DatabaseSelector
             :host="host"
-            label="Base de datos"
+            :label="t('connection.database')"
             :model-value="database"
             @update:model-value="database = $event"
-            hint="Base de Datos por defecto"
+            :hint="t('connection.databaseHint')"
           />
           <br />
 
@@ -28,14 +28,14 @@
             icon="save"
             v-close-popup="3"
             type="submit"
-            :label="'Guardar'"
+            :label="t('common.save')"
           ></q-btn>
                     <q-btn
             flat
             text-color="primary"
             v-close-popup="3"
 
-            label="Cancelar"
+            :label="t('common.cancel')"
           ></q-btn>
         </q-form>
       </div>
@@ -43,12 +43,13 @@
 </template>
 
 <script>
+import { useHistrixI18n } from '../../services/i18n.js';
 import { useHistrixStorage } from '../../services/storage.js';
 
 export default {
   name: 'HistrixConnectionSettings',
   setup() {
-    return { storage: useHistrixStorage() };
+    return { t: useHistrixI18n().t, storage: useHistrixStorage() };
   },
   data() {
     return {

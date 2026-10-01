@@ -9,7 +9,7 @@
         outlined
         debounce="400"
         type="search"
-        placeholder="Buscar..."
+        :placeholder="t('help.search')"
         @update:model-value="loadData"
       >
         <template v-slot:append>
@@ -38,7 +38,7 @@
         </template>
         <template v-slot:no-data>
           <div class="full-width text-center text-grey q-pa-sm">
-            {{ loading ? 'Buscando...' : 'Sin resultados' }}
+            {{ loading ? t('common.searching') : t('common.noResults') }}
           </div>
         </template>
       </q-table>
@@ -50,6 +50,7 @@
 import { joinDirXml, parseHelpDetail, parseSchemaUri } from '../core/schemaUri.js';
 import { compactValues, omit, pick } from '../core/values.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 
 /**
  * Popup de ayuda (picker) para un campo con `helpContainer`.
@@ -78,7 +79,7 @@ export default {
   emits: ['select-row'],
   setup() {
     const { getAppSchema, getAppData } = useApi();
-    return { getAppSchema, getAppData };
+    return { t: useHistrixI18n().t, getAppSchema, getAppData };
   },
   data() {
     return {
@@ -92,7 +93,7 @@ export default {
   },
   computed: {
     title() {
-      return this.label ? `Seleccione ${this.label}` : 'Seleccione';
+      return this.label ? this.t('help.selectField', { label: this.label }) : this.t('help.select');
     },
     columnsSource() {
       // Preferimos la forma estructurada (xml + dir de la ayuda) en vez de parsear

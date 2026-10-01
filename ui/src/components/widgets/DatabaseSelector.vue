@@ -14,12 +14,13 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 
 export default {
   name: 'DatabaseSelector',
   setup() {
     const { getHostDb } = useApi();
-    return { getHostDb };
+    return { t: useHistrixI18n().t, getHostDb };
   },
   props: {
     host: null,
@@ -29,7 +30,7 @@ export default {
     return {
       dbinfo: [],
       state: 'success',
-      message: '¡¡Histrix Connected!!'
+      message: this.t('database.connected')
     };
   },
   mounted() {
@@ -67,11 +68,11 @@ export default {
             });
           this.dbinfo = data;
           this.state = 'success';
-          this.message = '¡¡Histrix Connected!!';
+          this.message = this.t('database.connected');
         })
         .catch((_e) => {
           this.state = 'error';
-          this.message = 'No Histrix Server Available';
+          this.message = this.t('database.unavailable');
         });
     }
   }

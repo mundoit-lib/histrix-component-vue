@@ -69,9 +69,14 @@
 </template>
 
 <script>
+import { useHistrixI18n } from '../services/i18n.js';
+
 /* eslint-disable no-underscore-dangle */
 export default {
   name: 'InputPassword',
+  setup() {
+    return { t: useHistrixI18n().t };
+  },
   inheritAttrs: false,
   props: {
     messageError: String,
@@ -218,14 +223,14 @@ export default {
      */
     labelShow: {
       type: String,
-      default: 'Show Password'
+      default: null
     },
     /**
      * Label for the hide password icon
      */
     labelHide: {
       type: String,
-      default: 'Hide Password'
+      default: null
     },
     /**
      * @type String
@@ -297,7 +302,9 @@ export default {
     },
 
     showPasswordLabel() {
-      return this.$data._showPassword || this.showPassword ? this.labelHide : this.labelShow;
+      return this.$data._showPassword || this.showPassword
+        ? (this.labelHide ?? this.t('inputPassword.hide'))
+        : (this.labelShow ?? this.t('inputPassword.show'));
     }
   },
 

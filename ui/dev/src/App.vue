@@ -27,6 +27,20 @@
           class="q-mr-sm"
         />
 
+        <!-- Switch de prueba del i18n de la lib (HD-7530): cambia el locale en caliente. -->
+        <q-btn-toggle
+          v-model="locale"
+          :options="[
+            { label: 'es', value: 'es' },
+            { label: 'en', value: 'en' }
+          ]"
+          flat
+          dense
+          no-caps
+          toggle-color="white"
+          class="q-mr-sm"
+          aria-label="Idioma"
+        />
         <q-btn flat dense no-caps icon="home" label="Home" :to="{ name: 'home' }" />
         <q-btn
           v-if="!loggedIn"
@@ -78,7 +92,7 @@
 </template>
 
 <script>
-import { useHistrixSession, useHistrixStorage } from '@mundoit-lib/histrix-component-vue';
+import { useHistrixI18n, useHistrixSession, useHistrixStorage } from '@mundoit-lib/histrix-component-vue';
 import { computed, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
@@ -92,6 +106,8 @@ export default {
     // Sesión de la librería: única fuente de `user` (sin leer localStorage a mano).
     const session = useHistrixSession();
     const storage = useHistrixStorage();
+    // Locale reactivo de la lib: el toggle del header lo cambia en caliente.
+    const { locale } = useHistrixI18n();
 
     // Pantallas full-screen sin chrome (login/registro/recupero/reset).
     const isAuthScreen = computed(() => route.meta.fullscreen === true);
@@ -110,7 +126,7 @@ export default {
       router.push({ name: 'login' });
     };
 
-    return { drawer, loggedIn, isAuthScreen, dbLabel, logout };
+    return { drawer, loggedIn, isAuthScreen, dbLabel, logout, locale };
   }
 };
 </script>

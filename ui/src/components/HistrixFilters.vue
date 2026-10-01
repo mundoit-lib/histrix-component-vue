@@ -7,7 +7,7 @@
         v-model="open"
         icon="search"
         :label="schema.title"
-        caption="búsqueda avanzada"
+        :caption="t('filters.advanced')"
         dense
         class="histrix-filters__panel"
       >
@@ -36,7 +36,7 @@
             <q-btn
               class="histrix-filters__btn"
               color="secondary"
-              label="Buscar"
+              :label="t('common.search')"
               icon="search"
               unelevated
               no-caps
@@ -71,7 +71,7 @@
         <q-btn
           class="histrix-filters__btn full-width"
           color="secondary"
-          label="Buscar"
+          :label="t('common.search')"
           icon="search"
           v-on:click="filterData"
         />
@@ -82,10 +82,14 @@
 
 <script>
 import { buildFilterQuery } from '../core/filters.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import HistrixField from './HistrixField.vue';
 
 export default {
   name: 'HistrixFilters',
+  setup() {
+    return { t: useHistrixI18n().t };
+  },
   props: ['schema', 'show'],
   components: {
     HistrixField

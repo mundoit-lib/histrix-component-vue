@@ -27,7 +27,7 @@
           </q-item-section>
           <q-item-section>
             <div class="menu-section-label menu-section-label--featured">
-              <span>Destacados</span>
+              <span>{{ t('menu.featured') }}</span>
               <span class="menu-section-count">{{ featured.length }}</span>
             </div>
           </q-item-section>
@@ -79,7 +79,7 @@
           </q-item-section>
           <q-item-section>
             <div class="menu-section-label menu-section-label--fav">
-              <span>Favoritos</span>
+              <span>{{ t('menu.favorites') }}</span>
               <span class="menu-section-count">{{ favorit.keys.length }}</span>
             </div>
           </q-item-section>
@@ -102,7 +102,7 @@
             class="fav-star fav-star--active"
             @click.stop.prevent="toggleFavorit(fav.menuId, fav.uri, fav.name)"
           >
-            <q-btn flat round dense icon="star" class="fav-star-btn" aria-label="Quitar de favoritos" />
+            <q-btn flat round dense icon="star" class="fav-star-btn" :aria-label="t('menu.removeFavorite')" />
           </q-item-section>
         </q-item>
       </q-expansion-item>
@@ -181,7 +181,7 @@
               dense
               :icon="setIconStart(node.menuId)"
               class="fav-star-btn"
-              :aria-label="favoritIds.has(node.menuId) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+              :aria-label="favoritIds.has(node.menuId) ? t('menu.removeFavorite') : t('menu.addFavorite')"
             />
           </q-item-section>
         </q-item>
@@ -193,6 +193,7 @@
 <script>
 import { useHistrixBus } from '../../services/bus.js';
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 import { useHistrixNavigate } from '../../services/navigation.js';
 import { useHistrixNotify } from '../../services/notify.js';
 import { useHistrixStorage } from '../../services/storage.js';
@@ -208,12 +209,6 @@ function decodeHTMLcached(text) {
   return result;
 }
 
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  favoriteSaved: 'Favorito guardado',
-  favoriteError: 'El favorito no se pudo guardar'
-};
-
 export default {
   name: 'HistrixExpansionMenu',
   // update-favorit también sale por el bus (compat; el menú es recursivo y la app lo escucha ahí).
@@ -222,6 +217,7 @@ export default {
     const { removeFavorit, setFavorit, getFavorites, getMenu } = useApi();
     const { navigate } = useHistrixNavigate();
     return {
+      t: useHistrixI18n().t,
       notify: useHistrixNotify(),
       bus: useHistrixBus(),
       storage: useHistrixStorage(),
@@ -293,11 +289,11 @@ export default {
       }
       try {
         await this.apiSetFavorit(menuId, uri, name);
-        this.notify.success(messages.favoriteSaved);
+        this.notify.success(this.t('menu.favoriteSaved'));
         this.favorit.keys.push({ menuId, uri, name });
         this.notifyFavorit();
       } catch (_error) {
-        this.notify.error(messages.favoriteError);
+        this.notify.error(this.t('menu.favoriteError'));
       }
     },
     notifyFavorit() {

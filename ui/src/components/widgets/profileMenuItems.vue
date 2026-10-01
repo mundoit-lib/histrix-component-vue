@@ -8,8 +8,8 @@
         expand-separator
         icon="person"
         :label-lines="1"
-        label="Configuración Personal"
-        caption="Menú de usuario"
+        :label="t('profile.personalSettings')"
+        :caption="t('profile.userMenu')"
         class="capitalize"
       >
 
@@ -31,32 +31,37 @@
 </template>
 
 <script>
+import { useHistrixI18n } from '../../services/i18n.js';
 import HistrixMenu from './HistrixExpansionMenu.vue';
 
 export default {
   name: 'profileMenuItems',
+  setup() {
+    return { t: useHistrixI18n().t };
+  },
   components: {
     HistrixMenu
   },
   props: ['mini'],
   methods: {},
-  data() {
-    return {
-      items: [
+  computed: {
+    // Computed (no data) para que cambien con el locale.
+    items() {
+      return [
         {
           icon: 'person',
-          label: 'Mis Datos',
-          caption: 'Datos personales',
+          label: this.t('profile.myData'),
+          caption: this.t('profile.personalData'),
           to: { name: 'profile' }
         },
         {
           icon: 'info',
-          label: 'Acerca',
-          caption: 'Acerca de Histrix',
+          label: this.t('profile.about'),
+          caption: this.t('profile.aboutHistrix'),
           to: { name: 'about' }
         }
-      ]
-    };
+      ];
+    }
   }
 };
 </script>

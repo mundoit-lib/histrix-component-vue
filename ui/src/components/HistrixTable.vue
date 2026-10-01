@@ -57,7 +57,7 @@
             v-model="searchStr"
             type="search"
             dense
-            label="Buscar"
+            :label="t('common.search')"
           >
             <template v-slot:append>
               <q-icon name="search" />
@@ -70,7 +70,7 @@
       <template v-slot:top-right="props">
         <div v-if="paginationConfig.enabled && data.length" class="histrix-pagination">
           <div class="histrix-pagination__size">
-            <span class="histrix-pagination__label">Por página</span>
+            <span class="histrix-pagination__label">{{ t('table.perPage') }}</span>
             <q-select
               :options="paginationOptions"
               hide-bottom-space
@@ -132,10 +132,10 @@
             flat
             icon="get_app"
             _icon="fas fa-file-excel"
-            title="Exportar"
+            :title="t('common.export')"
             @click="$emit('export', fullQuery)"
           />
-          <q-btn flat icon="print" title="Imprimir" @click="$emit('print')" />
+          <q-btn flat icon="print" :title="t('common.print')" @click="$emit('print')" />
           <!--  <q-btn flat round dense :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'" @click="props.toggleFullscreen" />  -->
           <!--
           <q-btn flat  :icon="mode === 'grid' ? 'list' : 'grid_on'" @click=" mode = mode === 'grid' ? 'list' : 'grid'; separator = mode === 'grid' ? 'none' : 'horizontal';" >
@@ -152,7 +152,7 @@
           class="histrix-add-btn"
           color="positive"
           icon="add"
-          title="Nuevo"
+          :title="t('common.new')"
           v-if="showAddButton"
           @click="addItem()"
           no-caps
@@ -187,7 +187,7 @@
               dense
               size="xs"
               :model-value="columnCheckState(col.name)"
-              :title="messages.checkAll"
+              :title="t('table.checkAll')"
               @click.stop
               @update:model-value="toggleColumn(col.name, $event === true)"
             />
@@ -220,7 +220,7 @@
               icon="edit"
               v-if="showEditButton"
               color="positive"
-              :title="messages.editRow"
+              :title="t('table.editRow')"
               @click.stop="editRow(props.row)"
               size="sm"
               no-caps
@@ -232,7 +232,7 @@
               icon="delete"
               v-if="showDeleteButton"
               color="secondary"
-              :title="messages.deleteRow"
+              :title="t('table.deleteRow')"
               @click.stop="deleteItem(props.row)"
               size="sm"
               no-caps
@@ -244,7 +244,7 @@
               v-if="liveSaveRow"
               color="positive"
               :disable="!dirtyRows[props.key]"
-              :title="messages.saveRow"
+              :title="t('table.saveRow')"
               @click.stop="saveLiveRow(props.key)"
               size="sm"
               no-caps
@@ -358,7 +358,7 @@
                   flat
                   dense
                   icon="edit"
-                  label="Editar"
+                  :label="t('table.edit')"
                   v-if="showEditButton"
                   color="positive"
                   @click="editRow(props.row)"
@@ -369,7 +369,7 @@
                   flat
                   dense
                   icon="delete"
-                  label="Borrar"
+                  :label="t('table.delete')"
                   v-if="showDeleteButton"
                   color="secondary"
                   @click="deleteItem(props.row)"
@@ -380,7 +380,7 @@
                   flat
                   dense
                   icon="save"
-                  label="Guardar"
+                  :label="t('common.save')"
                   v-if="liveSaveRow"
                   color="positive"
                   :disable="!dirtyRows[props.key]"
@@ -395,7 +395,7 @@
                   v-if="hasDetail(props)"
                   @click="props.expand = !props.expand"
                   :icon="props.expand ? 'remove' : 'add'"
-                  :label="props.expand ? 'Cerrar' : 'Detalle'"
+                  :label="props.expand ? t('common.close') : t('table.detail')"
                   size="sm"
                   no-caps
                 />
@@ -437,9 +437,9 @@
 
       <!--
       <template v-slot:bottom="props">
-        <q-btn v-if="schema.insertButton" fab icon="add" color="red" title="agregar" @click="insertRow()"></q-btn>
+        <q-btn v-if="schema.insertButton" fab icon="add" color="red" :title="t('table.add')" @click="insertRow()"></q-btn>
           <q-page-sticky position="bottom-right" :offset="[18, 18]">
-            <q-btn fab icon="add" color="red" title="agregar" @onclick="newItem()"></q-btn>}
+            <q-btn fab icon="add" color="red" :title="t('table.add')" @onclick="newItem()"></q-btn>}
           </q-page-sticky>
       </template>
       -->
@@ -486,24 +486,13 @@ import { normalizeScreenType } from '../core/normalize.js';
 import { formatNumber, isNumericField, numericSpec } from '../core/numeric.js';
 import { buildPageParams, parsePageResponse } from '../core/pagination.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
 import HistrixFilters from './HistrixFilters.vue';
 import HistrixForm from './HistrixForm.vue';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  closeUnsaved: 'Usted está por cerrar el formulario. Recuerde guardar la información o se perderá',
-  confirmDelete: '¿Realmente desea borrar este elemento?',
-  confirmDeleteRow: '¿Borrar este renglón?',
-  rowSaved: 'Dato guardado',
-  editRow: 'Modificar renglón',
-  deleteRow: 'Borrar renglón',
-  saveRow: 'Guardar renglón',
-  checkAll: 'Marcar / desmarcar todos'
-};
 
 /** Cómo se muestra el form del renglón en las grillas de carga (`ing`/`grid`). */
 const FORM_MODES = ['dialog', 'inline', 'vertical'];
@@ -512,7 +501,7 @@ export default {
   name: 'HistrixTable',
   setup() {
     const { updateAppData, processApp, deleteAppData, getAppData } = useApi();
-    return { messages, notify: useHistrixNotify(), updateAppData, processApp, deleteAppData, getAppData };
+    return { t: useHistrixI18n().t, notify: useHistrixNotify(), updateAppData, processApp, deleteAppData, getAppData };
   },
   props: {
     inner: { type: Boolean, default: false },
@@ -673,7 +662,7 @@ export default {
       }
       const unique = [...new Set(values)].sort((a, b) => a - b);
       const options = unique.map((v) => ({ label: String(v), value: v }));
-      options.push({ label: 'Todos', value: 0 });
+      options.push({ label: this.t('table.all'), value: 0 });
       return options;
     },
     /**
@@ -951,7 +940,7 @@ export default {
     async showDialog() {
       let confim = true;
       if (this.editValue) {
-        confim = await this.notify.confirm(messages.closeUnsaved);
+        confim = await this.notify.confirm(this.t('table.closeUnsaved'));
       }
       if (!confim) {
         this.edit = true;
@@ -1144,7 +1133,7 @@ export default {
       };
       return this.updateAppData(this.xmlUrl(), postData)
         .then((_response) => {
-          this.notify.success(messages.rowSaved);
+          this.notify.success(this.t('table.rowSaved'));
           return true;
         })
         .catch((e) => {
@@ -1290,13 +1279,13 @@ export default {
         this.deleteGridRow(item);
         return;
       }
-      if (await this.notify.confirm(messages.confirmDelete)) {
+      if (await this.notify.confirm(this.t('common.confirmDelete'))) {
         this.delete(item);
       }
     },
     /** Borra un renglón de la grilla de carga (H.deleterow) y renumera _ORDEN. */
     async deleteGridRow(row) {
-      if (!(await this.notify.confirm(messages.confirmDeleteRow))) {
+      if (!(await this.notify.confirm(this.t('table.confirmDeleteRow')))) {
         return;
       }
       removeRow(this.data, row._id);
@@ -1448,7 +1437,7 @@ export default {
         })
         .catch((_e) => {
           this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          this.message = this.t('common.loadError');
           this.loading = false;
         });
     }

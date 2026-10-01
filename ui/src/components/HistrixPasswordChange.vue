@@ -1,14 +1,14 @@
 <template>
   <q-card style="width: 700px; max-width: 80vw;">
     <q-card-section class="bg-primary text-white">
-      <h2 class="text-h6 q-ma-xs">Modificar Contraseña</h2>
+      <h2 class="text-h6 q-ma-xs">{{ t('password.title') }}</h2>
     </q-card-section>
     <q-card-section>
       <q-form _v-if="!okPassword" @submit.prevent="submit">
         <q-list _class="row">
           <q-item class="col-12   q-pa-sm">
             <q-item-section>
-              <q-input label="Contraseña Actual" id="password" filled required type="password"
+              <q-input :label="t('password.current')" id="password" filled required type="password"
                 v-model="form.old_password" name="password" :before="[{ icon: 'lock' }]"
                 :error="v$.form.old_password.$error" />
             </q-item-section>
@@ -18,7 +18,7 @@
             <q-item-section>
 
               <InputPasswordVue :labelShow="'wer'" :model-value="form.new_password"
-                @update:model-value="form.new_password = $event" placeholder="Ingrese su nueva contraseña"
+                @update:model-value="form.new_password = $event" :placeholder="t('password.new')"
                 :toggle="true" required @score="showScore" class="full-width" :error-label="passwordErrorMsg">
               </InputPasswordVue>
             </q-item-section>
@@ -27,7 +27,7 @@
             <q-item-section>
 
               <InputPasswordVue :labelShow="'wer'" :model-value="form.confirm_password"
-                @update:model-value="form.confirm_password = $event" placeholder="Repita su nueva contraseña"
+                @update:model-value="form.confirm_password = $event" :placeholder="t('password.repeat')"
                 :toggle="true" required @score="showScore" class="full-width" :error-label="passwordErrorMsg">
               </InputPasswordVue>
             </q-item-section>
@@ -36,7 +36,7 @@
           <br>
           <div class="col-xs-12 q-mb-sm text-center">
             <q-btn icon="chevron_right" class="q-pl-md q-pr-md q-pt-sm q-pb-sm full-width" :disable="btnLoading"
-              type="submit" :loading="btnLoading" color="primary" size="md" label="Modificar">
+              type="submit" :loading="btnLoading" color="primary" size="md" :label="t('password.submit')">
             </q-btn>
 
           </div>
@@ -52,13 +52,9 @@ import { minLength, required, sameAs } from '@vuelidate/validators';
 import { useHistrixSession } from '../composables/useHistrixSession.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import InputPasswordVue from './InputPassword.vue';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  passwordError: 'Ha ocurrido un error reseteando la contraseña'
-};
 
 export default {
   name: 'HistrixPasswordChange',
@@ -73,7 +69,13 @@ export default {
   },
   setup() {
     const { changePassword } = useApi();
-    return { v$: useVuelidate(), notify: useHistrixNotify(), session: useHistrixSession(), changePassword };
+    return {
+      t: useHistrixI18n().t,
+      v$: useVuelidate(),
+      notify: useHistrixNotify(),
+      session: useHistrixSession(),
+      changePassword
+    };
   },
   data: () => ({
     user: '',
@@ -101,7 +103,7 @@ export default {
       if (this.form.old_password === '') {
         return '';
       }
-      return 'Ingrese contraseña correcta';
+      return this.t('password.wrong');
     },
     passwordError() {
       return this.v$.form.old_password.$error;
@@ -134,7 +136,7 @@ export default {
           this.$emit('close');
         })
         .catch((error) => {
-          this.notify.error(error.response?.data?.responseText || messages.passwordError);
+          this.notify.error(error.response?.data?.responseText || this.t('password.error'));
           this.btnLoading = false;
         });
     }

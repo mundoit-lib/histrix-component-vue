@@ -24,13 +24,9 @@
 
 <script>
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixFilters from './HistrixFilters.vue';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  confirmDelete: '¿Realmente desea borrar este elemento?'
-};
 
 export default {
   name: 'HistrixList',
@@ -38,7 +34,7 @@ export default {
   emits: ['select'],
   setup() {
     const { getAppData } = useApi();
-    return { notify: useHistrixNotify(), getAppData };
+    return { t: useHistrixI18n().t, notify: useHistrixNotify(), getAppData };
   },
   props: {
     path: null,
@@ -81,7 +77,7 @@ export default {
     },
     async deleteItem(item) {
       const index = this.data.indexOf(item);
-      if (await this.notify.confirm(messages.confirmDelete)) {
+      if (await this.notify.confirm(this.t('common.confirmDelete'))) {
         this.data.splice(index, 1);
       }
     },
@@ -111,7 +107,7 @@ export default {
         })
         .catch((_e) => {
           this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          this.message = this.t('common.loadError');
         });
     }
   },

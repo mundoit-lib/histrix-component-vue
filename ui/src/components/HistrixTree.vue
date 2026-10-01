@@ -17,7 +17,7 @@
           round
           dense
           icon="import_export"
-          title="Exportar"
+          :title="t('common.export')"
           @click="$emit('export')"
         />
         <q-btn
@@ -25,14 +25,14 @@
           round
           dense
           icon="print"
-          title="Imprimir"
+          :title="t('common.print')"
           @click="$emit('print')"
         />
         <q-btn
           fab
           color="red"
           icon="add"
-          title="Nuevo"
+          :title="t('common.new')"
           v-if="canInsert"
           @click="addItem()"
           no-caps
@@ -124,21 +124,17 @@
 <script>
 import { keyFieldNames } from '../core/keys.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixFilters from './HistrixFilters.vue';
 import HistrixForm from './HistrixForm.vue';
 
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  confirmDelete: '¿Realmente desea borrar este elemento?'
-};
-
 export default {
   name: 'HistrixTree',
   setup() {
     const { deleteAppData, getAppData } = useApi();
-    return { notify: useHistrixNotify(), deleteAppData, getAppData };
+    return { t: useHistrixI18n().t, notify: useHistrixNotify(), deleteAppData, getAppData };
   },
   props: {
     inner: false,
@@ -205,7 +201,7 @@ export default {
       return `${this.path}?${filterQuery}`;
     },
     async deleteItem(item) {
-      if (await this.notify.confirm(messages.confirmDelete)) {
+      if (await this.notify.confirm(this.t('common.confirmDelete'))) {
         this.delete(item);
       }
     },
@@ -260,7 +256,7 @@ export default {
         })
         .catch((_e) => {
           this.dialog = true;
-          this.message = 'Error de Carga de Datos';
+          this.message = this.t('common.loadError');
           this.loading = false;
         });
     }

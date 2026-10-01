@@ -154,7 +154,7 @@
       <div class="row">
         <span class="q-pa-sm col-12 text-center">
           <q-btn
-            label="Cancelar"
+            :label="t('common.cancel')"
             icon="close"
             class="nojustify-end flat"
             @click="closePopup"
@@ -165,7 +165,7 @@
             v-if="insertButton || updateButton"
             :disable="submitting"
             type="submit"
-            label="Grabar"
+            :label="t('form.submit')"
             icon="save"
             class="bg-positive text-white nojustify-end"
             :loading="submitting"
@@ -217,16 +217,11 @@ import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
 import { normalizeScreenType } from '../core/normalize.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNavigate } from '../services/navigation.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  processFinished: 'Proceso finalizado',
-  loadError: 'Error de carga de datos'
-};
 
 export default {
   name: 'HistrixForm',
@@ -262,6 +257,7 @@ export default {
   setup() {
     const { getAppSchema, upload, processAppForm, insertAppData, updateAppData, getAppData } = useApi();
     return {
+      t: useHistrixI18n().t,
       v$: useVuelidate(),
       navigation: useHistrixNavigate(),
       notify: useHistrixNotify(),
@@ -662,7 +658,7 @@ export default {
       return this.processAppForm(this.xmlUrl(), this.postData)
         .then((response) => {
           this.submitting = false;
-          this.notify.success(messages.processFinished);
+          this.notify.success(this.t('form.processFinished'));
           const data = response?.data?.resourceIds || [];
           this.reset();
           this.refresh();
@@ -862,7 +858,7 @@ export default {
         })
         .catch((e) => {
           this.dialog = true;
-          this.message = `${messages.loadError}: ${e.message}`;
+          this.message = `${this.t('form.loadError')}: ${e.message}`;
         });
     }
   },

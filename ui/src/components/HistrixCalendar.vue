@@ -15,7 +15,7 @@
           </div>
         </q-card-section>
         <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup></q-btn>
+          <q-btn flat :label="t('common.ok')" color="primary" v-close-popup></q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -31,7 +31,7 @@
       <q-btn
         flat
         dense
-        label="Hoy"
+        :label="t('calendar.today')"
         class="q-mx-md"
         @click="calendarToday"
       ></q-btn>
@@ -142,19 +142,15 @@ import {
 } from '../core/calendar.js';
 import { backendDateToDisplay } from '../core/dates.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixI18n } from '../services/i18n.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixFilters from './HistrixFilters.vue';
-
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  loadError: 'Error de carga de datos'
-};
 
 export default {
   name: 'HistrixCalendar',
   setup() {
     const { getData } = useApi();
-    return { notify: useHistrixNotify(), getData };
+    return { t: useHistrixI18n().t, notify: useHistrixNotify(), getData };
   },
   props: {
     schema: {},
@@ -168,6 +164,13 @@ export default {
   },
   emits: ['update:modelValue', 'select-row'],
   computed: {
+    viewOptions() {
+      return [
+        { label: this.t('calendar.day'), value: 'day' },
+        { label: this.t('calendar.week'), value: 'week' },
+        { label: this.t('calendar.month'), value: 'month' }
+      ];
+    },
     title() {
       if (!this.selectedDate) return '';
       const [y, m, d] = this.selectedDate.split('-').map(Number);
@@ -244,7 +247,7 @@ export default {
         .catch((e) => {
           if (generation !== this.generation) return;
           this.loadedRanges = this.loadedRanges.filter((r) => r !== range);
-          this.notify.error(`${messages.loadError}: ${e.message}`);
+          this.notify.error(`${this.t('calendar.loadError')}: ${e.message}`);
         });
     },
     applyFilter(query) {
@@ -278,12 +281,7 @@ export default {
       displayEvent: false,
       event: null,
       locale: undefined,
-      calendarView: mapDefaultView(this.schema?.defaultView),
-      viewOptions: [
-        { label: 'Día', value: 'day' },
-        { label: 'Semana', value: 'week' },
-        { label: 'Mes', value: 'month' }
-      ]
+      calendarView: mapDefaultView(this.schema?.defaultView)
     };
   }
 };

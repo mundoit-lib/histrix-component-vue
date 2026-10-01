@@ -125,7 +125,7 @@
                 <q-btn
                   @click="advanceStep"
                   color="primary"
-                  label="Continuar"
+                  :label="t('app.continue')"
                   icon="navigate_next"
                 />
               </q-stepper-navigation>
@@ -133,7 +133,7 @@
 
             <q-step
               :name="2"
-              title="Confirmación"
+              :title="t('app.confirmation')"
               icon="done_all"
               :done="step > 2"
             >
@@ -154,14 +154,14 @@
                   flat
                   @click="step--"
                   color="primary"
-                  label="Atras"
+                  :label="t('app.back')"
                   icon="navigate_before"
                   class="q-ml-sm"
                 />
                 <q-btn
                   @click="finishStep"
                   color="primary"
-                  label="CONFIRMAR"
+                  :label="t('app.confirm')"
                   icon="check"
                 />
               </q-stepper-navigation>
@@ -267,6 +267,7 @@ import ExportForm from './ExportForm.vue';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 
 import { resolveScreenKind } from '../core/screenType.js';
+import { useHistrixI18n } from '../services/i18n.js';
 
 // Render: kind de pantalla → componente Vue. Los kinds que no están acá
 // (map, kanban, card…) o los tipos desconocidos muestran HistrixUnsupported.
@@ -281,13 +282,6 @@ const SCREEN_COMPONENTS = {
 };
 const HistrixUnsupported = defineLazyComponent(() => import('./HistrixUnsupported.vue'));
 
-// Textos del componente (centralizados para la futura i18n, HD-7530).
-const messages = {
-  schemaError: 'Error al cargar la pantalla',
-  pdfError: 'Error al descargar el PDF',
-  stepPending: 'Hay que finalizar el paso antes de continuar'
-};
-
 export default {
   name: 'HistrixApp',
   setup(props) {
@@ -301,6 +295,7 @@ export default {
       handle: (action, event) => vm.onHotkey(action, event)
     });
     return {
+      t: useHistrixI18n().t,
       notify: useHistrixNotify(),
       storage: useHistrixStorage(),
       navigate,
@@ -384,7 +379,7 @@ export default {
     },
     labelButton() {
       if (this.schema?.processButton) return this.schema?.processButton;
-      return 'Procesar';
+      return this.t('app.process');
     },
     redirectPage() {
       if (!this.schema || !this.schema.redirect) return null;
@@ -554,7 +549,7 @@ export default {
      * this will process al containers within STEPS
      */
     finishStep() {
-      this.notify.info(messages.stepPending);
+      this.notify.info(this.t('app.stepPending'));
     },
     /**
      * emit event to parent component selected Row
@@ -764,7 +759,7 @@ export default {
           this.pdfSrc = window.URL.createObjectURL(blob);
         })
         .catch((e) => {
-          this.notify.error(`${messages.pdfError}: ${e.message}`);
+          this.notify.error(`${this.t('app.pdfError')}: ${e.message}`);
         });
     },
     /**
@@ -800,7 +795,7 @@ export default {
         })
         .catch((e) => {
           this.dialog = true;
-          this.message = `${messages.schemaError}: ${e.message}`;
+          this.message = `${this.t('app.schemaError')}: ${e.message}`;
         });
     },
     /**

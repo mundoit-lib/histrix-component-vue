@@ -24,18 +24,19 @@
           </q-item-section>
           <q-item-section>
             <q-item-label>
-              <span v-text="'Cerrar la Sesion'"></span>
+              <span v-text="t('profile.logout')"></span>
             </q-item-label>
           </q-item-section>
         </q-item>
       </q-menu>
     </q-avatar>
-    <q-tooltip>Account</q-tooltip>
+    <q-tooltip>{{ t('profile.account') }}</q-tooltip>
   </q-btn>
 </template>
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 import HistrixMenu from './HistrixExpansionMenu.vue';
 export default {
   name: 'profileMenu',
@@ -44,36 +45,37 @@ export default {
   },
   setup() {
     const { logout } = useApi();
-    return { logout };
+    return { t: useHistrixI18n().t, logout };
   },
   methods: {
     exit() {
       this.logout();
     }
   },
-  data() {
-    return {
-      items: [
+  computed: {
+    // Computed (no data) para que cambien con el locale.
+    items() {
+      return [
         {
           icon: 'person',
-          label: 'Mis Datos',
-          caption: 'Datos personales',
+          label: this.t('profile.myData'),
+          caption: this.t('profile.personalData'),
           to: { name: 'profile' }
         },
         {
           icon: 'settings',
-          label: 'Settings',
-          caption: 'Configuración',
+          label: this.t('profile.settings'),
+          caption: this.t('profile.configuration'),
           to: { name: 'systemSettings' }
         },
         {
           icon: 'info',
-          label: 'Acerca',
-          caption: 'Acerca de Histrix',
+          label: this.t('profile.about'),
+          caption: this.t('profile.aboutHistrix'),
           to: { name: 'about' }
         }
-      ]
-    };
+      ];
+    }
   }
 };
 </script>

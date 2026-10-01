@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="content__header">
-      <h1 class="content__title">Favoritos</h1>
+      <h1 class="content__title">{{ t('menu.favorites') }}</h1>
     </div>
     <div class="content">
       <q-btn v-for="item in favoritItems.keys" :key="item.menuId" :to="{ path: `/auth${item.uri}` }">{{item.name}}</q-btn>
@@ -11,11 +11,12 @@
 
 <script>
 import useApi from '../../services/histrixApi.js';
+import { useHistrixI18n } from '../../services/i18n.js';
 export default {
   name: 'FavoritItems',
   setup() {
     const { getFavorites } = useApi();
-    return { getFavorites };
+    return { t: useHistrixI18n().t, getFavorites };
   },
   data() {
     return {
