@@ -1,0 +1,56 @@
+{
+  "data": [
+    {
+      "id_stklista": 1,
+      "stklista_nombre": "Pyzke W",
+      "vencimiento_vigencia": "2027-01-01",
+      "moneda_id": 1,
+      "moneda_idvta": 1,
+      "ubicaciones": "Odfcwoj qj gpuheca",
+      "_detail": "/stock/listas/stklistadetalle_crud.xml?stklista_id=1"
+    },
+    {
+      "id_stklista": 2,
+      "stklista_nombre": "Tezlq bbsdv",
+      "vencimiento_vigencia": "2027-01-01",
+      "moneda_id": 0,
+      "moneda_idvta": 0,
+      "ubicaciones": "Odfcwoj qj gpuheca",
+      "_detail": "/stock/listas/stklistadetalle_crud.xml?stklista_id=2"
+    },
+    {
+      "id_stklista": 3,
+      "stklista_nombre": "Xlfopvxux Pdqo Bmclu",
+      "vencimiento_vigencia": "2027-01-01",
+      "moneda_id": 0,
+      "moneda_idvta": 0,
+      "ubicaciones": "Odfcwoj qj gpuheca",
+      "_detail": "/stock/listas/stklistadetalle_crud.xml?stklista_id=3"
+    },
+    {
+      "id_stklista": 4,
+      "stklista_nombre": "Yoewm WVJ",
+      "vencimiento_vigencia": "2027-01-01",
+      "moneda_id": 1,
+      "moneda_idvta": 1,
+      "ubicaciones": "Odfcwoj qj gpuheca",
+      "_detail": "/stock/listas/stklistadetalle_crud.xml?stklista_id=4"
+    },
+    {
+      "id_stklista": 5,
+      "stklista_nombre": "Trlde Udaayxr",
+      "vencimiento_vigencia": "2027-01-01",
+      "moneda_id": 1,
+      "moneda_idvta": 1,
+      "ubicaciones": "Odfcwoj qj gpuheca",
+      "_detail": "/stock/listas/stklistadetalle_crud.xml?stklista_id=5"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/stock/listas/stklista_crud.xml?_limit=5&offset=5&limit=5"
+  }
+}

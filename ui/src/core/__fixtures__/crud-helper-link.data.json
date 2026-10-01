@@ -1,0 +1,21 @@
+{
+  "data": [
+    {
+      "id_ctb_indice": 1,
+      "descripcion": "Xxybsj jm wshkaak wbuukmsnpa",
+      "valores": "4 Fihgkxlwxskd"
+    },
+    {
+      "id_ctb_indice": 2,
+      "descripcion": "Damegu wg bqomkef mykfdmvci",
+      "valores": "2 Apavksvrpiiz"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 2,
+    "has_more": false,
+    "next": null
+  }
+}

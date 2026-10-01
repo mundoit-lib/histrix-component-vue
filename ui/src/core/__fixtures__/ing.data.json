@@ -1,0 +1,23 @@
+{
+  "data": [
+    {
+      "codigo_barra": "",
+      "numorden": 0,
+      "cantidad": "1",
+      "prefijo": "",
+      "desde": "",
+      "hasta": "",
+      "sufijo": "",
+      "stkarticulo_id": "",
+      "_ORDEN": 1,
+      "codigo_serie": "0"
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 1,
+    "has_more": false,
+    "next": null
+  }
+}

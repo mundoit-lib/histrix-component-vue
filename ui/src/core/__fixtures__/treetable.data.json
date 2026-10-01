@@ -1,0 +1,46 @@
+{
+  "data": [
+    {
+      "id_cuenta": "63665684",
+      "nombre_cuenta": "QWMNLL",
+      "habilitada": 0,
+      "cuenta_superior_id": "0",
+      "hictasup": "hudmbakkq"
+    },
+    {
+      "id_cuenta": "16248483",
+      "nombre_cuenta": "XZNDUQ HCXVUEMVA",
+      "habilitada": 0,
+      "cuenta_superior_id": "63665684",
+      "hictasup": ""
+    },
+    {
+      "id_cuenta": "36137268",
+      "nombre_cuenta": "IGJZXNDPNRGGTJWP",
+      "habilitada": 0,
+      "cuenta_superior_id": "16248483",
+      "hictasup": ""
+    },
+    {
+      "id_cuenta": "90486800",
+      "nombre_cuenta": "Rfad Mzaqlanmsabnsl Rlobbsd",
+      "habilitada": 1,
+      "cuenta_superior_id": "36137268",
+      "hictasup": ""
+    },
+    {
+      "id_cuenta": "62471454",
+      "nombre_cuenta": "Mrdv Eggtwpkuonwhns Sqmqg",
+      "habilitada": 1,
+      "cuenta_superior_id": "36137268",
+      "hictasup": ""
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/contabilidad/qry/ctbcuentas_qry.xml?_limit=5&offset=5&limit=5"
+  }
+}

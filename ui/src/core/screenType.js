@@ -70,7 +70,7 @@ export const SCREEN_TYPE_TO_KIND = {
 
 /**
  * Devuelve el kind de pantalla para un `schema.type`, o `null` si no se conoce.
- * @param {string} type `schema.type` tal cual llega (cualquier grafía).
+ * @param {import('../../types').HistrixScreenType} type `schema.type` tal cual llega (cualquier grafía).
  * @returns {ScreenKind|null}
  */
 export function resolveScreenKind(type) {

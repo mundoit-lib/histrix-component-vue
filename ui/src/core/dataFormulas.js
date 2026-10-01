@@ -26,7 +26,7 @@ function decodeEntities(str) {
  * Parsea el atributo `data-formulas` a un array de reglas.
  * Acepta el string JSON (encodeado o no) o un array ya parseado.
  *
- * @param {string|Array|undefined} raw
+ * @param {import('../../types').HistrixFieldSchema['data-formulas']|Array} raw
  * @returns {Array<{formula: string, targetField: string, ajaxupdate?: string}>}
  */
 export function parseDataFormulas(raw) {

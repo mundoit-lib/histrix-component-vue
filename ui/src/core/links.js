@@ -23,7 +23,7 @@ export function dirname(path) {
 /**
  * Resuelve el path del XML al que apunta un `helpers.link`.
  *
- * @param {object} link        El objeto `helpers.link` (con `xml` y opcional `dir`).
+ * @param {import('../../types').HistrixLinkHelper} link El objeto `helpers.link` (con `xml` y opcional `dir`).
  * @param {string} currentPath Path del XML actual (para resolver dir faltante).
  * @returns {string} Path normalizado del XML destino, o '' si el link no es válido.
  */
@@ -49,7 +49,7 @@ export function resolveHelperLinkPath(link, currentPath = '') {
  * que significa "abrir el destino con tipo_oto = 3". El único operador que emite
  * el backend es `=` (asignar el valor); se ignora cualquier otro por seguridad.
  *
- * @param {Array<{source:any,target:string,operator?:string}>} parameters
+ * @param {import('../../types').HistrixLinkParameter[]} parameters
  * @returns {Object<string, any>} query listo para mergear (p. ej. { tipo_oto: '3' }).
  */
 export function buildLinkParameters(parameters) {

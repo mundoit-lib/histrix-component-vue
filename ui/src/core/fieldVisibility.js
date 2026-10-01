@@ -20,8 +20,8 @@
  * valores para los que el predicado devuelve `true`, de modo que devolver
  * `true` aquí significa "filtrar fuera (no editable)".
  *
- * @param {object} field      El fieldSchema del campo.
- * @param {string} schemaType El tipo del schema del componente (this.schema.type).
+ * @param {import('../../types').HistrixFieldSchema} field El fieldSchema del campo.
+ * @param {import('../../types').HistrixScreenType} schemaType El tipo del schema del componente (this.schema.type).
  * @returns {boolean} true si NO es editable; false si es editable.
  */
 export function isFieldEditable(field, schemaType) {

@@ -19,3 +19,6 @@ yarn-error.log*
 # público. El resto de docs/ (sobre la librería) sí se versiona.
 docs/07-backend-histrix.md
 docs/09-auditoria-2026-09-30.md
+
+# Lista de XML reales a capturar (rutas del cliente): local, no se versiona.
+ui/dev/scripts/fixtures.list.json

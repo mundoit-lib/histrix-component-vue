@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "id_presup_motivo": 1,
+      "motivo": "Uy hjqaub eqsib vu jdrzgub urf uypba jhu yhjqaubeq",
+      "tipo_motivo_id": 1
+    },
+    {
+      "id_presup_motivo": 2,
+      "motivo": "Tm igazxl jmzjv ft vflrekw",
+      "tipo_motivo_id": 1
+    },
+    {
+      "id_presup_motivo": 3,
+      "motivo": "Ahh tf lxxhegzvuog eg lipmat eo mfjyiiah htflxxheg",
+      "tipo_motivo_id": 2
+    },
+    {
+      "id_presup_motivo": 4,
+      "motivo": "Wn fiahjuuiokjc xyc gatvpn",
+      "tipo_motivo_id": 2
+    },
+    {
+      "id_presup_motivo": 5,
+      "motivo": "Bf dwbhmgfgdpov ota vvbphz tf jcsoynkbf",
+      "tipo_motivo_id": 2
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/clientes/man/motivos_presup_crud.xml?_limit=5&offset=5&limit=5"
+  }
+}

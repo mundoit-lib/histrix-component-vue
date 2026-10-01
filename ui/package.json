@@ -6,9 +6,11 @@
   "license": "MIT",
   "main": "src/index.esm.js",
   "module": "src/index.esm.js",
-  "files": ["src"],
+  "types": "./types/index.d.ts",
+  "files": ["src", "types/*.d.ts", "!src/**/__fixtures__", "!src/**/__snapshots__", "!src/**/*.test.js"],
   "exports": {
     ".": {
+      "types": "./types/index.d.ts",
       "import": "./src/index.esm.js",
       "require": "./src/index.esm.js"
     },

@@ -1,0 +1,2196 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Tranferencia de Stock entre Depositos",
+    "type": "fichaing",
+    "observation": "",
+    "can_insert": false,
+    "print": false,
+    "can_update": false,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": true,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "",
+    "instance": "STK1226537622",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": false,
+    "defaultView": null,
+    "export": false,
+    "import": false,
+    "processButton": "process",
+    "preFetch": false,
+    "pdf": false,
+    "detail": false,
+    "inline_detail": false,
+    "width": null,
+    "conditions": [],
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 28,
+    "fields": {
+      "id_stkmovimiento": {
+        "class": "",
+        "size": "",
+        "esClave": "true",
+        "required": "required",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Codigo",
+        "placeholder": "Kjoiny sc euwpzwmhzd",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "id_stkmovimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "impresion": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "impresion",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "subsistema_id": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "subsistema_id",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stkconcepto_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "stkconcepto_id",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "cantidad_bultos": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "cantidad_bultos",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "referencia": {
+        "class": " missinghelp ",
+        "size": "50",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Orden de Trabajo",
+        "placeholder": "Sdfas io Klkwkpz",
+        "histrix_type": "Varchar",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "referencia",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "alta_movimiento": {
+        "class": "date",
+        "size": "10",
+        "type": "text",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Alta",
+        "placeholder": "Qcyb",
+        "step": "1",
+        "inputType": "textBox",
+        "data-role": "datebox",
+        "data-options": {
+          "mode": "calbox",
+          "useClearButton": "true",
+          "useCollapsedButton": "true"
+        },
+        "histrix_type": "Date",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "alta_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "error": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "err",
+        "placeholder": "pph",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "error",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "regcuenta_externo_id": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "regcuenta_externo_id",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "concepto_id": {
+        "class": " refreshable",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "Xiigypji",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;puesto_movimiento&quot;,&quot;targetField&quot;:&quot;regconcepto_id&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;},{&quot;field&quot;:&quot;nro_movimiento&quot;,&quot;targetField&quot;:&quot;regconcepto_id&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "label_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "hidden_column": false,
+        "name": "concepto_id",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_concepto": "Qhdjbha "
+          },
+          "2": {
+            "descripcion_concepto": "Zeet Gt Hijphp Cqkrjj"
+          },
+          "3": {
+            "descripcion_concepto": "Uerd Gg Ppnitvy Qiflbz"
+          },
+          "4": {
+            "descripcion_concepto": "Rfjsze nw Lrhldmn"
+          },
+          "5": {
+            "descripcion_concepto": "Bshkmlnxqwg"
+          },
+          "6": {
+            "descripcion_concepto": "Xubhlc Giwuadc"
+          },
+          "10": {
+            "descripcion_concepto": "Rmbnm Xldqkor Cfgwkdvh"
+          },
+          "11": {
+            "descripcion_concepto": "Cshvw Fpwxkin Npkjjg"
+          },
+          "12": {
+            "descripcion_concepto": "GNFYAVFL KX IWZKIRNN Y QU XXPUYZZ PP 0AGN"
+          },
+          "13": {
+            "descripcion_concepto": "JWYFCJ LXEQSZU"
+          },
+          "15": {
+            "descripcion_concepto": "FXNJDQL XMVJGGNHD"
+          },
+          "16": {
+            "descripcion_concepto": "ZYHMAUSKVXESKC (+)"
+          },
+          "17": {
+            "descripcion_concepto": "XCPF NN RVWRXP"
+          },
+          "19": {
+            "descripcion_concepto": "AOTKAOEN S KIS WQSMUWA / SIJFDGJZ"
+          },
+          "21": {
+            "descripcion_concepto": "JVPUJIRAF MYLQORSKOMG AYTVYWKW IN"
+          },
+          "22": {
+            "descripcion_concepto": "CHHKIZVFI CBC"
+          },
+          "23": {
+            "descripcion_concepto": "ZMN.BYABVL YOQJUM KIBFWQ"
+          },
+          "24": {
+            "descripcion_concepto": "CSTYYUHTSQ"
+          },
+          "25": {
+            "descripcion_concepto": "XTNIBAVJR ZGDIJPCY KGBBGOOX"
+          },
+          "26": {
+            "descripcion_concepto": "DYO XOVV EZNEZSZ"
+          }
+        },
+        "options_sorted": {
+          " 316": {
+            "descripcion_concepto": "Bzfgby (+)"
+          },
+          " 318": {
+            "descripcion_concepto": "Bzfgby (+)"
+          },
+          " 333": {
+            "descripcion_concepto": "Bzfgby (+)"
+          },
+          " 317": {
+            "descripcion_concepto": "Smdlup (-)"
+          },
+          " 319": {
+            "descripcion_concepto": "Smdlup (-)"
+          },
+          " 334": {
+            "descripcion_concepto": "Smdlup (-)"
+          },
+          " 352": {
+            "descripcion_concepto": "SHXVLRGMQ Ftwebb (+)"
+          },
+          " 338": {
+            "descripcion_concepto": "EKPLMISXW EIEIMT HTCDRJS"
+          },
+          " 348": {
+            "descripcion_concepto": "YZFEUDLEQ MNVRLH MPUVPZ ERKJKARP"
+          },
+          " 342": {
+            "descripcion_concepto": "YZEMLDTPQ RJNGCCIJHO"
+          },
+          " 85": {
+            "descripcion_concepto": "Hryexmteg ca Morux ji Wopp"
+          },
+          " 81": {
+            "descripcion_concepto": "Lwakwyynf im Jucjbt"
+          },
+          " 337": {
+            "descripcion_concepto": "SSYZMDOKK YIRGWWVB TY XZUNYULF Z FK PNSSYZM DO 0KYI"
+          },
+          " 25": {
+            "descripcion_concepto": "XTNIBAVJR ZGDIJPCY KGBBGOOX"
+          },
+          " 340": {
+            "descripcion_concepto": "LJICHILCR QTACRMUM O APM NWTYOKZ / DRJRLJIC"
+          },
+          " 343": {
+            "descripcion_concepto": "QVXJPJAQY ILDSVFAUJ YPXZOWIIAXU CBRQVXJPJ"
+          },
+          " 349": {
+            "descripcion_concepto": "YTGPDXXBU KKOGAIYNA FISTSPO"
+          },
+          " 347": {
+            "descripcion_concepto": "UYWWICOXN VYOP OJZPSU JVCYAE"
+          },
+          " 351": {
+            "descripcion_concepto": "LLSAIZLPZ XZXQBIPPU CWZ"
+          },
+          " 341": {
+            "descripcion_concepto": "NFYPCCSFI KVUCYPQBM AXH"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["concepto_id"],
+        "default_option_value": 316,
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "puesto_movimiento",
+            "targetField": "regconcepto_id",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          },
+          {
+            "field": "nro_movimiento",
+            "targetField": "regconcepto_id",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml690229219",
+          "dir": "stock/ing/transferencia",
+          "uri": "xml690229219&dir=stock/ing/transferencia&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "regcuenta_ivaletra": {
+        "class": " refreshable",
+        "size": "1",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "Jolgc",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;puesto_movimiento&quot;,&quot;targetField&quot;:&quot;letra&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;},{&quot;field&quot;:&quot;nro_movimiento&quot;,&quot;targetField&quot;:&quot;letra&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "label_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "hidden_column": false,
+        "name": "regcuenta_ivaletra",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["letra_movimimento"],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "puesto_movimiento",
+            "targetField": "letra",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          },
+          {
+            "field": "nro_movimiento",
+            "targetField": "letra",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "puesto_movimiento": {
+        "class": " refreshable",
+        "size": "4",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "Qnynn um Asrso",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;nro_movimiento&quot;,&quot;targetField&quot;:&quot;puesto&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;},{&quot;field&quot;:&quot;impresora&quot;,&quot;targetField&quot;:&quot;puesto&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;},{&quot;field&quot;:&quot;stkdeposito_id&quot;,&quot;targetField&quot;:&quot;puesto&quot;,&quot;xml&quot;:&quot;stktransfer_fichaing.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "label_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "hidden_column": false,
+        "name": "puesto_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "0": {
+            "nombre_puesto": "0000"
+          },
+          "1": {
+            "nombre_puesto": "0001"
+          },
+          "2": {
+            "nombre_puesto": "0002"
+          },
+          "5": {
+            "nombre_puesto": "0005"
+          }
+        },
+        "options_sorted": {
+          " 0": {
+            "nombre_puesto": "0000"
+          },
+          " 1": {
+            "nombre_puesto": "0001"
+          },
+          " 2": {
+            "nombre_puesto": "0002"
+          },
+          " 5": {
+            "nombre_puesto": "0005"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["puesto_movimiento"],
+        "default_option_value": 0,
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "nro_movimiento",
+            "targetField": "puesto",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          },
+          {
+            "field": "impresora",
+            "targetField": "puesto",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          },
+          {
+            "field": "stkdeposito_id",
+            "targetField": "puesto",
+            "xml": "stktransfer_fichaing.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1460228868",
+          "dir": "stock/ing/transferencia",
+          "uri": "xml1460228868&dir=stock/ing/transferencia&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "nro_movimiento": {
+        "class": "",
+        "defaultvalue": 2,
+        "size": "8",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nº",
+        "placeholder": "K&slxdam;uemk qs Rzymgizlzz",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Numeric",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "label_style": "vertical-align:middle;text-align:center;font-size: large;background-color: #333; color: #fff;",
+        "hidden_column": false,
+        "name": "nro_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["nro_movimiento"],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "fecha_movimiento": {
+        "class": "date",
+        "size": "10",
+        "type": "text",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Fecha",
+        "placeholder": "Eadtp hkcewaybqd",
+        "step": "1",
+        "inputType": "textBox",
+        "data-role": "datebox",
+        "data-options": {
+          "mode": "calbox",
+          "useClearButton": "true",
+          "useCollapsedButton": "true"
+        },
+        "histrix_type": "Date",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "fecha_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stktransaccion_id": {
+        "class": "",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nº Transaccion",
+        "placeholder": "Lº Clmlxpbigtc",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Bigint",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stktransaccion_id",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stktransaccion_id"],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stkdeposito_origen": {
+        "class": " missinghelp ",
+        "size": 12,
+        "required": "required",
+        "oblig": "true",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Origen *",
+        "placeholder": "Osltul *",
+        "data-formulas": "[{&quot;formula&quot;:&quot;stkdeposito_origen&quot;,&quot;targetField&quot;:&quot;stkdeposito_origen&quot;,&quot;ajaxupdate&quot;:&quot;true&quot;}]",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkdeposito_origen",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "12": {
+            "nombre_deposito": "MKR X.M.F.",
+            "inactivo": 0
+          },
+          "13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          "14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          "15": {
+            "nombre_deposito": "G6 TTNJXSYQSL",
+            "inactivo": 0
+          },
+          "17": {
+            "nombre_deposito": "URTLG YQVYWNM",
+            "inactivo": 0
+          },
+          "18": {
+            "nombre_deposito": "GLKFJQWI SOPJIZCYB",
+            "inactivo": 0
+          },
+          "19": {
+            "nombre_deposito": "PIJHUNBW VGJZNY",
+            "inactivo": 0
+          },
+          "20": {
+            "nombre_deposito": "JVMOLCI ETFW",
+            "inactivo": 0
+          },
+          "21": {
+            "nombre_deposito": "FSHCE U.R.O.",
+            "inactivo": 0
+          },
+          "22": {
+            "nombre_deposito": "SIDVQ RKBCM",
+            "inactivo": 0
+          },
+          "23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          "24": {
+            "nombre_deposito": "HJUJRV USKQQIT",
+            "inactivo": 0
+          },
+          "25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          "26": {
+            "nombre_deposito": "OHNSJKOT 0",
+            "inactivo": 0
+          },
+          "29": {
+            "nombre_deposito": "EDMSZBZBAYK DRSNYN ZSXGEGL ",
+            "inactivo": 0
+          },
+          "30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          "31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          "33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          "36": {
+            "nombre_deposito": "Qcmhhd Gisgol ",
+            "inactivo": 0
+          },
+          "38": {
+            "nombre_deposito": "WLEMAD FICEUVB-BQLSNDAR KTPQQTEAER",
+            "inactivo": 0
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 119": {
+            "nombre_deposito": "WZCBLMFTEFU",
+            "inactivo": 0
+          },
+          " 30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          " 31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          " 124": {
+            "nombre_deposito": "EJXUHORIIQSZ ILPBMXLHA",
+            "inactivo": 0
+          },
+          " 13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          " 96": {
+            "nombre_deposito": "Puqebzbll Vozdf Rmblfj",
+            "inactivo": 0
+          },
+          " 33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          " 23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          " 110": {
+            "nombre_deposito": "Xlfpzuu QAE",
+            "inactivo": 0
+          },
+          " 14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          " 25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          " 116": {
+            "nombre_deposito": "ZCQBVS IZNSSXJ - GMXCTD YPDWI ",
+            "inactivo": 0
+          },
+          " 114": {
+            "nombre_deposito": "DLVIRGTAN SCUNAF JKBBSB ",
+            "inactivo": 0
+          },
+          " 118": {
+            "nombre_deposito": "UEDH DIHITTAI U.Y",
+            "inactivo": 0
+          },
+          " 98": {
+            "nombre_deposito": "GYLOEKE YXDMUL",
+            "inactivo": 0
+          },
+          " 112": {
+            "nombre_deposito": "NWXFMHP WMAQBNYPG(SAR ) ",
+            "inactivo": 0
+          },
+          " 94": {
+            "nombre_deposito": "OETYZ NURFPUDU",
+            "inactivo": 0
+          },
+          " 104": {
+            "nombre_deposito": "Apujb Izgmdgb Xpebyut (Lbtsylj",
+            "inactivo": 0
+          },
+          " 73": {
+            "nombre_deposito": "ALHFY QKLH",
+            "inactivo": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stkdeposito_origen"],
+        "default_option_value": "",
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": {
+          "stkdeposito_origen": "stkdeposito_origen"
+        },
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkdeposito_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkdeposito_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "stkconcepto_origen": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkconcepto_origen",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "2": {
+            "nombre_concepto": "RJAEV (SKHJFE)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "4": {
+            "nombre_concepto": "RSIL XV UDKXLRT (DORWDH)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "5": {
+            "nombre_concepto": "PEQLZZOY (ZSMQPP)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "6": {
+            "nombre_concepto": "TENTHW NZ LAA (UJHWSH)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "9": {
+            "nombre_concepto": "QRJWZF/CMUTOGS (JGALJN)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "10": {
+            "nombre_concepto": "UEAYHY FTRVIBJTRM NKO (UZVBCE)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "12": {
+            "nombre_concepto": "KLDEMMYPFOWPB QQWJW TDXPBEVO - (LFSIEI)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          "97": {
+            "nombre_concepto": "ZRPMBG QABF OO AMANQA (GIRGBO)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": "0"
+          },
+          "98": {
+            "nombre_concepto": "DRBKSV FMXN (HEFPPI)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          }
+        },
+        "options_sorted": {
+          " 10": {
+            "nombre_concepto": "UEAYHY FTRVIBJTRM NKO (UZVBCE)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 97": {
+            "nombre_concepto": "ZRPMBG QABF OO AMANQA (GIRGBO)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": "0"
+          },
+          " 6": {
+            "nombre_concepto": "TENTHW NZ LAA (UJHWSH)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 98": {
+            "nombre_concepto": "DRBKSV FMXN (HEFPPI)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 4": {
+            "nombre_concepto": "RSIL XV UDKXLRT (DORWDH)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 5": {
+            "nombre_concepto": "PEQLZZOY (ZSMQPP)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 9": {
+            "nombre_concepto": "QRJWZF/CMUTOGS (JGALJN)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 12": {
+            "nombre_concepto": "KLDEMMYPFOWPB QQWJW TDXPBEVO - (LFSIEI)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          },
+          " 2": {
+            "nombre_concepto": "RJAEV (SKHJFE)",
+            "tipo_concepto": 1,
+            "ctbcuenta_id": ""
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stkconcepto_origen"],
+        "default_option_value": 10,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkconcepto_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkconcepto_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "stkdeposito_destino": {
+        "class": " missinghelp ",
+        "size": 12,
+        "required": "required",
+        "oblig": "true",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Destino *",
+        "placeholder": "Prqxqpw *",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkdeposito_destino",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "12": {
+            "nombre_deposito": "MKR X.M.F.",
+            "inactivo": 0
+          },
+          "13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          "14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          "15": {
+            "nombre_deposito": "G6 TTNJXSYQSL",
+            "inactivo": 0
+          },
+          "17": {
+            "nombre_deposito": "URTLG YQVYWNM",
+            "inactivo": 0
+          },
+          "18": {
+            "nombre_deposito": "GLKFJQWI SOPJIZCYB",
+            "inactivo": 0
+          },
+          "19": {
+            "nombre_deposito": "PIJHUNBW VGJZNY",
+            "inactivo": 0
+          },
+          "20": {
+            "nombre_deposito": "JVMOLCI ETFW",
+            "inactivo": 0
+          },
+          "21": {
+            "nombre_deposito": "FSHCE U.R.O.",
+            "inactivo": 0
+          },
+          "22": {
+            "nombre_deposito": "SIDVQ RKBCM",
+            "inactivo": 0
+          },
+          "23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          "24": {
+            "nombre_deposito": "HJUJRV USKQQIT",
+            "inactivo": 0
+          },
+          "25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          "26": {
+            "nombre_deposito": "OHNSJKOT 0",
+            "inactivo": 0
+          },
+          "29": {
+            "nombre_deposito": "EDMSZBZBAYK DRSNYN ZSXGEGL ",
+            "inactivo": 0
+          },
+          "30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          "31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          "33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          "36": {
+            "nombre_deposito": "Qcmhhd Gisgol ",
+            "inactivo": 0
+          },
+          "38": {
+            "nombre_deposito": "WLEMAD FICEUVB-BQLSNDAR KTPQQTEAER",
+            "inactivo": 0
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 119": {
+            "nombre_deposito": "WZCBLMFTEFU",
+            "inactivo": 0
+          },
+          " 30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          " 31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          " 124": {
+            "nombre_deposito": "EJXUHORIIQSZ ILPBMXLHA",
+            "inactivo": 0
+          },
+          " 13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          " 96": {
+            "nombre_deposito": "Puqebzbll Vozdf Rmblfj",
+            "inactivo": 0
+          },
+          " 33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          " 23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          " 110": {
+            "nombre_deposito": "Xlfpzuu QAE",
+            "inactivo": 0
+          },
+          " 14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          " 25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          " 116": {
+            "nombre_deposito": "ZCQBVS IZNSSXJ - GMXCTD YPDWI ",
+            "inactivo": 0
+          },
+          " 114": {
+            "nombre_deposito": "DLVIRGTAN SCUNAF JKBBSB ",
+            "inactivo": 0
+          },
+          " 118": {
+            "nombre_deposito": "UEDH DIHITTAI U.Y",
+            "inactivo": 0
+          },
+          " 98": {
+            "nombre_deposito": "GYLOEKE YXDMUL",
+            "inactivo": 0
+          },
+          " 112": {
+            "nombre_deposito": "NWXFMHP WMAQBNYPG(SAR ) ",
+            "inactivo": 0
+          },
+          " 94": {
+            "nombre_deposito": "OETYZ NURFPUDU",
+            "inactivo": 0
+          },
+          " 104": {
+            "nombre_deposito": "Apujb Izgmdgb Xpebyut (Lbtsylj",
+            "inactivo": 0
+          },
+          " 73": {
+            "nombre_deposito": "ALHFY QKLH",
+            "inactivo": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stkdeposito_destino"],
+        "default_option_value": "",
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkdeposito_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkdeposito_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "stkconcepto_destino": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkconcepto_destino",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_concepto": "UPKBVA (WRKYFKP)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "3": {
+            "nombre_concepto": "NIBE QL QAXZOOLPM (SAITNSL)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "7": {
+            "nombre_concepto": "GVMAJGYEUA (DZBCHTX)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "8": {
+            "nombre_concepto": "DNOXZDB DDIMRVAHDN (KLBEZCR)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "11": {
+            "nombre_concepto": "YZZTOD SDOCFOAYFO ADO (PKHNODJ)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "13": {
+            "nombre_concepto": "LWKZKCC PGU SZWMPAEOSVUKE (+) (APWMUJG)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          "96": {
+            "nombre_concepto": "JRRSVZ FFCF BV YMANNNT (DRNLGHY)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": "0"
+          },
+          "99": {
+            "nombre_concepto": "WNTGKLU IQKS (XGLSYAB)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          }
+        },
+        "options_sorted": {
+          " 11": {
+            "nombre_concepto": "YZZTOD SDOCFOAYFO ADO (PKHNODJ)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 96": {
+            "nombre_concepto": "JRRSVZ FFCF BV YMANNNT (DRNLGHY)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": "0"
+          },
+          " 1": {
+            "nombre_concepto": "UPKBVA (WRKYFKP)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 7": {
+            "nombre_concepto": "GVMAJGYEUA (DZBCHTX)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 13": {
+            "nombre_concepto": "LWKZKCC PGU SZWMPAEOSVUKE (+) (APWMUJG)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 8": {
+            "nombre_concepto": "DNOXZDB DDIMRVAHDN (KLBEZCR)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 99": {
+            "nombre_concepto": "WNTGKLU IQKS (XGLSYAB)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          },
+          " 3": {
+            "nombre_concepto": "NIBE QL QAXZOOLPM (SAITNSL)",
+            "tipo_concepto": 0,
+            "ctbcuenta_id": ""
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stkconcepto_destino"],
+        "default_option_value": 11,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkconcepto_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkconcepto_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "para": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Notifica",
+        "placeholder": "Bpzuoabv",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "para",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "": "",
+          "vljokcyny": {
+            "Nombres": "Fdhfwbu Vlhaoczo",
+            "baja": 0
+          },
+          "aqrgqiar": {
+            "Nombres": "Tegsbt Zgawknm",
+            "baja": 0
+          },
+          "qudeybx": {
+            "Nombres": "Nprftg Bnhhnu",
+            "baja": 0
+          },
+          "stylucrn": {
+            "Nombres": "Loavekw Tcvdheo",
+            "baja": 0
+          },
+          "gctvbgdnfy": {
+            "Nombres": "Wrsrmgt  Dpwkcxqrb",
+            "baja": 0
+          },
+          "dgtnhlnz": {
+            "Nombres": "Nmscli Hakbxce",
+            "baja": 0
+          },
+          "ahiommmyq": {
+            "Nombres": "Bgazntg Onrbwvce",
+            "baja": 0
+          },
+          "olumznz": {
+            "Nombres": "Fsjrw  Eeckzo",
+            "baja": 0
+          },
+          "khsrrmfy": {
+            "Nombres": "Bqaby Mspxmuv",
+            "baja": 0
+          },
+          "bmpxsfr": {
+            "Nombres": "Yjyjdkq Iafgjd",
+            "baja": 0
+          },
+          "Nltylbmh": {
+            "Nombres": "Jlzudhk Bkgznt",
+            "baja": 0
+          },
+          "pmirjyorcs": {
+            "Nombres": "Isamixf Dgqwnqpma",
+            "baja": 0
+          },
+          "uarug": {
+            "Nombres": "Bhpa Gfil",
+            "baja": 0
+          },
+          "umnlkrot": {
+            "Nombres": "Sytmyp Lkfngwz",
+            "baja": 0
+          },
+          "pgugwdkr": {
+            "Nombres": "Lngg Gujmcit",
+            "baja": 0
+          },
+          "fbtxn": {
+            "Nombres": "Cwub Syhnzu",
+            "baja": 0
+          },
+          "hmrooo": {
+            "Nombres": "Mcghdhz Zaksp",
+            "baja": 0
+          },
+          "kyapseeqy": {
+            "Nombres": "Elta Weeoyk Wauasbnz",
+            "baja": 0
+          },
+          "bipo": {
+            "Nombres": "Rybp Nmc",
+            "baja": 0
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " gyrnttqjl": {
+            "Nombres": "Fdhfwbu Vlhaoczo",
+            "baja": 0
+          },
+          " gocjrbjb": {
+            "Nombres": "Tegsbt Zgawknm",
+            "baja": 0
+          },
+          " sbttkkz": {
+            "Nombres": "Nprftg Bnhhnu",
+            "baja": 0
+          },
+          " vogwjpgx": {
+            "Nombres": "Loavekw Tcvdheo",
+            "baja": 0
+          },
+          " dmkovidgzh": {
+            "Nombres": "Wrsrmgt  Dpwkcxqrb",
+            "baja": 0
+          },
+          " qvmsqffn": {
+            "Nombres": "Nmscli Hakbxce",
+            "baja": 0
+          },
+          " ubivduudq": {
+            "Nombres": "Bgazntg Onrbwvce",
+            "baja": 0
+          },
+          " irvcqer": {
+            "Nombres": "Fsjrw  Eeckzo",
+            "baja": 0
+          },
+          " cetvugkh": {
+            "Nombres": "Bqaby Mspxmuv",
+            "baja": 0
+          },
+          " bthbosa": {
+            "Nombres": "Yjyjdkq Iafgjd",
+            "baja": 0
+          },
+          " Pdvqwpyf": {
+            "Nombres": "Jlzudhk Bkgznt",
+            "baja": 0
+          },
+          " lrfkkhebft": {
+            "Nombres": "Isamixf Dgqwnqpma",
+            "baja": 0
+          },
+          " sttqt": {
+            "Nombres": "Bhpa Gfil",
+            "baja": 0
+          },
+          " wjhxtklt": {
+            "Nombres": "Sytmyp Lkfngwz",
+            "baja": 0
+          },
+          " iybomozr": {
+            "Nombres": "Lngg Gujmcit",
+            "baja": 0
+          },
+          " clpsv": {
+            "Nombres": "Cwub Syhnzu",
+            "baja": 0
+          },
+          " aguiqm": {
+            "Nombres": "Mcghdhz Zaksp",
+            "baja": 0
+          },
+          " mjmtkjuvq": {
+            "Nombres": "Elta Weeoyk Wauasbnz",
+            "baja": 0
+          },
+          " eprx": {
+            "Nombres": "Rybp Nmc",
+            "baja": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1481076866",
+          "dir": "stock/ing/transferencia",
+          "uri": "xml1481076866&dir=stock/ing/transferencia&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "regcuenta_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "required": "required",
+        "oblig": "true",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Receptor *",
+        "placeholder": "Gnlrpdmx *",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "regcuenta_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "2359": {
+            "nombre_movimiento": "NIGM MTML",
+            "subsistema_id": "SP"
+          },
+          "2360": {
+            "nombre_movimiento": "UYFMUAX CRZNKYIC",
+            "subsistema_id": "SP"
+          },
+          "2362": {
+            "nombre_movimiento": "HYTEBQ LQAZJUG",
+            "subsistema_id": "SP"
+          },
+          "2363": {
+            "nombre_movimiento": "IXULCAN PINCNAG",
+            "subsistema_id": "SP"
+          },
+          "2366": {
+            "nombre_movimiento": "LITTO VUFKA",
+            "subsistema_id": "SP"
+          },
+          "7026": {
+            "nombre_movimiento": "BJJBFVRWT KLOJDY",
+            "subsistema_id": "SP"
+          },
+          "7027": {
+            "nombre_movimiento": "KUIO TLBWHB",
+            "subsistema_id": "SP"
+          },
+          "7039": {
+            "nombre_movimiento": "VHMD UZXGFW HWBBFVWE",
+            "subsistema_id": "SP"
+          },
+          "7040": {
+            "nombre_movimiento": "DCYBXU VJYGKXY",
+            "subsistema_id": "SP"
+          },
+          "7041": {
+            "nombre_movimiento": "NKGRLWD BMRPKAW",
+            "subsistema_id": "SP"
+          },
+          "7042": {
+            "nombre_movimiento": "XCOINP EZYANM",
+            "subsistema_id": "SP"
+          },
+          "7044": {
+            "nombre_movimiento": "LNRY AOJO",
+            "subsistema_id": "SP"
+          },
+          "7131": {
+            "nombre_movimiento": "SFAWNGFLGZX GAPOP",
+            "subsistema_id": "SP"
+          },
+          "7132": {
+            "nombre_movimiento": "SWIFN ILWNDU",
+            "subsistema_id": "SP"
+          },
+          "7193": {
+            "nombre_movimiento": "NWCA PLORCNE",
+            "subsistema_id": "SP"
+          },
+          "7195": {
+            "nombre_movimiento": "TWAEVD IAPDVSJU",
+            "subsistema_id": "SP"
+          },
+          "7197": {
+            "nombre_movimiento": "LNWSAP UKETOJH",
+            "subsistema_id": "SP"
+          },
+          "7200": {
+            "nombre_movimiento": "ZTDIEH BXQGOI",
+            "subsistema_id": "SP"
+          },
+          "7206": {
+            "nombre_movimiento": "RRODXGO EYTWT",
+            "subsistema_id": "SP"
+          },
+          "7207": {
+            "nombre_movimiento": "RGYRU AWLYIH",
+            "subsistema_id": "SP"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 7238": {
+            "nombre_movimiento": "QOPYBPM UTITIKNF",
+            "subsistema_id": "SP"
+          },
+          " 7210": {
+            "nombre_movimiento": "ZWCHQIN  YZBVAMVDZ",
+            "subsistema_id": "SP"
+          },
+          " 7197": {
+            "nombre_movimiento": "LNWSAP UKETOJH",
+            "subsistema_id": "SP"
+          },
+          " 7213": {
+            "nombre_movimiento": "QITDN  GRQIXJ",
+            "subsistema_id": "SP"
+          },
+          " 7215": {
+            "nombre_movimiento": "VQEMP CGFCLLO",
+            "subsistema_id": "SP"
+          },
+          " 7217": {
+            "nombre_movimiento": "CQJIPKL",
+            "subsistema_id": "SP"
+          },
+          " 7209": {
+            "nombre_movimiento": "FHTCAVZ ANVLOG",
+            "subsistema_id": "SP"
+          },
+          " 7211": {
+            "nombre_movimiento": "ANCHAWY IVRWYZGCE",
+            "subsistema_id": "SP"
+          },
+          " 7044": {
+            "nombre_movimiento": "LNRY AOJO",
+            "subsistema_id": "SP"
+          },
+          " 2362": {
+            "nombre_movimiento": "HYTEBQ LQAZJUG",
+            "subsistema_id": "SP"
+          },
+          " 7193": {
+            "nombre_movimiento": "NWCA PLORCNE",
+            "subsistema_id": "SP"
+          },
+          " 7027": {
+            "nombre_movimiento": "KUIO TLBWHB",
+            "subsistema_id": "SP"
+          },
+          " 7206": {
+            "nombre_movimiento": "RRODXGO EYTWT",
+            "subsistema_id": "SP"
+          },
+          " 7039": {
+            "nombre_movimiento": "VHMD UZXGFW HWBBFVWE",
+            "subsistema_id": "SP"
+          },
+          " 7208": {
+            "nombre_movimiento": "HHCCBEQG XGHVK",
+            "subsistema_id": "SP"
+          },
+          " 2359": {
+            "nombre_movimiento": "NIGM MTML",
+            "subsistema_id": "SP"
+          },
+          " 7214": {
+            "nombre_movimiento": "CBAPUOG OLG HCGPBAGO",
+            "subsistema_id": "SP"
+          },
+          " 7040": {
+            "nombre_movimiento": "DCYBXU VJYGKXY",
+            "subsistema_id": "SP"
+          },
+          " 7042": {
+            "nombre_movimiento": "XCOINP EZYANM",
+            "subsistema_id": "SP"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml728630225",
+          "dir": "stock/ing/transferencia",
+          "uri": "xml728630225&dir=stock/ing/transferencia&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "nombre_movimiento": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre",
+        "placeholder": "Ukqqlb",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "nombre_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "receptor_externo": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre del externo",
+        "placeholder": "Bqplol fdq jauwplkh oomfivz.",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "receptor_externo",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "centro_imputacion": {
+        "class": " missinghelp ",
+        "size": 12,
+        "required": "required",
+        "oblig": "true",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Centro de Imputación *",
+        "placeholder": "Hgpeev gx Cayvsvpuvw *",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "centro_imputacion",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "id_ctbcentro",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpContainer": {
+          "xml": "ctbcentro_imputacion_qry.xml",
+          "dir": "/ayudas",
+          "help_field": "centro_imputacion",
+          "parent": {
+            "xml": "stktransfer_fichaing.xml",
+            "dir": "stock/ing/transferencia"
+          },
+          "context_fields": []
+        }
+      },
+      "descripcion_centro": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Descripción",
+        "placeholder": "Hduzcpohmcq",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "descripcion_centro",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "responsable_ot": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Responsable OT",
+        "placeholder": "Lswprsdbdms NI",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "responsable_ot",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "4",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "de": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "de",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "detalle": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "detalle",
+        "placeholder": "scxiily",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "detalle",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "6",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stktransfer_grid.xml",
+          "dir": "stock/ing/transferencia",
+          "uri": "stktransfer_grid.xml&dir=stock/ing/transferencia&",
+          "relationship": [],
+          "empty": false
+        }
+      }
+    },
+    "values": {
+      "id_stkmovimiento": "",
+      "impresion": "/mulwmqsk/dbt/uas_jqqofl.vnh",
+      "subsistema_id": "RH",
+      "stkconcepto_id": "13",
+      "cantidad_bultos": "",
+      "referencia": "",
+      "alta_movimiento": "01/10/2026",
+      "error": "",
+      "regcuenta_externo_id": "7217",
+      "concepto_id": "4",
+      "regcuenta_ivaletra": "X",
+      "puesto_movimiento": "",
+      "nro_movimiento": "2",
+      "fecha_movimiento": "01/10/2026",
+      "stktransaccion_id": "4799542154689893",
+      "stkdeposito_origen": "",
+      "stkconcepto_origen": "13",
+      "stkdeposito_destino": "",
+      "stkconcepto_destino": "42",
+      "para": "",
+      "regcuenta_id": "",
+      "nombre_movimiento": "",
+      "receptor_externo": "",
+      "centro_imputacion": "",
+      "descripcion_centro": "",
+      "responsable_ot": "",
+      "de": "iczpeum",
+      "detalle": ""
+    }
+  }
+}

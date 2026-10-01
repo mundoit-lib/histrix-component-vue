@@ -1,0 +1,529 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Sucursales",
+    "type": "crud",
+    "observation": "",
+    "can_insert": true,
+    "print": true,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "fotos/sucursales",
+    "instance": "GEN1974736406",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "process",
+    "preFetch": true,
+    "pdf": false,
+    "detail": false,
+    "inline_detail": false,
+    "width": null,
+    "conditions": [],
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 9,
+    "fields": {
+      "id_gensucursal": {
+        "class": " missinghelp ",
+        "size": "",
+        "esClave": "true",
+        "required": "required",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "id_gensucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nombre_sucursal": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre",
+        "placeholder": "Ukqqlb",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nombre_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "domicilio_sucursal": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Domicilio",
+        "placeholder": "Aumrxkjqm",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "domicilio_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "genprovincia_id": {
+        "class": " missinghelp  refreshable",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Provincia",
+        "placeholder": "Zgdtktkwz",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;genlocalidad_id&quot;,&quot;targetField&quot;:&quot;provincia_id&quot;,&quot;xml&quot;:&quot;sucursales_crud.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "genprovincia_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_provincia": "ZKMDLBN PJUSETC"
+          },
+          "2": {
+            "nombre_provincia": "IHLCTT XFOFH"
+          },
+          "3": {
+            "nombre_provincia": "OMOIGWH"
+          },
+          "4": {
+            "nombre_provincia": "XHKJDJSZOK"
+          },
+          "5": {
+            "nombre_provincia": "YBQFF UCRS"
+          },
+          "6": {
+            "nombre_provincia": "WBOYU"
+          },
+          "7": {
+            "nombre_provincia": "XGXVXPP"
+          },
+          "8": {
+            "nombre_provincia": "VE ZWPZW"
+          },
+          "9": {
+            "nombre_provincia": "CMUWU"
+          },
+          "10": {
+            "nombre_provincia": "IEB RSZW"
+          },
+          "11": {
+            "nombre_provincia": "YZE DYJT"
+          },
+          "12": {
+            "nombre_provincia": "QEXQB SK"
+          },
+          "13": {
+            "nombre_provincia": "EYLVJIUP RED NFHLSL"
+          },
+          "14": {
+            "nombre_provincia": "HQPGTAU"
+          },
+          "15": {
+            "nombre_provincia": "TJCHJSQAQ"
+          },
+          "16": {
+            "nombre_provincia": "MRSMF"
+          },
+          "17": {
+            "nombre_provincia": "OPLWNZ"
+          },
+          "18": {
+            "nombre_provincia": "BQTLVAZ"
+          },
+          "19": {
+            "nombre_provincia": "LFJSMSMH"
+          },
+          "20": {
+            "nombre_provincia": "WRVASAO"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 2": {
+            "nombre_provincia": "IHLCTT XFOFH"
+          },
+          " 1": {
+            "nombre_provincia": "ZKMDLBN PJUSETC"
+          },
+          " 15": {
+            "nombre_provincia": "TJCHJSQAQ"
+          },
+          " 16": {
+            "nombre_provincia": "MRSMF"
+          },
+          " 17": {
+            "nombre_provincia": "OPLWNZ"
+          },
+          " 3": {
+            "nombre_provincia": "OMOIGWH"
+          },
+          " 4": {
+            "nombre_provincia": "XHKJDJSZOK"
+          },
+          " 5": {
+            "nombre_provincia": "YBQFF UCRS"
+          },
+          " 18": {
+            "nombre_provincia": "BQTLVAZ"
+          },
+          " 6": {
+            "nombre_provincia": "WBOYU"
+          },
+          " 21": {
+            "nombre_provincia": "EQ VVRNR"
+          },
+          " 8": {
+            "nombre_provincia": "VE ZWPZW"
+          },
+          " 7": {
+            "nombre_provincia": "XGXVXPP"
+          },
+          " 19": {
+            "nombre_provincia": "LFJSMSMH"
+          },
+          " 20": {
+            "nombre_provincia": "WRVASAO"
+          },
+          " 22": {
+            "nombre_provincia": "LSG SBTWE"
+          },
+          " 9": {
+            "nombre_provincia": "CMUWU"
+          },
+          " 10": {
+            "nombre_provincia": "IEB RSZW"
+          },
+          " 11": {
+            "nombre_provincia": "YZE DYJT"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "genlocalidad_id",
+            "targetField": "provincia_id",
+            "xml": "sucursales_crud.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "provincia_qry.xml",
+          "dir": "/ayudas",
+          "uri": "provincia_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "genlocalidad_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Localidad",
+        "placeholder": "Okurobjnv",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "genlocalidad_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "localidad_qry.xml",
+          "dir": "/ayudas",
+          "uri": "localidad_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "telefono_sucursal": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Telefono",
+        "placeholder": "Tfuswcvt",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "telefono_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "email_sucursal": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "E-mail",
+        "placeholder": "K-cexn",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "email_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "referencia_sucursal": {
+        "class": " missinghelp ",
+        "size": "150",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Referencia",
+        "placeholder": "Mncneeritd",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "referencia_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "foto_sucursal": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Foto",
+        "placeholder": "Xksd",
+        "inputType": "file",
+        "histrix_type": "File",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "foto_sucursal",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      }
+    },
+    "values": {
+      "id_gensucursal": "",
+      "nombre_sucursal": "",
+      "domicilio_sucursal": "",
+      "genprovincia_id": "",
+      "genlocalidad_id": "",
+      "telefono_sucursal": "",
+      "email_sucursal": "",
+      "referencia_sucursal": "",
+      "foto_sucursal": ""
+    }
+  }
+}
