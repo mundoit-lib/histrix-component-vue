@@ -453,6 +453,7 @@
 import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
+import { normalizeScreenType } from '../core/normalize.js';
 import useApi from '../services/histrixApi.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
@@ -712,8 +713,11 @@ export default {
     filteredData(_cols) {
       return this.data.filter((row) => !row.value);
     },
+    screenType() {
+      return normalizeScreenType(this.schema.type);
+    },
     isGrid() {
-      return this.schema.type === 'grid' || this.schema.type === 'liveGrid';
+      return this.screenType === 'grid' || this.screenType === 'livegrid';
     },
     canInsert() {
       // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
@@ -894,7 +898,7 @@ export default {
       this.getData();
     },
     rowChange(row) {
-      if (this.schema.type === 'liveGrid') {
+      if (this.screenType === 'livegrid') {
         this.updateLiveRow(row);
       }
     },
@@ -1130,7 +1134,7 @@ export default {
       return item2;
     },
     addItem() {
-      if (this.schema.type === 'grid' || this.schema.type === 'ing') {
+      if (this.screenType === 'grid' || this.screenType === 'ing') {
         this.insertRow();
       } else {
         this.editedIndex = -1;

@@ -72,7 +72,7 @@
                   :label="labelButton"
                   class="bg-secondary text-white nojustify-end"
                   @click="process"
-                  v-if="schema.can_process && !inner"
+                  v-if="schema.can_process && !inner && !isUnsupported"
                 />
               </div>
             </div>
@@ -470,6 +470,9 @@ export default {
       // Mientras el schema no llegó (type vacío) no se monta nada.
       if (!this.schema.type) return null;
       return SCREEN_COMPONENTS[resolveScreenKind(this.schema.type)] || HistrixUnsupported;
+    },
+    isUnsupported() {
+      return this.histrixComponent === HistrixUnsupported;
     },
     isPdf() {
       if (this.schema.pdf || this.pdf) {

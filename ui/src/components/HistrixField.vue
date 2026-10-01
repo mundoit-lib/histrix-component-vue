@@ -242,8 +242,9 @@ import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 import HistrixHelp from './HistrixHelp.vue';
 
-// Número con decimales escrito con punto o con coma (y miles con punto).
-const DECIMAL_RE = /^-?(\d+|\d{1,3}(\.\d{3})+)([.,]\d+)?$/;
+// Número con decimales: separador decimal punto o coma, miles opcionales con
+// el otro separador, signo, espacios alrededor y notación exponencial.
+const DECIMAL_RE = /^\s*[-+]?(?=[.,]?\d)(\d+|\d{1,3}([.,]\d{3})+)?([.,]\d*)?([eE][-+]?\d+)?\s*$/;
 
 export default {
   name: 'HistrixField',
