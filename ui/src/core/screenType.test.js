@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { SCREEN_TYPE_TO_KIND, resolveScreenKind } from './screenType.js';
+import { resolveScreenKind } from './screenType.js';
 
 describe('resolveScreenKind', () => {
   it('mapea los types de formulario a "form"', () => {
@@ -21,15 +21,34 @@ describe('resolveScreenKind', () => {
     expect(resolveScreenKind('ayuda')).toBe('table');
   });
 
+  it('acepta todas las grafías que acepta el backend', () => {
+    expect(resolveScreenKind('abmmini')).toBe('table');
+    expect(resolveScreenKind('ABM-Mini')).toBe('table');
+    expect(resolveScreenKind('livegrid')).toBe('table');
+    expect(resolveScreenKind('live-grid')).toBe('table');
+    expect(resolveScreenKind('Consulta')).toBe('table');
+    expect(resolveScreenKind('FichaIng')).toBe('form');
+    expect(resolveScreenKind('consula')).toBe('table');
+  });
+
   it('mapea los types de árbol a "tree"', () => {
     expect(resolveScreenKind('tree')).toBe('tree');
     expect(resolveScreenKind('arbol')).toBe('tree');
   });
 
-  it('mapea chart, map y treeView a "chart" (todos HistrixChart en el original)', () => {
+  it('chart va a "chart"; map y treeView ya no', () => {
     expect(resolveScreenKind('chart')).toBe('chart');
-    expect(resolveScreenKind('map')).toBe('chart');
-    expect(resolveScreenKind('treeView')).toBe('chart');
+    expect(resolveScreenKind('map')).toBe('map');
+    expect(resolveScreenKind('treeView')).toBe('treeview');
+  });
+
+  it('da kinds propios a las pantallas sin componente', () => {
+    expect(resolveScreenKind('TreeTable')).toBe('treetable');
+    expect(resolveScreenKind('orgchart')).toBe('orgchart');
+    expect(resolveScreenKind('card')).toBe('card');
+    expect(resolveScreenKind('cards')).toBe('card');
+    expect(resolveScreenKind('kanban')).toBe('kanban');
+    expect(resolveScreenKind('horizontalGrid')).toBe('horizontalgrid');
   });
 
   it('mapea calendar y gantt a "calendar"', () => {
@@ -45,38 +64,13 @@ describe('resolveScreenKind', () => {
     expect(resolveScreenKind('list')).toBe('list');
   });
 
-  it('devuelve null para un type desconocido', () => {
+  it('devuelve null para raíces que no son pantallas y tipos desconocidos', () => {
+    expect(resolveScreenKind('insert')).toBeNull();
+    expect(resolveScreenKind('update')).toBeNull();
+    expect(resolveScreenKind('dalete')).toBeNull();
     expect(resolveScreenKind('inexistente')).toBeNull();
     expect(resolveScreenKind('')).toBeNull();
     expect(resolveScreenKind(undefined)).toBeNull();
     expect(resolveScreenKind(null)).toBeNull();
-  });
-
-  it('cubre exactamente los types del mapa original (sin sobras ni faltantes)', () => {
-    expect(Object.keys(SCREEN_TYPE_TO_KIND).sort()).toEqual(
-      [
-        'ficha',
-        'fichaing',
-        'cabecera',
-        'calendar',
-        'gantt',
-        'dashboard',
-        'tree',
-        'arbol',
-        'treeView',
-        'map',
-        'chart',
-        'list',
-        'consulta',
-        'crud',
-        'abm',
-        'ing',
-        'grid',
-        'liveGrid',
-        'help',
-        'ayuda',
-        'abm-mini'
-      ].sort()
-    );
   });
 });

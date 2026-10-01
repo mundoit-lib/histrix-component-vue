@@ -72,7 +72,7 @@
                   :label="labelButton"
                   class="bg-secondary text-white nojustify-end"
                   @click="process"
-                  v-if="schema.can_process && !inner"
+                  v-if="schema.can_process && !inner && !isUnsupported"
                 />
               </div>
             </div>
@@ -260,6 +260,19 @@ import ExportForm from './ExportForm.vue';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 
 import { resolveScreenKind } from '../core/screenType.js';
+
+// Render: kind de pantalla → componente Vue. Los kinds que no están acá
+// (map, kanban, card…) o los tipos desconocidos muestran HistrixUnsupported.
+const SCREEN_COMPONENTS = {
+  form: defineLazyComponent(() => import('./HistrixForm.vue')),
+  table: defineLazyComponent(() => import('./HistrixTable.vue')),
+  chart: defineLazyComponent(() => import('./HistrixChart.vue')),
+  tree: defineLazyComponent(() => import('./HistrixTree.vue')),
+  calendar: defineLazyComponent(() => import('./HistrixCalendar.vue')),
+  dashboard: defineLazyComponent(() => import('./HistrixDashboard.vue')),
+  list: defineLazyComponent(() => import('./HistrixList.vue'))
+};
+const HistrixUnsupported = defineLazyComponent(() => import('./HistrixUnsupported.vue'));
 
 export default {
   name: 'HistrixApp',
@@ -454,17 +467,12 @@ export default {
     histrixComponent() {
       // La DECISIÓN (qué tipo de pantalla es) vive en el módulo puro
       // ../core/screenType.js. Acá sólo queda el RENDER: kind → componente Vue.
-      const kind = resolveScreenKind(this.schema.type);
-      const byKind = {
-        form: defineLazyComponent(() => import('./HistrixForm.vue')),
-        table: defineLazyComponent(() => import('./HistrixTable.vue')),
-        chart: defineLazyComponent(() => import('./HistrixChart.vue')),
-        tree: defineLazyComponent(() => import('./HistrixTree.vue')),
-        calendar: defineLazyComponent(() => import('./HistrixCalendar.vue')),
-        dashboard: defineLazyComponent(() => import('./HistrixDashboard.vue')),
-        list: defineLazyComponent(() => import('./HistrixList.vue'))
-      };
-      return byKind[kind] || null;
+      // Mientras el schema no llegó (type vacío) no se monta nada.
+      if (!this.schema.type) return null;
+      return SCREEN_COMPONENTS[resolveScreenKind(this.schema.type)] || HistrixUnsupported;
+    },
+    isUnsupported() {
+      return this.histrixComponent === HistrixUnsupported;
     },
     isPdf() {
       if (this.schema.pdf || this.pdf) {
@@ -688,6 +696,9 @@ export default {
         .then((response) => {
           this.resources = response.data.resources;
           this.schema = response.data.schema;
+          if (this.schema.type && !SCREEN_COMPONENTS[resolveScreenKind(this.schema.type)]) {
+            console.warn(`[HistrixApp] tipo de pantalla no soportado: "${this.schema.type}" (${this.path})`);
+          }
           // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
           if (this.schema.hasOwnProperty('fields')) {
             this.buildColumns();
