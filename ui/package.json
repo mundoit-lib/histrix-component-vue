@@ -159,6 +159,10 @@
     "./services/histrixApi": {
       "import": "./src/services/histrixApi.js",
       "require": "./src/services/histrixApi.js"
+    },
+    "./services/notify": {
+      "import": "./src/services/notify.js",
+      "require": "./src/services/notify.js"
     }
   },
   "scripts": {
