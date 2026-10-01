@@ -70,7 +70,13 @@
 </template>
 
 <script>
-import { EXPORT_FORMATS, DEFAULT_DELIMITER, buildExportFileName, buildExportParams, findFormat } from '../core/export.js';
+import {
+  DEFAULT_DELIMITER,
+  EXPORT_FORMATS,
+  buildExportFileName,
+  buildExportParams,
+  findFormat
+} from '../core/export.js';
 import useApi from '../services/histrixApi.js';
 
 export default {

@@ -1,14 +1,41 @@
 import { useAuth } from '@mundoit-lib/plugin-vue-auth';
 import { axiosInstance } from '@mundoit-lib/plugin-vue-axios';
+import { normalizeApiError } from '../core/apiError.js';
+import { normalizeData } from '../core/apiResponse.js';
 import { buildExportUrl, parseQueryString } from '../core/export.js';
 import config from './config';
+
+// Convierte cualquier rechazo en HistrixApiError. Un 401 además avisa a la app
+// vía `config.onUnauthorized` (la librería no toca el router).
+const rejectWithApiError = (error, { notifyUnauthorized = true } = {}) => {
+  const apiError = normalizeApiError(error);
+  if (notifyUnauthorized && apiError.status === 401 && typeof config.onUnauthorized === 'function') {
+    try {
+      config.onUnauthorized(apiError);
+    } catch (callbackError) {
+      console.error(callbackError);
+    }
+  }
+  return Promise.reject(apiError);
+};
+
+// Interceptor local: envuelve la instancia compartida de plugin-vue-axios sin
+// registrar interceptores globales (otras partes de la app la usan tal cual).
+const METHODS = ['get', 'delete', 'head', 'options', 'post', 'put', 'patch'];
+export function withApiErrors(instance) {
+  const wrapped = (...args) => instance(...args).catch((e) => rejectWithApiError(e));
+  for (const method of METHODS) {
+    wrapped[method] = (...args) => instance[method](...args).catch((e) => rejectWithApiError(e));
+  }
+  return wrapped;
+}
 
 export default function useApi() {
   /**
    * Histrix Methods
    */
   const auth = useAuth();
-  const axios = axiosInstance;
+  const axios = withApiErrors(axiosInstance);
 
   // Helper functions que antes usaban 'this'
   const currentDb = () => {
@@ -140,30 +167,35 @@ export default function useApi() {
      */
     async login(username, password, redirect) {
       const token = null;
-      return auth
-        .login({
-          url: `${apiUrl()}/token`,
-          data: {
-            username,
-            password,
-            grant_type: 'password',
-            client_id: config.clientId,
-            client_secret: config.clientSecret,
-            notification_token: token
-          },
-          method: 'POST',
-          rememberMe: true,
-          staySignedIn: true,
-          headers: {
-            Accept: 'application/json, text/plain',
-            'Content-Type': 'application/json'
-          },
-          redirect: redirect ? redirect : '',
-          fetchUser: false
-        })
-        .then((_success) => {
-          return getUser();
-        });
+      return (
+        auth
+          .login({
+            url: `${apiUrl()}/token`,
+            data: {
+              username,
+              password,
+              grant_type: 'password',
+              client_id: config.clientId,
+              client_secret: config.clientSecret,
+              notification_token: token
+            },
+            method: 'POST',
+            rememberMe: true,
+            staySignedIn: true,
+            headers: {
+              Accept: 'application/json, text/plain',
+              'Content-Type': 'application/json'
+            },
+            redirect: redirect ? redirect : '',
+            fetchUser: false
+          })
+          // Credenciales inválidas también responden 401: no es sesión expirada,
+          // así que no se dispara onUnauthorized.
+          .catch((e) => rejectWithApiError(e, { notifyUnauthorized: false }))
+          .then((_success) => {
+            return getUser();
+          })
+      );
     },
 
     getData,
@@ -228,12 +260,15 @@ export default function useApi() {
       return axios.get(`${apiUrl()}/schema/${path}`, { params });
     },
 
+    // Resuelve la respuesta de axios con `data` normalizado: 204/body vacío →
+    // `{ data: [] }`, y `response.data.data` sigue disponible para los call-sites.
     async getAppData(path, params) {
-      return axios({
+      const response = await axios({
         method: 'GET',
         url: `${apiUrl()}/app/${path}`,
         params
       });
+      return { ...response, data: normalizeData(response) };
     },
 
     async getAppPdf(path, params) {

@@ -213,6 +213,7 @@ import { evaluateFormula } from '../core/formula.js';
 import { mapUiIcon } from '../core/icons.js';
 import { extractKeys } from '../core/keys.js';
 import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
+import { normalizeScreenType } from '../core/normalize.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
 import HistrixCell from './HistrixCell.vue';
@@ -254,10 +255,13 @@ export default {
         (this.isGridRow || this.newRecord || this.editedIndex === -1 || this.editedIndex == null)
       );
     },
+    screenType() {
+      return normalizeScreenType(this.schema?.type);
+    },
     isGridRow() {
       // El form se está usando para confirmar un renglón de un grid embebido
       // (detalle de comprobante) en vez de un alta/edición directa contra la API.
-      return ['ing', 'grid', 'liveGrid'].includes(this.schema?.type);
+      return ['ing', 'grid', 'livegrid'].includes(this.screenType);
     },
     updateButton() {
       return (
@@ -281,7 +285,7 @@ export default {
       return this.filter(
         this.localSchema.fields,
         (field) =>
-          this.schema.type === 'fichaing' || this.schema.type === 'cabecera' || !field.innerContainer || field.isSelect
+          this.screenType === 'fichaing' || this.screenType === 'cabecera' || !field.innerContainer || field.isSelect
       );
     },
     /**
@@ -318,13 +322,21 @@ export default {
       return data.length ? data : null;
     },
     postData() {
-      const data = this.localValues;
-      Object.keys(this.localValues).map((item) => {
-        if (this.localValues[item] && typeof this.localValues[item] === 'object' && this.localValues[item].name) {
-          data[item] = this.localValues[item].name;
-        }
-      });
+      // Copia sin los campos calculados por SQL (isExpression): el backend no
+      // los persiste. Los archivos viajan por su nombre.
+      const fields = this.localSchema.fields || {};
+      const data = {};
+      for (const [item, value] of Object.entries(this.localValues)) {
+        if (fields[item]?.isExpression === true) continue;
+        data[item] = value && typeof value === 'object' && value.name ? value.name : value;
+      }
       return data;
+    },
+    savedValues() {
+      // Lo que se emite después de grabar: los valores locales con los
+      // archivos por nombre (como quedan en el backend), incluidos los
+      // calculados que no viajan en el post.
+      return { ...this.localValues, ...this.postData };
     },
     canUpdate() {
       // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
@@ -594,7 +606,7 @@ export default {
       // FALSE = Mostrar editable
       // Lógica pura extraída a ../core/fieldVisibility.js; se le pasa el tipo
       // del schema porque la decisión depende de this.schema.type.
-      return isFieldEditablePure(field, this.schema.type);
+      return isFieldEditablePure(field, this.screenType);
     },
     deleteItem(_item) {
       //
@@ -721,8 +733,8 @@ export default {
           .then((response) => {
             this.submitting = false;
             this.$emit('closepopup');
-            this.$emit('form-saved', this.localValues, response.data.id);
-            this.$emit('insert-row', this.localValues, response.data.id);
+            this.$emit('form-saved', this.savedValues, response.data.id);
+            this.$emit('insert-row', this.savedValues, response.data.id);
           })
           .catch((e) => {
             console.error(e);
@@ -734,7 +746,7 @@ export default {
           .then((_response) => {
             this.submitting = false;
             this.$emit('closepopup');
-            this.$emit('form-saved', this.localValues, this.editedIndex);
+            this.$emit('form-saved', this.savedValues, this.editedIndex);
           })
           .catch((e) => {
             console.error(e);
