@@ -8,6 +8,12 @@
       class="col"
     />
 
+    <!-- Form del renglón arriba de la grilla (formMode inline/vertical):
+         siempre visible, como el `ing` del legacy. -->
+    <q-card v-if="inlineForm" flat bordered class="histrix-row-form q-mb-sm">
+      <HistrixForm ref="histrixForm" v-bind="{ ...$attrs, ...rowFormProps }" v-on="rowFormListeners" />
+    </q-card>
+
     <q-table
       v-bind="tableDateProp"
       :columns="schema.columns"
@@ -147,7 +153,7 @@
           color="positive"
           icon="add"
           title="Nuevo"
-          v-if="schema.can_insert && canInsert"
+          v-if="showAddButton"
           @click="addItem()"
           no-caps
         >
@@ -163,7 +169,7 @@
           >
           <q-th
             auto-width
-            v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete)"
+            v-if="showActions"
             class="bg-primary text-white"
           ></q-th>
 
@@ -176,6 +182,15 @@
             "
           >
             <!-- <HistrixField standout dense class="bg-grey text-white" v-model="field.valor" :schema="schema.fields[col.name]" clearable  /> -->
+            <q-checkbox
+              v-if="isHeaderCheck(col)"
+              dense
+              size="xs"
+              :model-value="columnCheckState(col.name)"
+              :title="messages.checkAll"
+              @click.stop
+              @update:model-value="toggleColumn(col.name, $event === true)"
+            />
             {{ col.label }}
           </q-th>
         </q-tr>
@@ -183,7 +198,7 @@
 
       <!--- TABLE BODY -->
       <template v-slot:body="props">
-        <q-tr :props="props" @click="selectRow(props)" :class="rowClass(props)">
+        <q-tr :props="props" @click="selectRow(props, $event)" :class="rowClass(props)">
           <q-td style="width:10px;" v-if="schema.inline_detail">
             <q-btn
               v-if="hasDetail(props)"
@@ -196,16 +211,17 @@
           </q-td>
           <q-td
             key="actions"
-            v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete)"
+            v-if="showActions"
             class="action-cell"
           >
             <q-btn
               flat
               rounded
               icon="edit"
-              v-if="canUpdate && !isGrid"
+              v-if="showEditButton"
               color="positive"
-              @click="editRow(props.row)"
+              :title="messages.editRow"
+              @click.stop="editRow(props.row)"
               size="sm"
               no-caps
             />
@@ -214,9 +230,22 @@
               unelevated
               rounded
               icon="delete"
-              v-if="schema.can_delete && canDelete"
+              v-if="showDeleteButton"
               color="secondary"
-              @click="deleteItem(props.row)"
+              :title="messages.deleteRow"
+              @click.stop="deleteItem(props.row)"
+              size="sm"
+              no-caps
+            />
+            <q-btn
+              flat
+              rounded
+              icon="save"
+              v-if="liveSaveRow"
+              color="positive"
+              :disable="!dirtyRows[props.key]"
+              :title="messages.saveRow"
+              @click.stop="saveLiveRow(props.key)"
               size="sm"
               no-caps
             />
@@ -230,10 +259,10 @@
             class="histrix-cell"
           >
             <HistrixField
-              :model-value="rawData[props.key][cell.name]"
-              @update:model-value="rawData[props.key][cell.name] = $event"
-              :row="rawData[props.key]"
-              :query="fieldQuerys(cell.name, rawData[props.key])"
+              :model-value="rawRow(props.key)[cell.name]"
+              @update:model-value="setCell(props.key, cell.name, $event)"
+              :row="rawRow(props.key)"
+              :query="fieldQuerys(cell.name, rawRow(props.key))"
               :name="cell.name"
               :schema="schema.fields[cell.name]"
               :rowSchema="getRowSchema(props.key, cell.name)"
@@ -250,7 +279,7 @@
               :props="props"
               :schema="schema.fields[cell.name]"
               :col="cell"
-              v-on:open-popup="bubbleLink(rawData[props.key], $event)"
+              v-on:open-popup="bubbleLink(rawRow(props.key), $event)"
               v-on:closepopup="closePopup"
             />
           </q-td>
@@ -284,7 +313,7 @@
                   v-if="
                     idx === 0 ||
                     (getFieldAttribute(props.key, cell.name, 'editable') && isGrid) ||
-                    (rawData[props.key][cell.name] != null && rawData[props.key][cell.name] !== '')
+                    (rawRow(props.key)[cell.name] != null && rawRow(props.key)[cell.name] !== '')
                   "
                   :class="idx === 0 ? 'histrix-grid-title' : 'histrix-grid-line'"
                 >
@@ -296,10 +325,10 @@
                   </span>
                   <span class="histrix-grid-value">
                     <HistrixField
-                      :model-value="rawData[props.key][cell.name]"
-                      @update:model-value="rawData[props.key][cell.name] = $event"
-                      :row="rawData[props.key]"
-                      :query="fieldQuerys(cell.name, rawData[props.key])"
+                      :model-value="rawRow(props.key)[cell.name]"
+                      @update:model-value="setCell(props.key, cell.name, $event)"
+                      :row="rawRow(props.key)"
+                      :query="fieldQuerys(cell.name, rawRow(props.key))"
                       :name="cell.name"
                       :schema="schema.fields[cell.name]"
                       :rowSchema="getRowSchema(props.key, cell.name)"
@@ -312,7 +341,7 @@
                       :props="props"
                       :schema="schema.fields[cell.name]"
                       :col="cell"
-                      v-on:open-popup="bubbleLink(rawData[props.key], $event)"
+                      v-on:open-popup="bubbleLink(rawRow(props.key), $event)"
                       v-on:closepopup="closePopup"
                     />
                   </span>
@@ -321,7 +350,7 @@
             </div>
 
             <template
-              v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete) || hasDetail(props)"
+              v-if="showActions || hasDetail(props)"
             >
               <q-separator class="histrix-grid-sep" />
               <div class="histrix-grid-actions">
@@ -330,7 +359,7 @@
                   dense
                   icon="edit"
                   label="Editar"
-                  v-if="canUpdate && !isGrid"
+                  v-if="showEditButton"
                   color="positive"
                   @click="editRow(props.row)"
                   size="sm"
@@ -341,9 +370,21 @@
                   dense
                   icon="delete"
                   label="Borrar"
-                  v-if="schema.can_delete && canDelete"
+                  v-if="showDeleteButton"
                   color="secondary"
                   @click="deleteItem(props.row)"
+                  size="sm"
+                  no-caps
+                />
+                <q-btn
+                  flat
+                  dense
+                  icon="save"
+                  label="Guardar"
+                  v-if="liveSaveRow"
+                  color="positive"
+                  :disable="!dirtyRows[props.key]"
+                  @click="saveLiveRow(props.key)"
                   size="sm"
                   no-caps
                 />
@@ -377,7 +418,7 @@
           <q-th auto-width v-if="schema.inline_detail"> </q-th>
           <q-th
             auto-width
-            v-if="(canUpdate && !isGrid) || (schema.can_delete && canDelete)"
+            v-if="showActions"
             class="bg-primary text-white"
           ></q-th>
 
@@ -414,27 +455,9 @@
       </q-card>
     </q-dialog>
 
-    <q-dialog v-model="edit" ref="formDialog" full-width @update:model-value="showDialog">
-      <q-card>
-        <HistrixForm
-          ref="histrixForm"
-          :resources="resources"
-          :schema="schema"
-          :path="path"
-          :query="query"
-          v-bind="$attrs"
-          :editedItem="editedItem"
-          :editedIndex="editedIndex"
-          :editedRow="editedRow"
-          :inner="inner"
-          v-on:open-popup="bubbleLink(editedItem, $event)"
-          v-on:form-saved="formSaved"
-          v-on:insert-row="commitGridRow"
-          v-on:closepopup="closeEdit"
-          v-on:valueEdit="setEdit"
-          :computedFields="computedFields"
-          :newRecord="newRecord"
-        />
+    <q-dialog v-if="!inlineForm" v-model="edit" ref="formDialog" full-width @update:model-value="showDialog">
+      <q-card @keydown="onDialogKeydown">
+        <HistrixForm ref="histrixForm" v-bind="{ ...$attrs, ...rowFormProps }" v-on="rowFormListeners" />
       </q-card>
     </q-dialog>
   </div>
@@ -442,8 +465,22 @@
 
 <script>
 import { buildFieldQueries } from '../core/fieldQueries.js';
+import { resolveFieldKind } from '../core/fieldType.js';
 import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
+import {
+  columnTotals,
+  headerCheckState,
+  isSumColumn,
+  nextOrden,
+  nextRowId,
+  removeRow,
+  rowIndexById,
+  setCellValue,
+  setColumnChecked,
+  upsertRow
+} from '../core/gridRows.js';
+import { resolveAction } from '../core/hotkeys.js';
 import { keyFieldNames } from '../core/keys.js';
 import { normalizeScreenType } from '../core/normalize.js';
 import { formatNumber, isNumericField, numericSpec } from '../core/numeric.js';
@@ -460,14 +497,22 @@ import HistrixForm from './HistrixForm.vue';
 const messages = {
   closeUnsaved: 'Usted está por cerrar el formulario. Recuerde guardar la información o se perderá',
   confirmDelete: '¿Realmente desea borrar este elemento?',
-  rowSaved: 'Dato guardado'
+  confirmDeleteRow: '¿Borrar este renglón?',
+  rowSaved: 'Dato guardado',
+  editRow: 'Modificar renglón',
+  deleteRow: 'Borrar renglón',
+  saveRow: 'Guardar renglón',
+  checkAll: 'Marcar / desmarcar todos'
 };
+
+/** Cómo se muestra el form del renglón en las grillas de carga (`ing`/`grid`). */
+const FORM_MODES = ['dialog', 'inline', 'vertical'];
 
 export default {
   name: 'HistrixTable',
   setup() {
     const { updateAppData, processApp, deleteAppData, getAppData } = useApi();
-    return { notify: useHistrixNotify(), updateAppData, processApp, deleteAppData, getAppData };
+    return { messages, notify: useHistrixNotify(), updateAppData, processApp, deleteAppData, getAppData };
   },
   props: {
     inner: { type: Boolean, default: false },
@@ -481,7 +526,25 @@ export default {
     computedFields: Object,
     computedTotals: Object,
     modelValue: null,
-    isFormulation: { type: Boolean, default: false }
+    isFormulation: { type: Boolean, default: false },
+    /**
+     * Form del renglón en `ing`/`grid`: 'dialog' (modal, default), 'inline'
+     * (arriba de la grilla, siempre visible) o 'vertical' (inline, un campo
+     * por línea). El backend todavía no serializa `hideForm`/`subtipo`, así
+     * que lo elige la app.
+     */
+    formMode: { type: String, default: 'dialog', validator: (v) => FORM_MODES.includes(v) },
+    /** Enter en el último campo del form confirma el renglón (flujo del legacy). */
+    enterConfirmsRow: { type: Boolean, default: true },
+    /**
+     * liveGrid: guardar cada fila con su botón en vez de al editar la celda
+     * (`saveRowButton` del XML, que el backend todavía no serializa).
+     */
+    saveRowButton: { type: Boolean, default: false }
+  },
+  inject: {
+    // Lo provee HistrixApp (prop `keyboard`). Fuera de una app, activo.
+    histrixKeyboard: { default: () => () => true }
   },
   components: {
     HistrixFilters,
@@ -508,6 +571,9 @@ export default {
       this.data = []
     }
     */
+    if (this.inlineForm && this.canEditRows) {
+      this.insertRow();
+    }
     if (this.schema.preFetch === true /* && this.data.length == 0 */) {
       this.getData();
     } else {
@@ -562,6 +628,13 @@ export default {
         this.$emit('update:modelValue', this.rawData);
       },
       deep: true
+    },
+    // Totales hacia la cabecera (`computedTotals`): se recalculan al
+    // confirmar, modificar o borrar un renglón, incluso si quedan en 0.
+    columnTotals(totals) {
+      for (const [target, source] of Object.entries(this.computedTotals || {})) {
+        this.$emit('computed-total', { target, value: totals[source] });
+      }
     }
   },
   computed: {
@@ -697,24 +770,15 @@ export default {
      * sumas). También se calculan las columnas origen de `computedTotals`.
      */
     columnTotals() {
-      const totals = {};
-      const sources = Object.values(this.computedTotals || {});
-      const columnsToSum = this.schema.columns.filter((col) => this.isSumColumn(col) || sources.includes(col.name));
-      for (const element of columnsToSum) {
-        totals[element.name] = this.data.reduce((prev, cur) => {
-          const field = cur[element.name];
-          const value = field?.value ?? field?._ ?? field ?? 0;
-          return prev + (Number.parseFloat(value) || 0);
-        }, 0);
-      }
-      Object.keys(this.computedTotals || {}).map((key) => {
-        const sourceName = this.computedTotals[key];
-        this.$emit('computed-total', {
-          target: key,
-          value: totals[sourceName]
-        });
-      });
-      return totals;
+      return columnTotals(this.data, this.schema.columns, this.computedTotals);
+    },
+    /** Filas de `data` por `_id` (row-key de la q-table), para las celdas. */
+    dataById() {
+      return new Map(this.data.map((row) => [row._id, row]));
+    },
+    /** Valores planos de las filas visibles por `_id`. */
+    rawById() {
+      return new Map(this.rawData.map((row) => [row._id, row]));
     },
     filteredRows() {
       if (!this.searchStr) {
@@ -753,6 +817,62 @@ export default {
     },
     isGrid() {
       return this.screenType === 'grid' || this.screenType === 'livegrid';
+    },
+    /** Grilla de carga de renglones (detalle de comprobante, cliente-side). */
+    isLoadGrid() {
+      return this.screenType === 'ing' || this.screenType === 'grid';
+    },
+    /** Renglones modificables: alta, edición y borrado locales. */
+    canEditRows() {
+      return this.isLoadGrid && !this.schema.readonly;
+    },
+    inlineForm() {
+      return this.isLoadGrid && this.formMode !== 'dialog';
+    },
+    liveSaveRow() {
+      return this.screenType === 'livegrid' && this.saveRowButton;
+    },
+    showEditButton() {
+      return (this.canUpdate && !this.isGrid) || this.canEditRows;
+    },
+    showDeleteButton() {
+      return (this.schema.can_delete && this.canDelete) || this.canEditRows;
+    },
+    showActions() {
+      return this.showEditButton || this.showDeleteButton || this.liveSaveRow;
+    },
+    showAddButton() {
+      if (this.isLoadGrid) {
+        // Con el form inline siempre visible no hace falta el botón.
+        return this.canEditRows && !this.inlineForm && Boolean(this.schema.can_insert || this.schema.insertButton);
+      }
+      return this.schema.can_insert && this.canInsert;
+    },
+    /** Props del form del renglón (diálogo o inline). */
+    rowFormProps() {
+      return {
+        resources: this.resources,
+        schema: this.schema,
+        path: this.path,
+        query: this.query,
+        editedItem: this.editedItem,
+        editedIndex: this.editedIndex,
+        editedRow: this.editedRow,
+        inner: this.inner,
+        computedFields: this.computedFields,
+        newRecord: this.newRecord,
+        enterSubmits: this.isLoadGrid && this.enterConfirmsRow,
+        vertical: this.isLoadGrid && this.formMode === 'vertical'
+      };
+    },
+    rowFormListeners() {
+      return {
+        'open-popup': (link) => this.bubbleLink(this.editedItem, link),
+        'form-saved': this.formSaved,
+        'insert-row': this.commitGridRow,
+        closepopup: this.onRowFormClose,
+        valueEdit: this.setEdit
+      };
     },
     canInsert() {
       // biome-ignore lint/suspicious/noPrototypeBuiltins: <explanation>
@@ -811,11 +931,20 @@ export default {
       this.editValue = value;
       this.$events.fire('editValue', value);
     },
-    getRowSchema(index, cell) {
-      if (this.data[index].DT_RowAttr.attributes) {
-        return this.data[index].DT_RowAttr.attributes[cell];
+    getRowSchema(key, cell) {
+      return this.dataById.get(key)?.DT_RowAttr?.attributes?.[cell];
+    },
+    /** Valores planos de la fila `key` (`_id`), los que editan las celdas. */
+    rawRow(key) {
+      return this.rawById.get(key) || {};
+    },
+    /** Edición en celda: escribe en la copia plana y en `data` (fuente de verdad). */
+    setCell(key, name, value) {
+      this.rawRow(key)[name] = value;
+      const row = this.dataById.get(key);
+      if (row) {
+        setCellValue(row, name, value);
       }
-      [];
     },
     async showDialog() {
       let confim = true;
@@ -830,7 +959,38 @@ export default {
     },
     closeEdit() {
       this.edit = false;
+      this.editingId = null;
       this.setEdit(false);
+    },
+    /** Cancelar / cerrar el form: en modo inline vuelve a alta en vez de cerrar. */
+    onRowFormClose() {
+      if (this.inlineForm) {
+        this.startNewRow();
+        return;
+      }
+      this.closeEdit();
+    },
+    /** Form del renglón en alta, limpio y con el foco en el primer campo. */
+    startNewRow() {
+      this.insertRow();
+      this.$nextTick(() => this.$refs.histrixForm?.startRow?.());
+    },
+    /**
+     * Enter dentro del diálogo del renglón: el diálogo está teleportado fuera
+     * de la HistrixApp, así que el atajo global no lo ve. Lo resolvemos acá.
+     */
+    onDialogKeydown(event) {
+      if (!this.isLoadGrid || resolveAction(event, { enabled: this.histrixKeyboard() }) !== 'nextField') {
+        return;
+      }
+      if (this.focusNextField(event.target)) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    },
+    /** Enter en el form del renglón (lo llama HistrixApp desde el atajo). */
+    focusNextField(target) {
+      return this.$refs.histrixForm?.focusNextField?.(target) === true;
     },
     updatePagination(pagination) {
       // Server-side el cambio de página/orden llega por @request (onRequest).
@@ -862,7 +1022,29 @@ export default {
       this.pagination.rowsPerPage = rowsPerPage;
     },
     isSumColumn(col) {
-      return col.sum === true || col.sum === 'true';
+      return isSumColumn(col);
+    },
+    /** Checkbox de cabecera: columnas check editables de grid/liveGrid. */
+    isHeaderCheck(col) {
+      const field = this.schema.fields[col.name];
+      return Boolean(this.isGrid && field?.editable && resolveFieldKind(field) === 'check');
+    },
+    columnCheckState(name) {
+      return headerCheckState(this.data, name);
+    },
+    /** Marca o desmarca la columna; en liveGrid guarda (o marca sucias) las filas que cambiaron. */
+    toggleColumn(name, checked) {
+      const changed = setColumnChecked(this.data, name, checked);
+      if (this.screenType !== 'livegrid') {
+        return;
+      }
+      for (const row of changed) {
+        if (this.liveSaveRow) {
+          this.dirtyRows[row._id] = true;
+        } else {
+          this.updateLiveRow(this.getValuesFromRow(row));
+        }
+      }
     },
     /** Formato de una celda numérica del pie: el de la columna si es numérica. */
     formatCell(col, value) {
@@ -893,17 +1075,26 @@ export default {
       this.getData();
     },
     rowChange(row) {
-      if (this.screenType === 'livegrid') {
+      if (this.screenType !== 'livegrid') {
+        return;
+      }
+      if (this.liveSaveRow) {
+        this.dirtyRows[row._id] = true;
+      } else {
         this.updateLiveRow(row);
       }
     },
+    /** liveGrid con `saveRowButton`: guarda la fila con su botón. */
+    async saveLiveRow(key) {
+      if (await this.updateLiveRow(this.rawRow(key))) {
+        delete this.dirtyRows[key];
+      }
+    },
 
-    getFieldAttribute(rowIndex, name, attr) {
-      if (
-        this.data[rowIndex].DT_RowAttr?.attributes?.[name] &&
-        this.data[rowIndex].DT_RowAttr.attributes[name][attr] !== undefined
-      ) {
-        return this.data[rowIndex].DT_RowAttr.attributes[name][attr];
+    getFieldAttribute(key, name, attr) {
+      const value = this.dataById.get(key)?.DT_RowAttr?.attributes?.[name]?.[attr];
+      if (value !== undefined) {
+        return value;
       }
       return this.schema.fields[name][attr];
     },
@@ -923,51 +1114,40 @@ export default {
       });
     },
     insertRow() {
-      const item = JSON.parse(JSON.stringify(this.schema.values));
+      const item = JSON.parse(JSON.stringify(this.schema.values || {}));
 
-      // let item = this.defaultItem;
-      item._id = this.data.length;
+      item._id = nextRowId(this.data);
       item._ajax_ = false;
       // _ORDEN se numera cliente-side. En Histrix normal el servidor hace el +1
       // por cada renglón; acá el grid es cliente-side (los renglones se acumulan
       // y viajan juntos en el process), así que la librería asigna el correlativo.
       if (Object.prototype.hasOwnProperty.call(item, '_ORDEN')) {
-        item._ORDEN = this.nextOrden();
+        item._ORDEN = nextOrden(this.data);
       }
-      // this.data.push(item);
       this.editedIndex = item._id;
       this.editedItem = item;
-      // Fila nueva del grid: marcar newRecord para que el form muestre el botón
-      // Grabar y que saveForm() haga INSERT (POST a la instancia), no UPDATE.
+      this.editedRow = {};
+      this.editingId = null;
+      // Fila nueva del grid: el form muestra Grabar y confirma un alta.
       this.newRecord = true;
-      this.edit = true;
+      if (!this.inlineForm) {
+        this.edit = true;
+      }
     },
-    /**
-     * Siguiente valor de _ORDEN para un renglón nuevo del grid: máximo existente
-     * + 1. Se usa el máximo (no data.length) para que no se repita el número si
-     * se borró un renglón del medio (removeItem hace splice y deja huecos). La
-     * celda puede venir como valor plano o como objeto {value, _}.
-     */
-    nextOrden() {
-      const max = this.data.reduce((acc, row) => {
-        const cell = row._ORDEN;
-        const value = cell?.value ?? cell?._ ?? cell;
-        const n = Number.parseInt(value, 10);
-        return Number.isNaN(n) ? acc : Math.max(acc, n);
-      }, 0);
-      return max + 1;
-    },
+    /** Guarda una fila de liveGrid. Devuelve true si el backend la aceptó. */
     updateLiveRow(row) {
       const postData = {
         keys: this.getKeys(row),
         data: this.getValuesFromRow(row)
       };
-      this.updateAppData(this.xmlUrl(), postData)
+      return this.updateAppData(this.xmlUrl(), postData)
         .then((_response) => {
           this.notify.success(messages.rowSaved);
+          return true;
         })
         .catch((e) => {
           this.notify.error(e);
+          return false;
         });
     },
     formSaved(_row, index) {
@@ -986,20 +1166,38 @@ export default {
       // update:modelValue hacia el grid padre, que junta los renglones para que
       // viajen en el process del comprobante.
       const item = JSON.parse(JSON.stringify(row));
-      let idx = -1;
-      if (item._id !== undefined) {
-        idx = this.data.findIndex((r) => r._id === item._id);
+      if (item._id === undefined) {
+        item._id = editedIndex && typeof editedIndex === 'object' ? editedIndex._id : editedIndex;
       }
-      if (idx < 0 && editedIndex && typeof editedIndex === 'object') {
-        idx = this.data.indexOf(editedIndex);
+      if (item._id === undefined || item._id === null) {
+        item._id = nextRowId(this.data);
       }
-      if (idx >= 0) {
-        this.data.splice(idx, 1, item);
-      } else {
-        this.data.push(item);
+      const previous = this.data[rowIndexById(this.data, item._id)];
+      if (previous) {
+        // Modificación: conserva los atributos de la fila que no pasan por el form.
+        for (const attr of ['DT_RowAttr', '_ajax_']) {
+          if (previous[attr] !== undefined && item[attr] === undefined) {
+            item[attr] = previous[attr];
+          }
+        }
+      } else if (Object.prototype.hasOwnProperty.call(item, '_ORDEN')) {
+        // Alta: el _ORDEN se toma al confirmar, por si se borró algo mientras tanto.
+        item._ORDEN = nextOrden(this.data);
       }
-      this.edit = false;
+      const { isNew } = upsertRow(this.data, item);
       this.setEdit(false);
+      if (!this.canEditRows) {
+        this.edit = false;
+        return;
+      }
+      // Como el legacy: después de un alta el form queda listo para el
+      // siguiente renglón; después de una modificación vuelve a alta (inline)
+      // o se cierra (diálogo).
+      if (this.inlineForm || isNew) {
+        this.startNewRow();
+      } else {
+        this.closeEdit();
+      }
     },
     processData() {
       this.submitting = true;
@@ -1013,8 +1211,16 @@ export default {
           this.submitting = false;
         });
     },
-    selectRow(props) {
+    selectRow(props, event) {
       const { row } = props;
+      // Grilla de carga: click en el renglón lo carga en el form para
+      // modificarlo (H.llenoForm), salvo que se haga click en una celda editable.
+      if (this.canEditRows) {
+        if (!event?.target?.closest?.('input, textarea, select, button, .q-field, .q-checkbox')) {
+          this.editRow(row);
+        }
+        return;
+      }
       if (this.hasDetail(props)) {
         const rowAttr = row.DT_RowAttr;
         this.$emit('open-detail', rowAttr);
@@ -1053,8 +1259,11 @@ export default {
         rowclass = attr.DT_RowClass || '';
       }
 
-      if (this.hasDetail(props) || this.onlyConsulta) {
+      if (this.hasDetail(props) || this.onlyConsulta || this.canEditRows) {
         rowclass += ' cursor-pointer ';
+      }
+      if (this.canEditRows && this.editingId !== null && row._id === this.editingId) {
+        rowclass += ' histrix-row--editing ';
       }
 
       return rowclass;
@@ -1075,8 +1284,27 @@ export default {
       return `${this.path}?&_dt=table${filterQuery}`;
     },
     async deleteItem(item) {
+      if (this.canEditRows) {
+        this.deleteGridRow(item);
+        return;
+      }
       if (await this.notify.confirm(messages.confirmDelete)) {
         this.delete(item);
+      }
+    },
+    /** Borra un renglón de la grilla de carga (H.deleterow) y renumera _ORDEN. */
+    async deleteGridRow(row) {
+      if (!(await this.notify.confirm(messages.confirmDeleteRow))) {
+        return;
+      }
+      removeRow(this.data, row._id);
+      if (this.editingId === row._id) {
+        // Se borró el renglón que estaba en el form: vuelve a alta.
+        if (this.inlineForm) {
+          this.startNewRow();
+        } else {
+          this.closeEdit();
+        }
       }
     },
     getKeys(item) {
@@ -1121,17 +1349,22 @@ export default {
       return item2;
     },
     addItem() {
-      if (this.screenType === 'grid' || this.screenType === 'ing') {
-        this.insertRow();
-      } else {
-        this.editedIndex = -1;
-        this.newRecord = true;
-        this.editedItem = JSON.parse(JSON.stringify(this.schema.values));
+      if (this.isLoadGrid) {
+        this.startNewRow();
+        this.insertButton = true;
+        return;
       }
+      this.editedIndex = -1;
+      this.newRecord = true;
+      this.editedItem = JSON.parse(JSON.stringify(this.schema.values));
       this.insertButton = true;
       this.edit = true;
     },
     editRow(row) {
+      if (this.canEditRows) {
+        this.editGridRow(row);
+        return;
+      }
       // this.editedIndex = this.data.indexOf(row);
       this.editedIndex = row;
       this.newRecord = false;
@@ -1151,6 +1384,22 @@ export default {
       */
 
       this.edit = true;
+    },
+    /**
+     * Modificar un renglón confirmado (H.llenoForm): lo carga en el form; al
+     * confirmar, commitGridRow lo reemplaza por su `_id`.
+     */
+    editGridRow(row) {
+      this.editingId = row._id;
+      this.editedIndex = row._id;
+      this.editedRow = row;
+      this.newRecord = false;
+      this.editedItem = this.getValuesFromRow(row);
+      if (this.inlineForm) {
+        this.$nextTick(() => this.$refs.histrixForm?.startRow?.());
+      } else {
+        this.edit = true;
+      }
     },
     close() {
       setTimeout(() => {
@@ -1232,6 +1481,8 @@ export default {
       editedRow: {},
       editedIndex: undefined,
       newRecord: false,
+      editingId: null, // _id del renglón cargado en el form para modificar
+      dirtyRows: {}, // liveGrid con saveRowButton: filas editadas sin guardar
       defaultItem: {},
       dataContainer: null,
       data: [],
@@ -1251,6 +1502,11 @@ export default {
 };
 </script>
 <style>
+/* Renglón cargado en el form para modificar. */
+.histrix-row--editing td {
+  background: rgba(25, 118, 210, 0.08);
+}
+
 .histrix-cell {
   max-width: 200px;
 }

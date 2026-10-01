@@ -720,7 +720,7 @@ export default {
         );
         validations.modelValue = {
           ...validations.modelValue,
-          mask: helpers.withMessage('Valor incorrecto', helpers.regex(regex))
+          mask: helpers.withMessage(this.fieldSchema.errorMessage || 'Valor incorrecto', helpers.regex(regex))
         };
       }
       return validations;

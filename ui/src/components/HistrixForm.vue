@@ -244,7 +244,9 @@ export default {
     computedFields: Object,
     // Enter en el último campo graba el form. Por defecto no: evita
     // grabaciones accidentales en carga intensiva (comprobantes).
-    enterSubmits: { type: Boolean, default: false }
+    enterSubmits: { type: Boolean, default: false },
+    // Form de renglón `subtipo="vertical"`: un campo por línea.
+    vertical: { type: Boolean, default: false }
   },
   inject: {
     // Lo provee HistrixApp (prop `keyboard`). Fuera de una app, activo.
@@ -596,6 +598,9 @@ export default {
     },
 
     fieldClass(field) {
+      if (this.vertical) {
+        return 'col-12';
+      }
       let span = 0;
       if (field.colspan !== '') {
         span = field.colspan / 2;
@@ -690,7 +695,7 @@ export default {
      * el schema o, si no hay, el primer campo editable visible. No le saca el
      * foco al usuario si ya está escribiendo en otro lado.
      */
-    focusFirstField() {
+    focusFirstField(force = false) {
       if (!this.histrixKeyboard() || typeof document === 'undefined') {
         return;
       }
@@ -698,7 +703,7 @@ export default {
       this.$nextTick(() => {
         setTimeout(() => {
           const active = document.activeElement;
-          if (active && active !== document.body && isFocusCandidate(active)) {
+          if (!force && active && active !== document.body && isFocusCandidate(active)) {
             return;
           }
           const candidates = this.focusCandidates();
@@ -730,6 +735,17 @@ export default {
         this.onSubmit();
       }
       return true;
+    },
+    /**
+     * Renglón nuevo o cargado para modificar (grillas de carga): limpia los
+     * errores de la validación anterior, el aviso de cambios sin guardar y
+     * lleva el foco al primer campo. Lo llama HistrixTable.
+     */
+    startRow() {
+      this.v$.$reset();
+      this.valueEdit = false;
+      this.$emit('valueEdit', false);
+      this.focusFirstField(true);
     },
     async validateAndFocus() {
       const valid = await this.v$.$validate();
