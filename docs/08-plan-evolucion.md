@@ -59,7 +59,7 @@ Drop de Vue 2 + limpieza + infraestructura mínima:
 
 El activo del proyecto es el motor schema→pantalla, no la UI. Hoy están amasados en archivos de 1.300 líneas.
 
-- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, `useApi`) a módulos sin UI. Avance al 2026-10-01: 20 módulos puros en `ui/src/core/` con 295 tests (ver `06-estado-actual.md`).
+- Extraer el **schema engine** (interpretación de `schema.type`, `histrix_type`, `update_fields`, `useApi`) a módulos sin UI. Avance al 2026-10-01: 21 módulos puros en `ui/src/core/` con 310 tests (ver `06-estado-actual.md`).
 - `HistrixField` pasa de switch gigante a un **resolver** que delega en renderers chicos (un archivo por tipo de campo).
 - **Tests** contra schemas fixture capturados de la API real (varios clientes/bases, multi-tenant). Sin esto, cualquier evolución es a ciegas.
 - ~~Sacar el `eval()` de `processOperation`~~ — **hecho** (2026-06-08): `core/formula.js`, tokenizer + shunting-yard sin `eval`. Ver la corrección de abajo sobre su alcance.
