@@ -26,6 +26,7 @@
       :_hide-top="data.length < pagination.rowsPerPage"
       v-on:closepopup="closePopup"
       @update:pagination="updatePagination"
+      @request="onRequest"
     >
       <!-- TOP LEFT: FILTERS -->
       <template v-slot:top-left="">
@@ -72,7 +73,8 @@
               item-aligned
               emit-value
               map-options
-              v-model="pagination.rowsPerPage"
+              :model-value="pagination.rowsPerPage"
+              @update:model-value="setRowsPerPage"
               class="histrix-pagination__select"
             />
           </div>
@@ -385,20 +387,9 @@
             :class="col.classes + ' text-bold'"
             style="text-align:right;"
           >
-          <span v-if="columnTotals[col.name]">
-            <span v-if="!Number.isInteger(columnTotals[col.name]) ">
-              {{
-                columnTotals[col.name].toLocaleString('es-AR', {
-                  style: 'decimal',
-                  maximumFractionDigits: 2,
-                  minimumFractionDigits: 2,
-                })
-              }}
+            <span v-if="isSumColumn(col) && columnTotals[col.name]">
+              {{ formatCell(col, columnTotals[col.name]) }}
             </span>
-            <span v-if="Number.isInteger(columnTotals[col.name])">
-              {{columnTotals[col.name]}}
-            </span>
-          </span>
           </q-th>
         </q-tr>
       </template>
@@ -450,10 +441,12 @@
 </template>
 
 <script>
+import { buildFieldQueries } from '../core/fieldQueries.js';
 import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
 import { normalizeScreenType } from '../core/normalize.js';
+import { buildPageParams, parsePageResponse } from '../core/pagination.js';
 import useApi from '../services/histrixApi.js';
 import HistrixApp from './HistrixApp.vue';
 import HistrixCell from './HistrixCell.vue';
@@ -493,6 +486,12 @@ export default {
     // Paginación inicial desde el schema: deshabilitada → mostrar todo
     // (rowsPerPage 0); habilitada → arrancar con el page_size del backend.
     this.pagination.rowsPerPage = this.paginationConfig.enabled ? this.paginationConfig.pageSize : 0;
+    if (this.serverSide) {
+      // rowsNumber presente = q-table en modo server: no ordena ni pagina en
+      // memoria y emite @request ante cada cambio de página/orden.
+      this.pagination.rowsNumber = 0;
+      this.pagination.sortBy = null;
+    }
     /*
     if (this.modelValue) {
       this.data = JSON.parse(JSON.stringify(this.modelValue))
@@ -524,6 +523,7 @@ export default {
         // Cambió el XML (nueva pantalla): re-aplicamos la regla de preFetch del
         // nuevo schema. Reseteamos el "armado" para no arrastrar el de la anterior.
         this.autoFetchArmed = false;
+        this.pagination.page = 1;
         if (this.autoFetchAllowed) {
           this.getData();
         }
@@ -535,12 +535,14 @@ export default {
       // ya tiene su propio guard por contenido. Sólo dispara ante un cambio real.
       handler(newVal, oldVal) {
         if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
+          this.pagination.page = 1;
           this.getData();
         }
       }
     },
     fullQuery: {
       handler(_newVal, _oldVal) {
+        this.pagination.page = 1;
         if (this.autoFetchAllowed) {
           this.getData();
         }
@@ -569,6 +571,14 @@ export default {
       return { enabled: p.enabled !== false, pageSize, maxLimit };
     },
     /**
+     * Paginación contra el backend: sólo con `schema.pagination` habilitada y
+     * fuera de las grillas de carga (`ing`/`grid`/`liveGrid`), que acumulan
+     * renglones cliente-side y viajan juntos en el process.
+     */
+    serverSide() {
+      return this.paginationConfig.enabled && !this.isGrid && this.screenType !== 'ing';
+    },
+    /**
      * Opciones del selector "Por página": valores estándar + `page_size`,
      * descartando los que superen `max_limit` (que además se agrega como tope).
      * "Todos" (0) se mantiene siempre.
@@ -586,9 +596,20 @@ export default {
     },
     /**
      * Rango + total de registros para el paginador superior ("1-50 de 82").
-     * La data es client-side, por lo que el total es `data.length`.
+     * Server-side el total viene del backend (`pageTotal`; null = desconocido,
+     * se muestra "de 50+"); client-side es `data.length`.
      */
     paginationLabel() {
+      if (this.serverSide) {
+        const count = this.data.length;
+        if (count === 0) {
+          return '0 de 0';
+        }
+        const rpp = this.pagination.rowsPerPage;
+        const start = rpp ? (this.pagination.page - 1) * rpp + 1 : 1;
+        const end = start + count - 1;
+        return this.pageTotal === null ? `${start}-${end} de ${end}+` : `${start}-${end} de ${this.pageTotal}`;
+      }
       const total = this.data.length;
       if (total === 0) {
         return '0 de 0';
@@ -661,10 +682,15 @@ export default {
       });
     },
 
-    /** Calculates the bottom amount where field has sum = true */
+    /**
+     * Totales al pie de las columnas `suma="true"` sobre las filas cargadas (la
+     * página visible si la paginación es server-side: el backend no manda
+     * sumas). También se calculan las columnas origen de `computedTotals`.
+     */
     columnTotals() {
       const totals = {};
-      const columnsToSum = this.schema.columns.filter((col) => col.sum !== null);
+      const sources = Object.values(this.computedTotals || {});
+      const columnsToSum = this.schema.columns.filter((col) => this.isSumColumn(col) || sources.includes(col.name));
       for (const element of columnsToSum) {
         totals[element.name] = this.data.reduce((prev, cur) => {
           const field = cur[element.name];
@@ -672,7 +698,7 @@ export default {
           return prev + (Number.parseFloat(value) || 0);
         }, 0);
       }
-      Object.keys(this.computedTotals).map((key) => {
+      Object.keys(this.computedTotals || {}).map((key) => {
         const sourceName = this.computedTotals[key];
         this.$emit('computed-total', {
           target: key,
@@ -799,6 +825,10 @@ export default {
       this.setEdit(false);
     },
     updatePagination(pagination) {
+      // Server-side el cambio de página/orden llega por @request (onRequest).
+      if (this.serverSide) {
+        return;
+      }
       const descending = pagination.descending ? 'desc' : 'asc';
       this.localFilters._sortBy = `${pagination.sortBy}|${descending}`;
       // La q-table emite update:pagination al montar; con preFetch:false eso NO
@@ -808,84 +838,38 @@ export default {
       }
       this.getData();
     },
-    fieldQuerys(fieldname, row) {
-      const fieldQuerys = {};
-
-      const field = this.schema.fields[fieldname];
-      const rel = {};
-      /**
-       * Read initial container conditions
-       */
-      if (field.innerContainer) {
-        if (field.innerContainer.schema) {
-          Object.entries(field.innerContainer.schema.conditions).map((conditions) => {
-            Object.entries(conditions[1]).map((condition) => {
-              rel[conditions[0]] = condition[1].valor;
-            });
-          }, this);
-          fieldQuerys[field.name] = rel;
-        }
-
-        /**
-         * Read Relationships
-         */
-        if (field.innerContainer.relationship) {
-          Object.entries(field.innerContainer.relationship).map((relationship) => {
-            const localtarget = relationship[0];
-            const source = relationship[1];
-
-            rel[localtarget] = row[source.valor];
-          }, this);
-
-          fieldQuerys[field.name] = rel;
-        }
+    /** @request de la q-table (modo server): guarda página/orden y pide la página. */
+    onRequest({ pagination }) {
+      this.pagination = { ...this.pagination, ...pagination };
+      if (!this.autoFetchAllowed) {
+        return;
       }
-      /*
-      // updated field querys with (histrix actualiza)
-      Object.entries(this.updatedFields).map((fieldArray) => {
-        const field = fieldArray[1];
-
-        const relations = field.update_fields;
-        relations.map((relation) => {
-          // for inner field querys
-          const rel = {};
-          if (relation.parentField) {
-            const query = {};
-
-            query[relation.targetField] = row[field.name];
-            rel[relation.field] = query;
-
-            fieldQuerys[relation.parentField] = rel;
-
-            if (fieldQuerys[relation.field] == undefined) {
-              rel[relation.field] = query;
-              fieldQuerys[relation.parentField] = rel;
-            } else {
-              fieldQuerys[relation.field][relation.field] = query;
-            }
-          } else if (fieldQuerys[relation.field] == undefined) {
-            rel[relation.targetField] = row[field.name];
-            fieldQuerys[relation.field] = rel;
-          } else {
-            fieldQuerys[relation.field][relation.targetField] = row[field.name];
-          }
-        }, this);
-      }, this);
-
-      // add External Query data
-      Object.keys(this.query).map((key) => {
-        if (this.query[key]) {
-          const query = this.query[key];
-          if (typeof query === 'object' || typeof query === 'function') {
-            fieldQuerys[key] = query;
-          }
-        }
+      this.getData();
+    },
+    setRowsPerPage(rowsPerPage) {
+      if (this.serverSide) {
+        this.onRequest({ pagination: { page: 1, rowsPerPage } });
+        return;
+      }
+      this.pagination.rowsPerPage = rowsPerPage;
+    },
+    isSumColumn(col) {
+      return col.sum === true || col.sum === 'true';
+    },
+    /** Formato de una celda numérica del pie (hook hasta tener el renderer numérico). */
+    formatCell(_col, value) {
+      if (Number.isInteger(value)) {
+        return String(value);
+      }
+      return Number(value).toLocaleString('es-AR', {
+        style: 'decimal',
+        maximumFractionDigits: 2,
+        minimumFractionDigits: 2
       });
-
-      return fieldQuerys;
-      */
-
-      return rel;
+    },
+    /** Query del combo/ayuda de la celda, con los valores de su fila (incluye update_fields). */
+    fieldQuerys(fieldname, row) {
+      return buildFieldQueries(this.schema.fields, row, this.query)[fieldname] || {};
     },
     bubbleLink(row, link) {
       link.row = row;
@@ -1191,11 +1175,21 @@ export default {
     getData(index) {
       this.loading = true;
       const url = this.xmlUrl(this.fullQuery);
-      const filters = { ...this.query, ...this.localFilters };
+      const pageParams = this.serverSide ? buildPageParams(this.pagination, this.paginationConfig) : {};
+      const filters = { ...this.query, ...this.localFilters, ...pageParams };
 
       this.getAppData(url, filters)
         .then((response) => {
-          const { data } = response.data;
+          let { data } = response.data;
+          if (this.serverSide) {
+            const limit = pageParams.page_size || 0;
+            const offset = limit ? (pageParams.page - 1) * limit : 0;
+            const page = parsePageResponse(response.data, { offset, limit });
+            data = page.rows;
+            this.pageTotal = page.total;
+            // Total desconocido: una fila "fantasma" de más habilita "siguiente".
+            this.pagination.rowsNumber = page.total ?? offset + data.length + (page.hasMore ? 1 : 0);
+          }
           data.map((element) => {
             if (element.DT_RowAttr) {
               element._id = element.DT_RowAttr.o;
@@ -1241,6 +1235,7 @@ export default {
       data: [],
       openFilter: false,
       autoFetchArmed: false, // el usuario ya "armó" la carga (aplicó filtro, etc.)
+      pageTotal: null, // total de registros informado por el backend (server-side)
       searchStr: this.modelValueFilter,
       pagination: {
         sortBy: 'desc',
