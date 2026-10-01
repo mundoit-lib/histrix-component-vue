@@ -1,0 +1,2760 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Artículos",
+    "type": "crud",
+    "observation": "",
+    "can_insert": true,
+    "print": true,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "fotos/articulos",
+    "instance": "STK82425117",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [
+      {
+        "campo": "id_stkarticulo",
+        "operador": "like",
+        "label": "Código",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1781247077",
+        "grupo": "",
+        "modificador": "",
+        "id": "id_stkarticulo"
+      },
+      {
+        "campo": "nombre_articulo",
+        "operador": "like",
+        "label": "Nombre",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1759004856",
+        "grupo": "",
+        "modificador": "",
+        "id": "nombre_articulo",
+        "fullSearch": "true",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "rubro_filtro",
+        "operador": "=",
+        "label": "Rubro",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1361271713",
+        "grupo": "",
+        "modificador": "",
+        "id": "rubro_filtro"
+      },
+      {
+        "campo": "stksubrubro_id",
+        "operador": "=",
+        "label": "SubRubro",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F619324030",
+        "grupo": "",
+        "modificador": "",
+        "id": "stksubrubro_id",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "stkmarca_id",
+        "operador": "=",
+        "label": "Marca",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1431092949",
+        "grupo": "",
+        "modificador": "",
+        "id": "stkmarca_id"
+      },
+      {
+        "campo": "stkfamilia_id",
+        "operador": "=",
+        "label": "Familia",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1873059883",
+        "grupo": "",
+        "modificador": "",
+        "id": "stkfamilia_id",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "baja_articulo",
+        "operador": "=",
+        "label": "Estado",
+        "valor": 0,
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1472312367",
+        "grupo": "",
+        "modificador": "",
+        "id": "baja_articulo"
+      }
+    ],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "process",
+    "preFetch": true,
+    "pdf": false,
+    "detail": false,
+    "inline_detail": false,
+    "width": null,
+    "conditions": {
+      "baja_articulo": {
+        "=0": {
+          "OpLogico": " and ",
+          "operador": "=",
+          "valor": 0,
+          "premodificador": "",
+          "verdadero": null,
+          "falso": null,
+          "tipo": "int",
+          "grupo": "",
+          "fixed": false
+        }
+      }
+    },
+    "pagination": {
+      "enabled": true,
+      "page_size": 200,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 46,
+    "fields": {
+      "barcode": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "barcode",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "xml": "stkarticulo_label.xml",
+            "type": "link",
+            "icon": "ui-icon-print",
+            "text": "false",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "id_stkarticulo",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "id_stkarticulo": {
+        "class": "getDataByKey missinghelp ",
+        "size": "25",
+        "esClave": "true",
+        "required": "required",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Codigo",
+        "placeholder": "Upgmcg",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "id_stkarticulo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "codigo_barra": {
+        "class": " missinghelp ",
+        "size": "15",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Codigo de Barras",
+        "placeholder": "Bzuabt bm Nxmmkm",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "codigo_barra",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stkarticulo_foto": {
+        "class": " missinghelp ",
+        "size": "40",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Foto",
+        "placeholder": "Xksd",
+        "inputType": "file",
+        "histrix_type": "File",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkarticulo_foto",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "id_stkarticulo",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nombre_articulo": {
+        "class": " missinghelp ",
+        "size": "45",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre",
+        "placeholder": "Ukqqlb",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nombre_articulo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nombre_impresion": {
+        "class": " missinghelp ",
+        "size": "60",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre impresión",
+        "placeholder": "Hghlvc ofixunclj",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nombre_impresion",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "cantidad_stock": {
+        "class": "",
+        "size": "45",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Stock Actual",
+        "placeholder": "Vdmob Jxysgm",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "cantidad_stock",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "xml": "stockactual_art_qry.xml",
+            "dir": "/stock/qry/",
+            "type": "link",
+            "width": "85%",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "stkarticulo_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "unidad_uso_id": {
+        "class": "",
+        "size": "",
+        "required": "required",
+        "oblig": "true",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "U.M. *",
+        "placeholder": "Kqkobl ya Fjyqnq",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "unidad_uso_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_unidad": "Lavtoa"
+          },
+          "2": {
+            "nombre_unidad": "Ytmxf"
+          },
+          "3": {
+            "nombre_unidad": "Wvvk"
+          },
+          "4": {
+            "nombre_unidad": "Eymlq"
+          },
+          "5": {
+            "nombre_unidad": "Ibls"
+          },
+          "6": {
+            "nombre_unidad": "Szftk"
+          },
+          "7": {
+            "nombre_unidad": "Iae"
+          },
+          "8": {
+            "nombre_unidad": "Baelmr"
+          },
+          "9": {
+            "nombre_unidad": "Xxfu 36 Jafh"
+          },
+          "10": {
+            "nombre_unidad": "Iyvlwi"
+          },
+          "": ""
+        },
+        "options_sorted": {
+          " ": "",
+          " 4": {
+            "nombre_unidad": "Eymlq"
+          },
+          " 2": {
+            "nombre_unidad": "Ytmxf"
+          },
+          " 9": {
+            "nombre_unidad": "Xxfu 36 Jafh"
+          },
+          " 6": {
+            "nombre_unidad": "Szftk"
+          },
+          " 5": {
+            "nombre_unidad": "Ibls"
+          },
+          " 10": {
+            "nombre_unidad": "Iyvlwi"
+          },
+          " 7": {
+            "nombre_unidad": "Iae"
+          },
+          " 8": {
+            "nombre_unidad": "Baelmr"
+          },
+          " 3": {
+            "nombre_unidad": "Wvvk"
+          },
+          " 1": {
+            "nombre_unidad": "Lavtoa"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "unidad_qry.xml",
+          "dir": "/ayudas",
+          "uri": "unidad_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "categoria_articulo": {
+        "class": " missinghelp ",
+        "size": "",
+        "required": "required",
+        "oblig": "true",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Categoria *",
+        "placeholder": "Sxemcgfxj *",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "categoria_articulo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": "Eoc. nx kgezi",
+          "2": "Xle. ly Stojve",
+          "3": "Qhb. Ajqfbs / Yzxeb"
+        },
+        "options_sorted": {
+          " 3": "Qhb. Ajqfbs / Yzxeb",
+          " 1": "Eoc. nx kgezi",
+          " 2": "Xle. ly Stojve"
+        },
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 3,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stkmarca_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Marca",
+        "placeholder": "Elkic",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkmarca_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_marca": "DUXWRM"
+          },
+          "": ""
+        },
+        "options_sorted": {
+          " ": "",
+          " 1": {
+            "nombre_marca": "DUXWRM"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkmarca_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkmarca_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "stkfamilia_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Familia",
+        "placeholder": "Maoedvc",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkfamilia_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_familia": "* QUEHXTSMRU"
+          },
+          "2": {
+            "nombre_familia": "PGUQMKT"
+          },
+          "3": {
+            "nombre_familia": "NIRUVORRXUQC"
+          },
+          "7": {
+            "nombre_familia": "ZYDPJO"
+          },
+          "9": {
+            "nombre_familia": "KDKDVXGG"
+          },
+          "1001": {
+            "nombre_familia": "RAFYFQI"
+          },
+          "1002": {
+            "nombre_familia": "SSHTK"
+          },
+          "1003": {
+            "nombre_familia": "SQAPSB"
+          },
+          "1004": {
+            "nombre_familia": "PACADDYBVU"
+          },
+          "1005": {
+            "nombre_familia": "* GVRQIBBNZV"
+          },
+          "1006": {
+            "nombre_familia": "GFGQCIXPA"
+          },
+          "1101": {
+            "nombre_familia": "KWAPABT HKAZLBHXBSS"
+          },
+          "1102": {
+            "nombre_familia": "* RGJQOFQULCX"
+          },
+          "1201": {
+            "nombre_familia": "JPEHZIFV"
+          },
+          "1250": {
+            "nombre_familia": "CERFCKO B RJKLLY"
+          },
+          "1301": {
+            "nombre_familia": "* JOXU MUYTIWK"
+          },
+          "1401": {
+            "nombre_familia": "RFGXQWEB"
+          },
+          "1402": {
+            "nombre_familia": "QNPONFHC PAPIETJUYYCMIV"
+          },
+          "1403": {
+            "nombre_familia": "XCDUBLGN IXVMDNR HCKYTONDRML"
+          },
+          "1404": {
+            "nombre_familia": "AXJSLBIC AENOMPNYZ"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 1005": {
+            "nombre_familia": "* GVRQIBBNZV"
+          },
+          " 1": {
+            "nombre_familia": "* QUEHXTSMRU"
+          },
+          " 1102": {
+            "nombre_familia": "* RGJQOFQULCX"
+          },
+          " 1601": {
+            "nombre_familia": "* ILOJAEHX JFIZAJMVY"
+          },
+          " 1301": {
+            "nombre_familia": "* JOXU MUYTIWK"
+          },
+          " 9600": {
+            "nombre_familia": "* TC"
+          },
+          " 10100": {
+            "nombre_familia": "* ASKXFHYM DNTABZFY"
+          },
+          " 14008": {
+            "nombre_familia": "B NHMTMTE"
+          },
+          " 9500": {
+            "nombre_familia": "TXOGSHVFK"
+          },
+          " 14001": {
+            "nombre_familia": "TFWKELHJVY"
+          },
+          " 9701": {
+            "nombre_familia": "ESXC WP DBO"
+          },
+          " 1006": {
+            "nombre_familia": "GFGQCIXPA"
+          },
+          " 1001": {
+            "nombre_familia": "RAFYFQI"
+          },
+          " 1002": {
+            "nombre_familia": "SSHTK"
+          },
+          " 1501": {
+            "nombre_familia": "ZWFIRNSEFXE"
+          },
+          " 1700": {
+            "nombre_familia": "JPZCZEGIWRJU"
+          },
+          " 14002": {
+            "nombre_familia": "AVAIMGAOBKA"
+          },
+          " 3": {
+            "nombre_familia": "NIRUVORRXUQC"
+          },
+          " 9800": {
+            "nombre_familia": "KRN"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkfamilia_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkfamilia_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "stkrubro_id": {
+        "class": " missinghelp  refreshable",
+        "size": "",
+        "required": "required",
+        "oblig": "true",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Rubro *",
+        "placeholder": "Nedrt *",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;stksubrubro_id&quot;,&quot;targetField&quot;:&quot;stkrubro_id&quot;,&quot;xml&quot;:&quot;stkarticulos_crud.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stkrubro_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "9928": {
+            "nombre_rubro": "OVDUN"
+          },
+          "20002": {
+            "nombre_rubro": "KTSPFYCJBSDMY"
+          },
+          "20013": {
+            "nombre_rubro": "JPZCZEGIWRJU"
+          },
+          "200017": {
+            "nombre_rubro": "TFWKELHJVY"
+          },
+          "200018": {
+            "nombre_rubro": "YQXNSPGRD"
+          },
+          "200019": {
+            "nombre_rubro": "AVAIMGAOBKA"
+          },
+          "200020": {
+            "nombre_rubro": "FUTQCD"
+          },
+          "200021": {
+            "nombre_rubro": "GMXXHW QL JAR"
+          },
+          "200022": {
+            "nombre_rubro": "GFGQCIXPA"
+          },
+          "200024": {
+            "nombre_rubro": "WVMBCMBBMMY"
+          },
+          "200025": {
+            "nombre_rubro": "NIRUVORRXUQC"
+          },
+          "200026": {
+            "nombre_rubro": "KRN"
+          },
+          "200027": {
+            "nombre_rubro": "TQANBTSXBG"
+          },
+          "200028": {
+            "nombre_rubro": "CGVGXTOQFLFV"
+          },
+          "200029": {
+            "nombre_rubro": "TGJDDHUCDP"
+          },
+          "200030": {
+            "nombre_rubro": "PVFCNYC"
+          },
+          "200031": {
+            "nombre_rubro": "JPEHZIFV"
+          },
+          "200032": {
+            "nombre_rubro": "NQUTMKTC"
+          },
+          "200033": {
+            "nombre_rubro": "PRMPKNFNP"
+          },
+          "200034": {
+            "nombre_rubro": "QDBBYCBCAN"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 200017": {
+            "nombre_rubro": "TFWKELHJVY"
+          },
+          " 200021": {
+            "nombre_rubro": "GMXXHW QL JAR"
+          },
+          " 200022": {
+            "nombre_rubro": "GFGQCIXPA"
+          },
+          " 200355": {
+            "nombre_rubro": "DSSWNGIN V FECRKWSNRC"
+          },
+          " 200024": {
+            "nombre_rubro": "WVMBCMBBMMY"
+          },
+          " 20013": {
+            "nombre_rubro": "JPZCZEGIWRJU"
+          },
+          " 200019": {
+            "nombre_rubro": "AVAIMGAOBKA"
+          },
+          " 200025": {
+            "nombre_rubro": "NIRUVORRXUQC"
+          },
+          " 200026": {
+            "nombre_rubro": "KRN"
+          },
+          " 200027": {
+            "nombre_rubro": "TQANBTSXBG"
+          },
+          " 9928": {
+            "nombre_rubro": "OVDUN"
+          },
+          " 200028": {
+            "nombre_rubro": "CGVGXTOQFLFV"
+          },
+          " 200029": {
+            "nombre_rubro": "TGJDDHUCDP"
+          },
+          " 200030": {
+            "nombre_rubro": "PVFCNYC"
+          },
+          " 200031": {
+            "nombre_rubro": "JPEHZIFV"
+          },
+          " 200032": {
+            "nombre_rubro": "NQUTMKTC"
+          },
+          " 200033": {
+            "nombre_rubro": "PRMPKNFNP"
+          },
+          " 20002": {
+            "nombre_rubro": "KTSPFYCJBSDMY"
+          },
+          " 200356": {
+            "nombre_rubro": "DU NOPV"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "stksubrubro_id",
+            "targetField": "stkrubro_id",
+            "xml": "stkarticulos_crud.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkrubro_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkrubro_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "rubro_filtro": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Rubro",
+        "placeholder": "Fukyl",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "rubro_filtro",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "9928": {
+            "nombre_rubro": "OVDUN"
+          },
+          "20002": {
+            "nombre_rubro": "KTSPFYCJBSDMY"
+          },
+          "20013": {
+            "nombre_rubro": "JPZCZEGIWRJU"
+          },
+          "200017": {
+            "nombre_rubro": "TFWKELHJVY"
+          },
+          "200018": {
+            "nombre_rubro": "YQXNSPGRD"
+          },
+          "200019": {
+            "nombre_rubro": "AVAIMGAOBKA"
+          },
+          "200020": {
+            "nombre_rubro": "FUTQCD"
+          },
+          "200021": {
+            "nombre_rubro": "GMXXHW QL JAR"
+          },
+          "200022": {
+            "nombre_rubro": "GFGQCIXPA"
+          },
+          "200024": {
+            "nombre_rubro": "WVMBCMBBMMY"
+          },
+          "200025": {
+            "nombre_rubro": "NIRUVORRXUQC"
+          },
+          "200026": {
+            "nombre_rubro": "KRN"
+          },
+          "200027": {
+            "nombre_rubro": "TQANBTSXBG"
+          },
+          "200028": {
+            "nombre_rubro": "CGVGXTOQFLFV"
+          },
+          "200029": {
+            "nombre_rubro": "TGJDDHUCDP"
+          },
+          "200030": {
+            "nombre_rubro": "PVFCNYC"
+          },
+          "200031": {
+            "nombre_rubro": "JPEHZIFV"
+          },
+          "200032": {
+            "nombre_rubro": "NQUTMKTC"
+          },
+          "200033": {
+            "nombre_rubro": "PRMPKNFNP"
+          },
+          "200034": {
+            "nombre_rubro": "QDBBYCBCAN"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 200017": {
+            "nombre_rubro": "TFWKELHJVY"
+          },
+          " 200021": {
+            "nombre_rubro": "GMXXHW QL JAR"
+          },
+          " 200022": {
+            "nombre_rubro": "GFGQCIXPA"
+          },
+          " 200355": {
+            "nombre_rubro": "DSSWNGIN V FECRKWSNRC"
+          },
+          " 200024": {
+            "nombre_rubro": "WVMBCMBBMMY"
+          },
+          " 20013": {
+            "nombre_rubro": "JPZCZEGIWRJU"
+          },
+          " 200019": {
+            "nombre_rubro": "AVAIMGAOBKA"
+          },
+          " 200025": {
+            "nombre_rubro": "NIRUVORRXUQC"
+          },
+          " 200026": {
+            "nombre_rubro": "KRN"
+          },
+          " 200027": {
+            "nombre_rubro": "TQANBTSXBG"
+          },
+          " 9928": {
+            "nombre_rubro": "OVDUN"
+          },
+          " 200028": {
+            "nombre_rubro": "CGVGXTOQFLFV"
+          },
+          " 200029": {
+            "nombre_rubro": "TGJDDHUCDP"
+          },
+          " 200030": {
+            "nombre_rubro": "PVFCNYC"
+          },
+          " 200031": {
+            "nombre_rubro": "JPEHZIFV"
+          },
+          " 200032": {
+            "nombre_rubro": "NQUTMKTC"
+          },
+          " 200033": {
+            "nombre_rubro": "PRMPKNFNP"
+          },
+          " 20002": {
+            "nombre_rubro": "KTSPFYCJBSDMY"
+          },
+          " 200356": {
+            "nombre_rubro": "DU NOPV"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stkrubro_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stkrubro_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "stksubrubro_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "SubRubro",
+        "placeholder": "VvcCpgsi",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stksubrubro_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stksubrubro_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stksubrubro_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "item_presup": {
+        "class": "",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Item Pres.",
+        "placeholder": "Tlyt Pqpqpeveoxoscp",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "item_presup",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion": "Casffwaqds frwuza"
+          },
+          "2": {
+            "descripcion": "Mrnjqleofk Jjwyyfpyygebt"
+          },
+          "3": {
+            "descripcion": "Pwnpjghx Kqmsku"
+          },
+          "4": {
+            "descripcion": "Sqibedax Rcnrncurfa"
+          },
+          "5": {
+            "descripcion": "Hcerywrn Idosmvhyjt"
+          },
+          "6": {
+            "descripcion": "Szqygmoz Pebbzum"
+          },
+          "7": {
+            "descripcion": "Noeqoikp twyzoydea"
+          },
+          "8": {
+            "descripcion": "KRN"
+          },
+          "10": {
+            "descripcion": "Hmsbpcupo Lavpjcb"
+          },
+          "11": {
+            "descripcion": "Vtjwfomatdi"
+          },
+          "12": {
+            "descripcion": "Nzaisrjd lvzcvrfk qbiktax"
+          },
+          "14": {
+            "descripcion": "Lfut rg Kczi Axrqzdu Ltjtzm"
+          },
+          "15": {
+            "descripcion": "Qqvm fb Npsq Qnopwnhei Qpxlnu"
+          },
+          "16": {
+            "descripcion": "Fzbh we Mczs Gasrujr Qqhh"
+          },
+          "99": {
+            "descripcion": "Cio csrombd"
+          }
+        },
+        "options_sorted": {
+          " 11": {
+            "descripcion": "Vtjwfomatdi"
+          },
+          " 8": {
+            "descripcion": "KRN"
+          },
+          " 16": {
+            "descripcion": "Fzbh we Mczs Gasrujr Qqhh"
+          },
+          " 14": {
+            "descripcion": "Lfut rg Kczi Axrqzdu Ltjtzm"
+          },
+          " 15": {
+            "descripcion": "Qqvm fb Npsq Qnopwnhei Qpxlnu"
+          },
+          " 7": {
+            "descripcion": "Noeqoikp twyzoydea"
+          },
+          " 3": {
+            "descripcion": "Pwnpjghx Kqmsku"
+          },
+          " 4": {
+            "descripcion": "Sqibedax Rcnrncurfa"
+          },
+          " 6": {
+            "descripcion": "Szqygmoz Pebbzum"
+          },
+          " 2": {
+            "descripcion": "Mrnjqleofk Jjwyyfpyygebt"
+          },
+          " 1": {
+            "descripcion": "Casffwaqds frwuza"
+          },
+          " 12": {
+            "descripcion": "Nzaisrjd lvzcvrfk qbiktax"
+          },
+          " 5": {
+            "descripcion": "Hcerywrn Idosmvhyjt"
+          },
+          " 10": {
+            "descripcion": "Hmsbpcupo Lavpjcb"
+          },
+          " 99": {
+            "descripcion": "Cio csrombd"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 11,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml536570881",
+          "dir": "stock/man",
+          "uri": "xml536570881&dir=stock/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "baja_articulo": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Estado Art.",
+        "placeholder": "Rhtqlf Taa.",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "baja_articulo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": ["Gsttmmxwsn", "Woitxqxfaprbr"],
+        "options_sorted": {
+          " 0": "Gsttmmxwsn",
+          " 1": "Woitxqxfaprbr"
+        },
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 0,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "no_listar": {
+        "class": "",
+        "size": "1",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Oculto",
+        "placeholder": "Qq jcoiusn mz kprchjs qp npmkb fijzotcqq",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "no_listar",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "no_web": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "No WEB",
+        "placeholder": "Xo IWM",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "no_web",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "separator_costos": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "label_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "hidden_column": true,
+        "name": "separator_costos",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "9",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "precio_costo": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Costo",
+        "placeholder": "Hivhra bp Cgwtl",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "precio_costo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "tipocalculo_costo": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Tipo de Calculo Costo",
+        "placeholder": "Nbmx iw Yggzblj Qqgcq",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "tipocalculo_costo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": ["Auntnfaqxz", "Dwrwqd"],
+        "options_sorted": {
+          " 0": "Auntnfaqxz",
+          " 1": "Dwrwqd"
+        },
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 0,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "precio_origen": {
+        "class": "",
+        "size": "8",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Costo Original",
+        "placeholder": "Frfqao pv Hcako wv gbepmn kxspjcnk",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "precio_origen",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "genmoneda_origen_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Moneda Costo",
+        "placeholder": "Prfkqy Pahmi",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "genmoneda_origen_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          "2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          " 2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "moneda_qry.xml",
+          "dir": "/ayudas",
+          "uri": "moneda_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "porc_bonificacion_max": {
+        "class": " missinghelp ",
+        "size": "8",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Porc. Bonif. Máx. Permitida",
+        "placeholder": "Bprh. Elbyd. Zmb. Oouwjstid",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "porc_bonificacion_max",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "separator_fiscal": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "label_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "hidden_column": true,
+        "name": "separator_fiscal",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "9",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "gravado": {
+        "class": "",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Gravado",
+        "placeholder": "Cmgucz or vw Ctzrptrn ox muyygaw bfy PXC",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "gravado",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "ivaregimen_id": {
+        "class": "",
+        "size": "",
+        "required": "required",
+        "oblig": "true",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": " *",
+        "placeholder": "Hcocraovkn fz wuqtvij gr xmr hhq rtjqlhco",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "ivaregimen_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_iva_regimen": "Giwuql bi hcnhhd - 34.79%"
+          },
+          "2": {
+            "nombre_iva_regimen": "Tmmmgwepojskk - 82.82%"
+          },
+          "3": {
+            "nombre_iva_regimen": "Vlxrdjbolg l Mfyemxpkj - 31.62%"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "nombre_iva_regimen": "Giwuql bi hcnhhd - 34.79%"
+          },
+          " 2": {
+            "nombre_iva_regimen": "Tmmmgwepojskk - 82.82%"
+          },
+          " 3": {
+            "nombre_iva_regimen": "Vlxrdjbolg l Mfyemxpkj - 31.62%"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "ivaregimen_qry.xml",
+          "dir": "/ayudas",
+          "uri": "ivaregimen_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "genmoneda_venta_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Moneda Venta",
+        "placeholder": "Zmqjbq Yyohy",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display: none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "genmoneda_venta_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          "2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          " 2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "moneda_qry.xml",
+          "dir": "/ayudas",
+          "uri": "moneda_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "separator_stock": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "label_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "hidden_column": true,
+        "name": "separator_stock",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "9",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stock_minimo": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Mínimo",
+        "placeholder": "Sqgtz N&ipghfb;unmg",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stock_minimo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stock_maximo": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Máximo",
+        "placeholder": "Xexyj A&nbmmtw;evcj",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stock_maximo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stock_reposicion": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Reposición",
+        "placeholder": "Hmuhp ik Efkodsln&plobsk;y",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stock_reposicion",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "separator_depositos": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "label_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "hidden_column": true,
+        "name": "separator_depositos",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "9",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stksector_id": {
+        "class": "",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Sector",
+        "placeholder": "Ymoheblepo ux vvmetr aqcul ft gvhggkgym oh Eblepoux",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stksector_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "2": {
+            "nombre_sector": "Ttzhju xlis Zmip Fif"
+          },
+          "3": {
+            "nombre_sector": "Wemoqr Oedl Jjqa Tdlqn"
+          },
+          "4": {
+            "nombre_sector": "Dnryql Rxuw Fuaa Ojhjv"
+          },
+          "5": {
+            "nombre_sector": "Lxgont Wysf Xgql Nwq"
+          },
+          "6": {
+            "nombre_sector": "B NHMTMTE"
+          },
+          "7": {
+            "nombre_sector": "WZGN 7"
+          },
+          "8": {
+            "nombre_sector": "QEDPFY RCOPCCYRD"
+          },
+          "9": {
+            "nombre_sector": "ACBQ 3"
+          },
+          "10": {
+            "nombre_sector": "DTKD 1"
+          },
+          "11": {
+            "nombre_sector": "BRGS 7"
+          },
+          "12": {
+            "nombre_sector": "YFWU GRCEBXC"
+          },
+          "13": {
+            "nombre_sector": "IKQAVO VNXWFSZW"
+          },
+          "14": {
+            "nombre_sector": "VIWCLRS"
+          },
+          "": ""
+        },
+        "options_sorted": {
+          " ": "",
+          " 6": {
+            "nombre_sector": "B NHMTMTE"
+          },
+          " 9": {
+            "nombre_sector": "ACBQ 3"
+          },
+          " 7": {
+            "nombre_sector": "WZGN 7"
+          },
+          " 11": {
+            "nombre_sector": "BRGS 7"
+          },
+          " 10": {
+            "nombre_sector": "DTKD 1"
+          },
+          " 12": {
+            "nombre_sector": "YFWU GRCEBXC"
+          },
+          " 14": {
+            "nombre_sector": "VIWCLRS"
+          },
+          " 4": {
+            "nombre_sector": "Dnryql Rxuw Fuaa Ojhjv"
+          },
+          " 5": {
+            "nombre_sector": "Lxgont Wysf Xgql Nwq"
+          },
+          " 3": {
+            "nombre_sector": "Wemoqr Oedl Jjqa Tdlqn"
+          },
+          " 2": {
+            "nombre_sector": "Ttzhju xlis Zmip Fif"
+          },
+          " 8": {
+            "nombre_sector": "QEDPFY RCOPCCYRD"
+          },
+          " 13": {
+            "nombre_sector": "IKQAVO VNXWFSZW"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "stksector_qry.xml",
+          "dir": "/ayudas",
+          "uri": "stksector_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "pasillo": {
+        "class": " missinghelp ",
+        "size": "25",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Pasillo",
+        "placeholder": "Lgofpjv",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "pasillo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "bloque": {
+        "class": " missinghelp ",
+        "size": "25",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Tarima",
+        "placeholder": "Rpkelj",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "bloque",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "locacion": {
+        "class": " missinghelp ",
+        "size": "25",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Locación",
+        "placeholder": "Edbmlkxj",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "locacion",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "separator_contable": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display: none;",
+        "form_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "label_style": "background-color: #c9c9c9;height:1px;font-size:1px;",
+        "hidden_column": true,
+        "name": "separator_contable",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "9",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "cuentadebe_id": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cta.Ctb.Venta",
+        "placeholder": "Drsabh Sdyrgd",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "cuentadebe_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "id_cuenta",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpContainer": {
+          "xml": "cuentas_habilitadas_qry.xml",
+          "dir": "/ayudas",
+          "help_field": "cuentadebe_id",
+          "parent": {
+            "xml": "stkarticulos_crud.xml",
+            "dir": "stock/man"
+          },
+          "context_fields": []
+        }
+      },
+      "ctbcuentacps_id": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cta.Ctb.Compra",
+        "placeholder": "Kcecpd Olyhubo",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "ctbcuentacps_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "id_cuenta",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpContainer": {
+          "xml": "cuentas_habilitadas_qry.xml",
+          "dir": "/ayudas",
+          "help_field": "ctbcuentacps_id",
+          "parent": {
+            "xml": "stkarticulos_crud.xml",
+            "dir": "stock/man"
+          },
+          "context_fields": []
+        }
+      },
+      "ctb_stock_cps_id": {
+        "class": "",
+        "size": "15",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cta.Ctb.Stock",
+        "placeholder": "Gomqmk Qddbq",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "ctb_stock_cps_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "id_cuenta",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpContainer": {
+          "xml": "cuentas_habilitadas_qry.xml",
+          "dir": "/ayudas",
+          "help_field": "ctb_stock_cps_id",
+          "parent": {
+            "xml": "stkarticulos_crud.xml",
+            "dir": "stock/man"
+          },
+          "context_fields": []
+        }
+      },
+      "oculta_promociones": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": true,
+        "name": "oculta_promociones",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "Composicion": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Composicion",
+        "placeholder": "Hxkufslykdz",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "Composicion",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "type": "link",
+            "xml": "stk_bom_add.xml",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "stkarticulopadre_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "Precios": {
+        "class": "",
+        "size": "5",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Precios",
+        "placeholder": "Pmkzamt",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "Precios",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "type": "link",
+            "xml": "stkarticulo_precios.xml",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "stkarticulo_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "Historial": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Historial",
+        "placeholder": "Kbgicgffh",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "Historial",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "type": "link",
+            "xml": "stkarticulos_historial_qry.xml",
+            "dir": "/stock/qry/",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "record_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "proveedores": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Proveedores",
+        "placeholder": "Qgurrpaothq",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "proveedores",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "type": "link",
+            "xml": "stkarticulo_proveedor.xml",
+            "icon": "ui-icon-truck",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stkarticulo",
+                "target": "stkarticulo_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      }
+    },
+    "values": {
+      "barcode": "",
+      "id_stkarticulo": "",
+      "codigo_barra": "",
+      "stkarticulo_foto": "",
+      "nombre_articulo": "",
+      "nombre_impresion": "",
+      "cantidad_stock": "",
+      "unidad_uso_id": "",
+      "categoria_articulo": "",
+      "stkmarca_id": "",
+      "stkfamilia_id": "",
+      "stkrubro_id": "",
+      "rubro_filtro": "",
+      "stksubrubro_id": "",
+      "item_presup": "",
+      "baja_articulo": 0,
+      "no_listar": "",
+      "no_web": "",
+      "separator_costos": "",
+      "precio_costo": "",
+      "tipocalculo_costo": "",
+      "precio_origen": "",
+      "genmoneda_origen_id": "",
+      "porc_bonificacion_max": "",
+      "separator_fiscal": "",
+      "gravado": "",
+      "ivaregimen_id": "1",
+      "genmoneda_venta_id": "",
+      "separator_stock": "",
+      "stock_minimo": "",
+      "stock_maximo": "",
+      "stock_reposicion": "",
+      "separator_depositos": "",
+      "stksector_id": "",
+      "pasillo": "",
+      "bloque": "",
+      "locacion": "",
+      "separator_contable": "",
+      "cuentadebe_id": "",
+      "ctbcuentacps_id": "",
+      "ctb_stock_cps_id": "",
+      "oculta_promociones": "1",
+      "Composicion": "'Jvkzkwtelgk'",
+      "Precios": "$",
+      "Historial": "'Ifppqecsa'",
+      "proveedores": ""
+    }
+  }
+}

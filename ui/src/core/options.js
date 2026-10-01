@@ -143,7 +143,7 @@ export function mapArrayOptions(options, helperPath) {
  * `helperPath`, `data` es `option[1] ?? {}`; si no, `data` es la entry completa
  * `[key, value]` y se agrega `description = label`.
  *
- * @param {Object} options - diccionario { key: label }.
+ * @param {import('../../types').HistrixOptions} options - diccionario { key: label } (`options` / `options_sorted`).
  * @param {boolean} helperPath - truthiness del computed `helperPath`.
  * @returns {{ data: Array<Object>, flat: boolean }}
  */

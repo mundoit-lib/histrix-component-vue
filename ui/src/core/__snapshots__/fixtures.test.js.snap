@@ -1,0 +1,1824 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`fixture 'abm' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "id_presup_motivo": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "motivo": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "tipo_motivo_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "clientes/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 8,
+    },
+  },
+  "keys": [
+    "id_presup_motivo",
+  ],
+  "screenKind": "table",
+  "type": "abm",
+  "visibleColumns": [
+    "motivo",
+    "tipo_motivo_id",
+  ],
+}
+`;
+
+exports[`fixture 'abm-mini' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "id_stklista": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "moneda_id": {
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/moneda_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "moneda_idvta": {
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/moneda_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "stklista_nombre": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "ubicaciones": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/stklista_ubicacion.xml",
+    },
+    "vencimiento_vigencia": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_stklista",
+  ],
+  "screenKind": "table",
+  "type": "abm-mini",
+  "visibleColumns": [
+    "id_stklista",
+    "stklista_nombre",
+    "vencimiento_vigencia",
+    "ubicaciones",
+  ],
+}
+`;
+
+exports[`fixture 'arbol' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "comportamiento": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Tinyint",
+      "kind": "q-select",
+      "options": 3,
+    },
+    "ctbcentro_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "cuenta_patrimonial_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 3,
+    },
+    "cuenta_superior_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Varchar",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "esmadre": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "estado_resultado_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 14,
+    },
+    "genmoneda_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "habilitada": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "id_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "indice": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "porc_s_venta": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "resultado": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "tipo_centro": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 10,
+      "update_fields": 1,
+    },
+    "tipo_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "contabilidad/man/ctbtipos_crud.xml",
+      },
+      "kind": "q-select",
+      "options": 6,
+      "update_fields": 1,
+    },
+    "tipo_saldo": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Tinyint",
+      "kind": "q-select",
+      "options": 2,
+    },
+    "valor_min": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_cuenta",
+  ],
+  "screenKind": "tree",
+  "type": "arbol",
+  "visibleColumns": [
+    "id_cuenta",
+    "nombre_cuenta",
+    "tipo_centro",
+    "ctbcentro_id",
+    "habilitada",
+  ],
+}
+`;
+
+exports[`fixture 'ayuda' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "ctbnombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "habilitada": {
+      "histrix_type": "Tinyint",
+      "kind": "q-input",
+    },
+    "id_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "tipo_id": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_cuenta",
+  ],
+  "screenKind": "table",
+  "type": "consulta",
+  "visibleColumns": [
+    "id_cuenta",
+    "ctbnombre_cuenta",
+  ],
+}
+`;
+
+exports[`fixture 'calendar' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "acreditacion_valor": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "carbanco_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/carbanco_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "carplaza_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/carplaza_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "cuenta_valor": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "cuit_valor": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "fecha_calendario": {
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "fecha_cobro": {
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "fecha_valor": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "id_carvalor": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "importe_valor": {
+      "editable": true,
+      "histrix_type": "CustomNumeric",
+      "kind": "q-input",
+    },
+    "moneda_id": {
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/monedas_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 3,
+    },
+    "nro_valor": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "propio": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "regcuenta_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/regcuenta_cmb.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "subject": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "tipo_movimiento_egreso": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "tipo_movimiento_ingreso": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "titular_valor": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "vencimiento_valor": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_carvalor",
+  ],
+  "screenKind": "calendar",
+  "type": "calendar",
+  "visibleColumns": [
+    "carbanco_id",
+    "carplaza_id",
+    "fecha_valor",
+    "acreditacion_valor",
+    "vencimiento_valor",
+    "nro_valor",
+    "subject",
+    "regcuenta_id",
+    "cuenta_valor",
+    "cuit_valor",
+    "titular_valor",
+    "importe_valor",
+  ],
+}
+`;
+
+exports[`fixture 'chart' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "cantidad_cotizada": {
+      "editable": true,
+      "histrix_type": "Numeric",
+      "kind": "q-input",
+    },
+    "cantidad_no_cotizada": {
+      "editable": true,
+      "histrix_type": "Numeric",
+      "kind": "q-input",
+    },
+    "estado": {
+      "editable": true,
+      "histrix_type": "Text",
+      "kind": "q-input",
+    },
+  },
+  "keys": [],
+  "screenKind": "chart",
+  "type": "chart",
+  "visibleColumns": [
+    "estado",
+    "cantidad_no_cotizada",
+    "cantidad_cotizada",
+  ],
+}
+`;
+
+exports[`fixture 'consulta-filtros' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "Orden_compa": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/compras/qry/ordencompra_imp.xml",
+    },
+    "adjuntos": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/cps_mov_adjuntos.xml",
+    },
+    "btn_trazabilidad": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/compras/qry/oc_trazabilidad_qry.xml",
+    },
+    "cantidad_compra": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "cpsdetalle": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "cpsestado_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Varchar",
+      "innerContainer": {
+        "params": {},
+        "path": "compras/qry/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 6,
+    },
+    "cpsfecha": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "estado_autorizacion": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/compras/qry/oc_autorizacion_detalle_qry.xml",
+    },
+    "fecha_requerido": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "id_cpsmovimiento": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "id_cpsmovimiento2": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "importe_total2": {
+      "editable": true,
+      "histrix_type": "CustomNumeric",
+      "kind": "q-input",
+    },
+    "mov_pen2": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "obs2": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "innerContainer": {
+        "params": {},
+        "path": "compras/qry/remitos_x_oc.xml",
+      },
+      "kind": "object",
+      "renderHelper": true,
+    },
+    "observaciones": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "pendiente_compra": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "regcuenta_id": {
+      "editable": true,
+      "helpContainer": "compras/qry/xml1938551576",
+      "histrix_type": "Mediumint",
+      "kind": "q-input",
+    },
+    "stkarticulo_id": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "subsistema_id": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "unidad_uso_id_exp3": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "compras/qry/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 11,
+    },
+  },
+  "keys": [
+    "id_cpsmovimiento",
+    "stkarticulo_id",
+  ],
+  "screenKind": "table",
+  "type": "consulta",
+  "visibleColumns": [
+    "Orden_compa",
+    "btn_trazabilidad",
+    "cpsfecha",
+    "regcuenta_id",
+    "nombre_cuenta",
+    "cpsestado_id",
+    "estado_autorizacion",
+    "stkarticulo_id",
+    "cpsdetalle",
+    "importe_total2",
+    "observaciones",
+    "obs2",
+    "fecha_requerido",
+    "cantidad_compra",
+    "mov_pen2",
+    "pendiente_compra",
+    "unidad_uso_id_exp3",
+    "adjuntos",
+  ],
+}
+`;
+
+exports[`fixture 'consulta-paginada' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "cajmovimiento_id": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "codigo_serie": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "cpsmovimiento_id": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "link_caj": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/caja/proc/del/cajmovimiento_ficha.xml",
+    },
+    "link_cps": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/compras/qry/ordencompra_imp.xml",
+    },
+    "nombre_articulo": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "stkarticulo_id": {
+      "editable": true,
+      "helpContainer": "/ayudas/stkarticulo_qry.xml",
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [],
+  "screenKind": "table",
+  "type": "consulta",
+  "visibleColumns": [
+    "stkarticulo_id",
+    "nombre_articulo",
+    "codigo_serie",
+    "link_cps",
+    "link_caj",
+  ],
+}
+`;
+
+exports[`fixture 'crud' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "Composicion": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/fotos/stk_bom_add.xml",
+    },
+    "Historial": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/stock/qry/stkarticulos_historial_qry.xml",
+    },
+    "Precios": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/fotos/stkarticulo_precios.xml",
+    },
+    "baja_articulo": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "kind": "q-select",
+      "options": 2,
+    },
+    "barcode": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/fotos/stkarticulo_label.xml",
+    },
+    "bloque": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "cantidad_stock": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/stock/qry/stockactual_art_qry.xml",
+    },
+    "categoria_articulo": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "kind": "q-select",
+      "options": 3,
+    },
+    "codigo_barra": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "ctb_stock_cps_id": {
+      "editable": true,
+      "helpContainer": "/ayudas/cuentas_habilitadas_qry.xml",
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "ctbcuentacps_id": {
+      "editable": true,
+      "helpContainer": "/ayudas/cuentas_habilitadas_qry.xml",
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "cuentadebe_id": {
+      "editable": true,
+      "helpContainer": "/ayudas/cuentas_habilitadas_qry.xml",
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "genmoneda_origen_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/moneda_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "genmoneda_venta_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/moneda_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "gravado": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "id_stkarticulo": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "item_presup": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/man/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 15,
+    },
+    "ivaregimen_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/ivaregimen_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 3,
+    },
+    "locacion": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "no_listar": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "no_web": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "nombre_articulo": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "nombre_impresion": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "oculta_promociones": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "pasillo": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "porc_bonificacion_max": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "precio_costo": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "precio_origen": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "proveedores": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/fotos/stkarticulo_proveedor.xml",
+    },
+    "rubro_filtro": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkrubro_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "separator_contable": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "separator_costos": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "separator_depositos": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "separator_fiscal": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "separator_stock": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "stkarticulo_foto": {
+      "editable": true,
+      "histrix_type": "File",
+      "kind": "q-file",
+    },
+    "stkfamilia_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkfamilia_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "stkmarca_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkmarca_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 2,
+    },
+    "stkrubro_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkrubro_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+      "update_fields": 1,
+    },
+    "stksector_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stksector_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 14,
+    },
+    "stksubrubro_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stksubrubro_qry.xml",
+      },
+      "kind": "q-select",
+    },
+    "stock_maximo": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "stock_minimo": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "stock_reposicion": {
+      "editable": true,
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "tipocalculo_costo": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "kind": "q-select",
+      "options": 2,
+    },
+    "unidad_uso_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/unidad_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 11,
+    },
+  },
+  "keys": [
+    "id_stkarticulo",
+  ],
+  "screenKind": "table",
+  "type": "crud",
+  "visibleColumns": [
+    "barcode",
+    "id_stkarticulo",
+    "stkarticulo_foto",
+    "nombre_articulo",
+    "cantidad_stock",
+    "unidad_uso_id",
+    "categoria_articulo",
+    "stkmarca_id",
+    "stkfamilia_id",
+    "stkrubro_id",
+    "Composicion",
+    "Precios",
+    "Historial",
+    "proveedores",
+  ],
+}
+`;
+
+exports[`fixture 'crud-helper-link' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "descripcion": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "id_ctb_indice": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "valores": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "link": "/coeficiente_indice_crud.xml",
+    },
+  },
+  "keys": [
+    "id_ctb_indice",
+  ],
+  "screenKind": "table",
+  "type": "crud",
+  "visibleColumns": [
+    "id_ctb_indice",
+    "descripcion",
+    "valores",
+  ],
+}
+`;
+
+exports[`fixture 'crud-update-fields' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "domicilio_sucursal": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "email_sucursal": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "foto_sucursal": {
+      "editable": true,
+      "histrix_type": "File",
+      "kind": "q-file",
+    },
+    "genlocalidad_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/localidad_qry.xml",
+      },
+      "kind": "q-select",
+    },
+    "genprovincia_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/provincia_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+      "update_fields": 1,
+    },
+    "id_gensucursal": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "nombre_sucursal": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "referencia_sucursal": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "telefono_sucursal": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_gensucursal",
+  ],
+  "screenKind": "table",
+  "type": "crud",
+  "visibleColumns": [
+    "nombre_sucursal",
+    "domicilio_sucursal",
+    "genprovincia_id",
+    "genlocalidad_id",
+    "telefono_sucursal",
+    "email_sucursal",
+    "foto_sucursal",
+  ],
+}
+`;
+
+exports[`fixture 'dashboard' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {},
+  "keys": [],
+  "screenKind": "dashboard",
+  "type": "dashboard",
+  "visibleColumns": [],
+}
+`;
+
+exports[`fixture 'ficha-prefetch' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "fcs_grid": {
+      "editable": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "proveedores/imputacion/imputacion_rec_fcs_grid.xml",
+      },
+      "kind": "object",
+      "renderHelper": true,
+    },
+    "id_regcuenta": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "proveedores/imputacion/regcuenta_c_saldo_pos2.xml",
+      },
+      "kind": "q-select",
+      "options": 7,
+      "update_fields": 2,
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "nro_cuenta": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "ops_grid": {
+      "editable": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "proveedores/imputacion/imputacion_rec_ops_grid.xml",
+      },
+      "kind": "object",
+      "renderHelper": true,
+    },
+    "subsistema_id": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_regcuenta",
+  ],
+  "screenKind": "form",
+  "type": "ficha",
+  "visibleColumns": [
+    "id_regcuenta",
+    "nro_cuenta",
+    "nombre_cuenta",
+    "ops_grid",
+    "fcs_grid",
+  ],
+}
+`;
+
+exports[`fixture 'fichaing-formulas' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "cantidad": {
+      "histrix_type": "Decimal",
+      "kind": "q-input",
+    },
+    "cliente": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "detalle": {
+      "editable": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/stkmovimiento_ficha_grid.xml",
+      },
+      "kind": "object",
+      "renderHelper": true,
+    },
+    "fecha_movimiento": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "planta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "pry_proyecto_id": {
+      "editable": true,
+      "formulas": [
+        "pry_proyecto_id",
+      ],
+      "helpContainer": "stock/proyecto_ayuda.xml",
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "regcuenta_id": {
+      "editable": true,
+      "formulas": [
+        "regcuenta_id",
+      ],
+      "helpContainer": "stock/legajo_ayuda.xml",
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "stkarticulo_id": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [],
+  "screenKind": "form",
+  "type": "fichaing",
+  "visibleColumns": [
+    "pry_proyecto_id",
+    "planta",
+    "nombre_cuenta",
+    "regcuenta_id",
+    "cliente",
+    "fecha_movimiento",
+    "detalle",
+  ],
+}
+`;
+
+exports[`fixture 'fichaing-ing' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "alta_movimiento": {
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "cantidad_bultos": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "centro_imputacion": {
+      "editable": true,
+      "helpContainer": "/ayudas/ctbcentro_imputacion_qry.xml",
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "concepto_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/ing/transferencia/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+      "update_fields": 2,
+    },
+    "de": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "descripcion_centro": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "detalle": {
+      "editable": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/ing/transferencia/stktransfer_grid.xml",
+      },
+      "kind": "object",
+      "renderHelper": true,
+    },
+    "error": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "fecha_movimiento": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "id_stkmovimiento": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "impresion": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nombre_movimiento": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nro_movimiento": {
+      "editable": true,
+      "histrix_type": "Numeric",
+      "kind": "q-input",
+    },
+    "para": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/ing/transferencia/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "puesto_movimiento": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/ing/transferencia/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 4,
+      "update_fields": 3,
+    },
+    "receptor_externo": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "referencia": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "regcuenta_externo_id": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "regcuenta_id": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "stock/ing/transferencia/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "regcuenta_ivaletra": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+      "update_fields": 2,
+    },
+    "responsable_ot": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "stkconcepto_destino": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkconcepto_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 8,
+    },
+    "stkconcepto_id": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "stkconcepto_origen": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkconcepto_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 9,
+    },
+    "stkdeposito_destino": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkdeposito_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "stkdeposito_origen": {
+      "editable": true,
+      "formulas": [
+        "stkdeposito_origen",
+      ],
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/stkdeposito_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "stktransaccion_id": {
+      "editable": true,
+      "histrix_type": "Bigint",
+      "kind": "q-input",
+    },
+    "subsistema_id": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_stkmovimiento",
+  ],
+  "screenKind": "form",
+  "type": "fichaing",
+  "visibleColumns": [
+    "concepto_id",
+    "regcuenta_ivaletra",
+    "puesto_movimiento",
+    "nro_movimiento",
+    "fecha_movimiento",
+    "stktransaccion_id",
+    "stkdeposito_origen",
+    "stkconcepto_origen",
+    "stkdeposito_destino",
+    "stkconcepto_destino",
+    "para",
+    "regcuenta_id",
+    "receptor_externo",
+    "centro_imputacion",
+    "descripcion_centro",
+    "responsable_ot",
+    "detalle",
+  ],
+}
+`;
+
+exports[`fixture 'grid' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "acreditacion_valor": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "cuenta_valor": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "cuit_valor": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "egreso_valor": {
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "fecha_valor": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "id_carvalor": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "importe_valor": {
+      "editable": true,
+      "histrix_type": "CustomNumeric",
+      "kind": "q-input",
+    },
+    "imputar": {
+      "editable": true,
+      "formulas": [
+        "total_imputado",
+      ],
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "moneda_id": {
+      "hasOptions": true,
+      "histrix_type": "Integer",
+      "innerContainer": {
+        "params": {},
+        "path": "/ayudas/monedas_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 3,
+    },
+    "nombre_banco": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nombre_plaza": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nro_valor": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "propio": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "tipo_movimiento": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "titular_valor": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "total_imputado": {
+      "editable": true,
+      "histrix_type": "CustomNumeric",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_carvalor",
+  ],
+  "screenKind": "table",
+  "type": "grid",
+  "visibleColumns": [
+    "id_carvalor",
+    "nombre_banco",
+    "nombre_plaza",
+    "nro_valor",
+    "fecha_valor",
+    "acreditacion_valor",
+    "cuenta_valor",
+    "cuit_valor",
+    "titular_valor",
+    "importe_valor",
+    "imputar",
+    "total_imputado",
+  ],
+}
+`;
+
+exports[`fixture 'ing' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "_ORDEN": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "cantidad": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "codigo_barra": {
+      "helpContainer": "/ayudas/stkarticulo_pos.xml",
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "codigo_serie": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "desde": {
+      "formulas": [
+        "cantidad",
+      ],
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "hasta": {
+      "formulas": [
+        "cantidad",
+      ],
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nombre_articulo": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "numorden": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "prefijo": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "stkarticulo_id": {
+      "helpContainer": "/ayudas/stkarticulo_qry.xml",
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "sufijo": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+  },
+  "keys": [],
+  "screenKind": "table",
+  "type": "ing",
+  "visibleColumns": [
+    "_ORDEN",
+    "codigo_serie",
+  ],
+}
+`;
+
+exports[`fixture 'livegrid' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "cantidad_articulos": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "color": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "color2": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "concepto_id": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "cuenta_filtro": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "dep_destino": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "clientes/ing/pre/depositos_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "dep_origen": {
+      "editable": true,
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "clientes/ing/pre/depositos_qry.xml",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "est_cerrado": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "est_pend": {
+      "editable": true,
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "fecha_movimiento": {
+      "editable": true,
+      "histrix_type": "Date",
+      "kind": "q-input",
+    },
+    "id_regmovim": {
+      "histrix_type": "Integer",
+      "kind": "q-input",
+    },
+    "imprime_concepto1": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nro_filtro": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "nro_movimiento": {
+      "editable": true,
+      "histrix_type": "Integer",
+      "kind": "q-input",
+      "link": "",
+    },
+    "ot_centro_sel": {
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "clientes/ing/pre/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "receptor_sel": {
+      "hasOptions": true,
+      "histrix_type": "Field",
+      "innerContainer": {
+        "params": {},
+        "path": "clientes/ing/pre/xml<embebido>",
+      },
+      "kind": "q-select",
+      "options": 20,
+    },
+    "referencia": {
+      "editable": true,
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "separador_filtros": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "subsistema_id": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_regmovim",
+  ],
+  "screenKind": "table",
+  "type": "liveGrid",
+  "visibleColumns": [
+    "fecha_movimiento",
+    "nombre_cuenta",
+    "nro_movimiento",
+    "cantidad_articulos",
+    "dep_destino",
+    "dep_origen",
+    "referencia",
+    "est_pend",
+    "est_cerrado",
+  ],
+}
+`;
+
+exports[`fixture 'treetable' > resuelve los kinds sin tirar (snapshot) 1`] = `
+{
+  "fields": {
+    "cuenta_superior_id": {
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "habilitada": {
+      "histrix_type": "Check",
+      "kind": "check",
+    },
+    "hictasup": {
+      "histrix_type": "Field",
+      "kind": "q-input",
+    },
+    "id_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+    "nombre_cuenta": {
+      "editable": true,
+      "histrix_type": "Varchar",
+      "kind": "q-input",
+    },
+  },
+  "keys": [
+    "id_cuenta",
+  ],
+  "screenKind": null,
+  "type": "TreeTable",
+  "visibleColumns": [
+    "id_cuenta",
+    "nombre_cuenta",
+  ],
+}
+`;

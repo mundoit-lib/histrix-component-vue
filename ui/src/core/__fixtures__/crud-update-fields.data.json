@@ -1,0 +1,22 @@
+{
+  "data": [
+    {
+      "id_gensucursal": 1,
+      "nombre_sucursal": "Xyke Kdthdkr",
+      "domicilio_sucursal": "T. Xecjy km Pobtxbax 562",
+      "genprovincia_id": 12,
+      "genlocalidad_id": 13111,
+      "telefono_sucursal": "4492-753660",
+      "email_sucursal": "usuario227@example.com",
+      "referencia_sucursal": null,
+      "foto_sucursal": null
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 1,
+    "has_more": false,
+    "next": null
+  }
+}

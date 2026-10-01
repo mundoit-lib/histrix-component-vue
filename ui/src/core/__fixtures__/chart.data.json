@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "estado": "Twtoeovc",
+      "cantidad_no_cotizada": 0,
+      "cantidad_cotizada": 90
+    },
+    {
+      "estado": "Twtoeovc",
+      "cantidad_no_cotizada": 0,
+      "cantidad_cotizada": 90
+    },
+    {
+      "estado": "Twtoeovc",
+      "cantidad_no_cotizada": 0,
+      "cantidad_cotizada": 90
+    },
+    {
+      "estado": "Twtoeovc",
+      "cantidad_no_cotizada": 0,
+      "cantidad_cotizada": 90
+    },
+    {
+      "estado": "Twtoeovc",
+      "cantidad_no_cotizada": 0,
+      "cantidad_cotizada": 90
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/obras/stats/pedido_stats_cotizados.xml?_limit=5&offset=5&limit=5"
+  }
+}

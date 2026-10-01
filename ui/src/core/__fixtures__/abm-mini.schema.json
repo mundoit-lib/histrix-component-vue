@@ -1,0 +1,361 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Maestro de Listas de Precios de Productos",
+    "type": "abm-mini",
+    "observation": "",
+    "can_insert": true,
+    "print": false,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "",
+    "instance": "STK1939414564",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "process",
+    "preFetch": true,
+    "pdf": false,
+    "detail": {
+      "xml": "stklistadetalle_crud.xml",
+      "dir": "stock/listas",
+      "dynamic": false,
+      "xml_field": null,
+      "has_detail_field": null,
+      "inline": false,
+      "params": [
+        {
+          "field": "id_stklista",
+          "param": "stklista_id"
+        }
+      ],
+      "row_key": "_detail"
+    },
+    "inline_detail": false,
+    "width": null,
+    "conditions": [],
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 6,
+    "fields": {
+      "id_stklista": {
+        "class": " missinghelp ",
+        "size": "",
+        "esClave": "true",
+        "required": "required",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "display: none;",
+        "label_style": "display: none;",
+        "hidden_column": false,
+        "name": "id_stklista",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": ["stklista_id"],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "stklista_nombre": {
+        "class": " missinghelp ",
+        "size": "20",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Descripcion",
+        "placeholder": "Wgfaufsymax",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "stklista_nombre",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "vencimiento_vigencia": {
+        "class": "date",
+        "size": "10",
+        "type": "text",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Vencimiento Vigencia",
+        "placeholder": "Btctyzywmyj Qphitpoe",
+        "step": "1",
+        "inputType": "textBox",
+        "data-role": "datebox",
+        "data-options": {
+          "mode": "calbox",
+          "useClearButton": "true",
+          "useCollapsedButton": "true"
+        },
+        "histrix_type": "Date",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "vencimiento_vigencia",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "moneda_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Moneda",
+        "placeholder": "Ultoar",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "moneda_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          "2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          " 2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "moneda_qry.xml",
+          "dir": "/ayudas",
+          "uri": "moneda_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "moneda_idvta": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Moneda",
+        "placeholder": "Ultoar",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "moneda_idvta",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          "2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          " 2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "moneda_qry.xml",
+          "dir": "/ayudas",
+          "uri": "moneda_qry.xml&dir=/ayudas&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "ubicaciones": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Lugares de trabajo asociados",
+        "placeholder": "Gcsecas ru bewnvwu lscyufoxs",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": false,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "ubicaciones",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "xml": "stklista_ubicacion.xml",
+            "type": "link",
+            "icon": "ui-icon-flag",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_stklista",
+                "target": "stklista_id",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      }
+    },
+    "values": {
+      "id_stklista": "",
+      "stklista_nombre": "",
+      "vencimiento_vigencia": "01/10/2027",
+      "moneda_id": "1",
+      "moneda_idvta": "1",
+      "ubicaciones": "Odfcwoj qj gpuheca"
+    }
+  }
+}

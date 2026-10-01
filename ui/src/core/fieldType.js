@@ -22,7 +22,7 @@
  *     'datetime', 'decimal', 'integer') cuando no es pisado por una condición
  *     posterior.
  *
- * @param {object} fieldSchema schema del campo ({ ...schema, ...rowSchema }).
+ * @param {Partial<import('../../types').HistrixFieldSchema>} fieldSchema schema del campo ({ ...schema, ...rowSchema }).
  * @param {string} [defaultType='q-input'] valor base (this.type en el componente).
  * @returns {string} clave del tipo de input.
  */
@@ -73,7 +73,7 @@ export function resolveFieldKind(fieldSchema, defaultType = 'q-input') {
 /**
  * ¿El campo tiene opciones (es un select)?
  * Réplica pura del computed `hasOptions` del componente.
- * @param {object} fieldSchema
+ * @param {Partial<import('../../types').HistrixFieldSchema>} fieldSchema
  * @returns {boolean}
  */
 export function hasOptions(fieldSchema) {
@@ -85,7 +85,7 @@ export function hasOptions(fieldSchema) {
 /**
  * ¿Hay que renderizar el helper anidado (object)?
  * Réplica pura del computed `renderHelper` del componente.
- * @param {object} fieldSchema
+ * @param {Partial<import('../../types').HistrixFieldSchema>} fieldSchema
  * @returns {boolean}
  */
 export function renderHelper(fieldSchema) {

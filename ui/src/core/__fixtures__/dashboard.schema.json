@@ -1,0 +1,63 @@
+{
+  "resources": {
+    "OPTIONS": "Dash Info"
+  },
+  "schema": {
+    "title": "Estadisticas",
+    "type": "dashboard",
+    "observation": "",
+    "can_insert": false,
+    "can_update": false,
+    "can_delete": false,
+    "can_process": false,
+    "pdf": false,
+    "widgets": {
+      "cotizados": {
+        "id": "cotizados",
+        "uid": "widget1714852452",
+        "style": null,
+        "width": "48%",
+        "height": null,
+        "text": "",
+        "title": "PEDIDOs cotizados vs no cotizados",
+        "url": "/api/xml/?&xml=pedido_stats_cotizados.xml&dir=obras/stats",
+        "target": {
+          "xml": "pedido_stats_cotizados.xml",
+          "dir": "obras/stats"
+        },
+        "iframe": ""
+      },
+      "adjudicados": {
+        "id": "adjudicados",
+        "uid": "widget513377208",
+        "style": null,
+        "width": "48%",
+        "height": null,
+        "text": "",
+        "title": "PEDIDOs adjudicados vs no adjudicados",
+        "url": "/api/xml/?&xml=pedido_stats_adjudicado.xml&dir=obras/stats",
+        "target": {
+          "xml": "pedido_stats_adjudicado.xml",
+          "dir": "obras/stats"
+        },
+        "iframe": ""
+      },
+      "registros_mes": {
+        "id": "registros_mes",
+        "uid": "widget215695555",
+        "style": null,
+        "width": "48%",
+        "height": null,
+        "text": "",
+        "title": "PEDIDOs por mes",
+        "url": "/api/xml/?&xml=pedido_stats_mes.xml&dir=obras/stats",
+        "target": {
+          "xml": "pedido_stats_mes.xml",
+          "dir": "obras/stats"
+        },
+        "iframe": ""
+      }
+    },
+    "values": []
+  }
+}

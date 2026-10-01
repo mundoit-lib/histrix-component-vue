@@ -1,0 +1,244 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Tipos de motivos",
+    "type": "abm",
+    "observation": "",
+    "can_insert": true,
+    "print": true,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "",
+    "instance": "PRY666904957",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "process",
+    "preFetch": true,
+    "pdf": false,
+    "detail": false,
+    "inline_detail": false,
+    "width": null,
+    "conditions": [],
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 3,
+    "fields": {
+      "id_presup_motivo": {
+        "class": " missinghelp ",
+        "size": "",
+        "esClave": "true",
+        "required": "required",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "id_presup_motivo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "motivo": {
+        "class": " missinghelp ",
+        "size": "255",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Motivos",
+        "placeholder": "Wkdegir",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "motivo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "tipo_motivo_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Motivo de",
+        "placeholder": "Hajtcb fy",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "tipo_motivo_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "tipo_motivo": "Hqcawwq uj Sgmdwg",
+            "modulo": 2
+          },
+          "2": {
+            "tipo_motivo": "Tomzmpo uo Ffpccwq",
+            "modulo": 2
+          },
+          "3": {
+            "tipo_motivo": "Dacglge qf Pjxbx Epmsjbcagwryui",
+            "modulo": 2
+          },
+          "5": {
+            "tipo_motivo": "Azsdlgihawxg ic Oyfcrl",
+            "modulo": 1
+          },
+          "6": {
+            "tipo_motivo": "Ddzyxhmjxcys ee Eathwczvyw",
+            "modulo": 1
+          },
+          "7": {
+            "tipo_motivo": "He pzrjsplmfq",
+            "modulo": 2
+          },
+          "8": {
+            "tipo_motivo": "Sw smsnldybpndk",
+            "modulo": 2
+          },
+          "9": {
+            "tipo_motivo": "AC",
+            "modulo": 1
+          }
+        },
+        "options_sorted": {
+          " 9": {
+            "tipo_motivo": "AC",
+            "modulo": 1
+          },
+          " 6": {
+            "tipo_motivo": "Ddzyxhmjxcys ee Eathwczvyw",
+            "modulo": 1
+          },
+          " 5": {
+            "tipo_motivo": "Azsdlgihawxg ic Oyfcrl",
+            "modulo": 1
+          },
+          " 1": {
+            "tipo_motivo": "Hqcawwq uj Sgmdwg",
+            "modulo": 2
+          },
+          " 3": {
+            "tipo_motivo": "Dacglge qf Pjxbx Epmsjbcagwryui",
+            "modulo": 2
+          },
+          " 2": {
+            "tipo_motivo": "Tomzmpo uo Ffpccwq",
+            "modulo": 2
+          },
+          " 8": {
+            "tipo_motivo": "Sw smsnldybpndk",
+            "modulo": 2
+          },
+          " 7": {
+            "tipo_motivo": "He pzrjsplmfq",
+            "modulo": 2
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 9,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1489509226",
+          "dir": "clientes/man",
+          "uri": "xml1489509226&dir=clientes/man&",
+          "relationship": [],
+          "empty": false
+        }
+      }
+    },
+    "values": {
+      "id_presup_motivo": "",
+      "motivo": "",
+      "tipo_motivo_id": ""
+    }
+  }
+}

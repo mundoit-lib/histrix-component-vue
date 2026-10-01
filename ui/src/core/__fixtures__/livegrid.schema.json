@@ -1,0 +1,1652 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data",
+    "PROCESS": "Process Data"
+  },
+  "schema": {
+    "title": "Presupuestos",
+    "type": "liveGrid",
+    "observation": "Observación de ejemplo.",
+    "can_insert": false,
+    "print": true,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": false,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "",
+    "instance": "REG252641493",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [
+      {
+        "campo": "fecha_movimiento",
+        "operador": ">=",
+        "label": "Desde",
+        "valor": "01/10/2026",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F287737538",
+        "grupo": "",
+        "modificador": "",
+        "id": "fecha_movimiento"
+      },
+      {
+        "campo": "separador_filtros",
+        "operador": "=",
+        "label": "",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "true",
+        "copia": "",
+        "colspan": null,
+        "uid": "F2075827279",
+        "grupo": "",
+        "modificador": "",
+        "id": "separador_filtros",
+        "modpos": "nobr",
+        "noshow": "true",
+        "local": "true"
+      },
+      {
+        "campo": "fecha_movimiento",
+        "operador": "<=",
+        "label": "Hasta",
+        "valor": "01/10/2026",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F692075182",
+        "grupo": "",
+        "modificador": "",
+        "id": "fecha_movimiento",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "separador_filtros",
+        "operador": "=",
+        "label": "",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "true",
+        "copia": "",
+        "colspan": null,
+        "uid": "F553594188",
+        "grupo": "",
+        "modificador": "",
+        "id": "separador_filtros",
+        "modpos": "nobr",
+        "noshow": "true",
+        "local": "true"
+      },
+      {
+        "campo": "separador_filtros",
+        "operador": "=",
+        "label": "",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "true",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1250599061",
+        "grupo": "",
+        "modificador": "",
+        "id": "separador_filtros",
+        "modpos": "nobr",
+        "noshow": "true",
+        "local": "true"
+      },
+      {
+        "campo": "dep_destino",
+        "operador": "=",
+        "label": "Destino",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F2036596132",
+        "grupo": "",
+        "modificador": "",
+        "id": "dep_destino"
+      },
+      {
+        "campo": "dep_origen",
+        "operador": "=",
+        "label": "Origen",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F385722863",
+        "grupo": "",
+        "modificador": "",
+        "id": "dep_origen",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "ot_centro_sel",
+        "operador": "=",
+        "label": "OT / Centro",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F457694493",
+        "grupo": "",
+        "modificador": "",
+        "id": "ot_centro_sel",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "receptor_sel",
+        "operador": "=",
+        "label": "Receptor",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F957747872",
+        "grupo": "",
+        "modificador": "",
+        "id": "receptor_sel",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "cuenta_filtro",
+        "operador": "like",
+        "label": "Cuenta",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F2003496647",
+        "grupo": "",
+        "modificador": "",
+        "id": "cuenta_filtro",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "nro_filtro",
+        "operador": "like",
+        "label": "Nº Remito",
+        "valor": "",
+        "opcion": "xml",
+        "deshabilitado": "false",
+        "copia": "",
+        "colspan": null,
+        "uid": "F1002504364",
+        "grupo": "",
+        "modificador": "",
+        "id": "nro_filtro",
+        "modpos": "nobr"
+      },
+      {
+        "campo": "est_cerrado",
+        "operador": "=",
+        "label": "Cerrado",
+        "valor": "0",
+        "opcion": "xml",
+        "deshabilitado": "",
+        "copia": "",
+        "colspan": null,
+        "uid": "F171376985",
+        "grupo": "",
+        "modificador": "",
+        "id": "est_cerrado"
+      }
+    ],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": true,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "CONFIRMAR",
+    "preFetch": true,
+    "pdf": false,
+    "detail": {
+      "xml": "remito_transferencia_detalle_qry.xml",
+      "dir": "clientes/ing/pre",
+      "dynamic": false,
+      "xml_field": null,
+      "has_detail_field": null,
+      "inline": true,
+      "params": [
+        {
+          "field": "id_regmovim",
+          "param": "regmovim_id"
+        }
+      ],
+      "row_key": "_detail"
+    },
+    "inline_detail": "true",
+    "width": null,
+    "conditions": {
+      "fecha_movimiento": {
+        ">='2026-10-01'": {
+          "OpLogico": " and ",
+          "operador": ">=",
+          "valor": "'2026-10-01'",
+          "premodificador": "",
+          "verdadero": null,
+          "falso": null,
+          "tipo": "date",
+          "grupo": "",
+          "fixed": false
+        },
+        "<='2026-10-01'": {
+          "OpLogico": " and ",
+          "operador": "<=",
+          "valor": "'2026-10-01'",
+          "premodificador": "",
+          "verdadero": null,
+          "falso": null,
+          "tipo": "date",
+          "grupo": "",
+          "fixed": false
+        }
+      },
+      "est_cerrado": {
+        "=0": {
+          "OpLogico": " and ",
+          "operador": "=",
+          "valor": "0",
+          "premodificador": "",
+          "verdadero": null,
+          "falso": null,
+          "tipo": "check",
+          "grupo": "",
+          "fixed": false
+        }
+      }
+    },
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": true,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "number_of_fields": 20,
+    "fields": {
+      "separador_filtros": {
+        "class": "",
+        "size": "1",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "separador_filtros",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "id_regmovim": {
+        "class": " missinghelp ",
+        "size": "",
+        "esClave": "true",
+        "required": "required",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "id_regmovim",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": ["regmovim_id"],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "subsistema_id": {
+        "class": " missinghelp ",
+        "size": "12",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "ss",
+        "placeholder": "ss",
+        "histrix_type": "Varchar",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "subsistema_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "concepto_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Integer",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "concepto_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "imprime_concepto1": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "imprime_concepto1",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "fecha_movimiento": {
+        "class": "date",
+        "size": "10",
+        "type": "text",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Fecha",
+        "placeholder": "Vzxtc",
+        "step": "1",
+        "inputType": "textBox",
+        "data-role": "datebox",
+        "data-options": {
+          "mode": "calbox",
+          "useClearButton": "true",
+          "useCollapsedButton": "true"
+        },
+        "histrix_type": "Date",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "fecha_movimiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nombre_cuenta": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cuenta",
+        "placeholder": "Onmzyy",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nombre_cuenta",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nro_movimiento": {
+        "class": "",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Numero",
+        "placeholder": "Fytjmz",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nro_movimiento",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false,
+        "helpers": {
+          "link": {
+            "type": "link",
+            "linkloader": null,
+            "linktarget": "win",
+            "parameters": [
+              {
+                "source": "id_regmovim",
+                "target": "id_regmovim",
+                "operator": "="
+              }
+            ]
+          }
+        }
+      },
+      "cantidad_articulos": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cant. de Artículos",
+        "placeholder": "Txff. sp Oakddjvxv",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "cantidad_articulos",
+        "isExpression": true,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "ot_centro_sel": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "OT / Centro",
+        "placeholder": "FD / Bvophd",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "ot_centro_sel",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "2": {
+            "nombre_centro": "Lbrtgown Dvrnatfid"
+          },
+          "3": {
+            "nombre_centro": "Rwcssspe Yrinus"
+          },
+          "4": {
+            "nombre_centro": "Vshzgtsb Yywlru"
+          },
+          "5": {
+            "nombre_centro": "Dbrcerfe Wvkzobb"
+          },
+          "6": {
+            "nombre_centro": "Mflrwbh yg voctazzjgzg"
+          },
+          "7": {
+            "nombre_centro": "Kgyggf es Jzgjacokmnv O61734"
+          },
+          "9": {
+            "nombre_centro": "Mcgqdq Laegbiiueto N48774"
+          },
+          "10": {
+            "nombre_centro": "Daouye sq Iaodjjkxa G17524"
+          },
+          "11": {
+            "nombre_centro": "Vjduddjppno Jgiczwyozl X46336"
+          },
+          "12": {
+            "nombre_centro": "Wxltocw L56607"
+          },
+          "13": {
+            "nombre_centro": "Jltxfi eq Yxp W18589"
+          },
+          "14": {
+            "nombre_centro": "Gsenfcwj Lmstoo"
+          },
+          "15": {
+            "nombre_centro": "Elncoyjzcewf - FQZ 973"
+          },
+          "16": {
+            "nombre_centro": "Xbsnimqpfcsv - GFS 345"
+          },
+          "17": {
+            "nombre_centro": "Ufyfvk Gzfys - ZF487TB"
+          },
+          "18": {
+            "nombre_centro": "Gdvire Ksnmg - LZR481"
+          },
+          "19": {
+            "nombre_centro": "Odnfej Bujfr - DL443EI"
+          },
+          "20": {
+            "nombre_centro": "Ftvoih SM 80245 - QNX155"
+          },
+          "21": {
+            "nombre_centro": "Eqoj Wszbpy - LW118IK"
+          },
+          "23": {
+            "nombre_centro": "Svrmmxq Exqk M71075"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 334": {
+            "nombre_centro": "I Yzozqd Ulahiib Mrixbnlh"
+          },
+          " 379": {
+            "nombre_centro": "Z Gvkffw Elnzm Denol"
+          },
+          " 320": {
+            "nombre_centro": "S Veihwx Jzfhxop Cukpsge"
+          },
+          " 318": {
+            "nombre_centro": "J Hxjcoo Nbcqba Jvexsqh"
+          },
+          " 358": {
+            "nombre_centro": "Q Xwemqs Xsnms Ocgnub"
+          },
+          " 325": {
+            "nombre_centro": "H Noxtgo Gjndqyp Ucccoftee"
+          },
+          " 324": {
+            "nombre_centro": "W Lniqqk Gile Pikw"
+          },
+          " 326": {
+            "nombre_centro": "D Vvisan Bzrz Pxew"
+          },
+          " 380": {
+            "nombre_centro": "Q Voerku Mujknchfd Lbxqdwdu"
+          },
+          " 352": {
+            "nombre_centro": "Z Uawuwz Frutsr Okkyssz"
+          },
+          " 321": {
+            "nombre_centro": "O Ldxjlv Nwhda Ujeuarv"
+          },
+          " 333": {
+            "nombre_centro": "U Rqoatj Ahjntlb Iuliuej"
+          },
+          " 322": {
+            "nombre_centro": "R Hkdsgf Cpvjs Uozgyn"
+          },
+          " 323": {
+            "nombre_centro": "Q Tptpip Dizym Rwdtl"
+          },
+          " 319": {
+            "nombre_centro": "Q Djwzxi Quvrcycil Qpefdq"
+          },
+          " 317": {
+            "nombre_centro": "S Jpdvpb Enytio Qvsxzhec"
+          },
+          " 122": {
+            "nombre_centro": "B002449"
+          },
+          " 123": {
+            "nombre_centro": "X428108"
+          },
+          " 124": {
+            "nombre_centro": "H672755"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml185391199",
+          "dir": "clientes/ing/pre",
+          "uri": "xml185391199&dir=clientes/ing/pre&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "receptor_sel": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Receptor",
+        "placeholder": "Aohsnski",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "receptor_sel",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "2359": {
+            "nombre_cuenta": "NIGM MTML"
+          },
+          "2360": {
+            "nombre_cuenta": "UYFMUAX CRZNKYIC"
+          },
+          "2362": {
+            "nombre_cuenta": "HYTEBQ LQAZJUG"
+          },
+          "2363": {
+            "nombre_cuenta": "IXULCAN PINCNAG"
+          },
+          "2366": {
+            "nombre_cuenta": "LITTO VUFKA"
+          },
+          "7026": {
+            "nombre_cuenta": "BJJBFVRWT KLOJDY"
+          },
+          "7027": {
+            "nombre_cuenta": "KUIO TLBWHB"
+          },
+          "7039": {
+            "nombre_cuenta": "VHMD UZXGFW HWBBFVWE"
+          },
+          "7040": {
+            "nombre_cuenta": "DCYBXU VJYGKXY"
+          },
+          "7041": {
+            "nombre_cuenta": "NKGRLWD BMRPKAW"
+          },
+          "7042": {
+            "nombre_cuenta": "XCOINP EZYANM"
+          },
+          "7044": {
+            "nombre_cuenta": "LNRY AOJO"
+          },
+          "7131": {
+            "nombre_cuenta": "SFAWNGFLGZX GAPOP"
+          },
+          "7132": {
+            "nombre_cuenta": "SWIFN ILWNDU"
+          },
+          "7193": {
+            "nombre_cuenta": "NWCA PLORCNE"
+          },
+          "7195": {
+            "nombre_cuenta": "TWAEVD IAPDVSJU"
+          },
+          "7197": {
+            "nombre_cuenta": "LNWSAP UKETOJH"
+          },
+          "7200": {
+            "nombre_cuenta": "ZTDIEH BXQGOI"
+          },
+          "7206": {
+            "nombre_cuenta": "RRODXGO EYTWT"
+          },
+          "7207": {
+            "nombre_cuenta": "RGYRU AWLYIH"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 7238": {
+            "nombre_cuenta": "QOPYBPM UTITIKNF"
+          },
+          " 7210": {
+            "nombre_cuenta": "ZWCHQIN  YZBVAMVDZ"
+          },
+          " 7197": {
+            "nombre_cuenta": "LNWSAP UKETOJH"
+          },
+          " 7213": {
+            "nombre_cuenta": "QITDN  GRQIXJ"
+          },
+          " 7215": {
+            "nombre_cuenta": "VQEMP CGFCLLO"
+          },
+          " 7217": {
+            "nombre_cuenta": "CQJIPKL"
+          },
+          " 7209": {
+            "nombre_cuenta": "FHTCAVZ ANVLOG"
+          },
+          " 7211": {
+            "nombre_cuenta": "ANCHAWY IVRWYZGCE"
+          },
+          " 7044": {
+            "nombre_cuenta": "LNRY AOJO"
+          },
+          " 2362": {
+            "nombre_cuenta": "HYTEBQ LQAZJUG"
+          },
+          " 7193": {
+            "nombre_cuenta": "NWCA PLORCNE"
+          },
+          " 7027": {
+            "nombre_cuenta": "KUIO TLBWHB"
+          },
+          " 7206": {
+            "nombre_cuenta": "RRODXGO EYTWT"
+          },
+          " 7039": {
+            "nombre_cuenta": "VHMD UZXGFW HWBBFVWE"
+          },
+          " 7208": {
+            "nombre_cuenta": "HHCCBEQG XGHVK"
+          },
+          " 2359": {
+            "nombre_cuenta": "NIGM MTML"
+          },
+          " 7214": {
+            "nombre_cuenta": "CBAPUOG OLG HCGPBAGO"
+          },
+          " 7040": {
+            "nombre_cuenta": "DCYBXU VJYGKXY"
+          },
+          " 7042": {
+            "nombre_cuenta": "XCOINP EZYANM"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1478601246",
+          "dir": "clientes/ing/pre",
+          "uri": "xml1478601246&dir=clientes/ing/pre&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "nro_filtro": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "nro_filtro",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "cuenta_filtro": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "cuenta_filtro",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "dep_destino": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Deposito Destino",
+        "placeholder": "Ioicxlmj Vjqerdt",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "dep_destino",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "12": {
+            "nombre_deposito": "MKR X.M.F.",
+            "inactivo": 0
+          },
+          "13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          "14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          "15": {
+            "nombre_deposito": "G6 TTNJXSYQSL",
+            "inactivo": 0
+          },
+          "17": {
+            "nombre_deposito": "URTLG YQVYWNM",
+            "inactivo": 0
+          },
+          "18": {
+            "nombre_deposito": "GLKFJQWI SOPJIZCYB",
+            "inactivo": 0
+          },
+          "19": {
+            "nombre_deposito": "PIJHUNBW VGJZNY",
+            "inactivo": 0
+          },
+          "20": {
+            "nombre_deposito": "JVMOLCI ETFW",
+            "inactivo": 0
+          },
+          "21": {
+            "nombre_deposito": "FSHCE U.R.O.",
+            "inactivo": 0
+          },
+          "22": {
+            "nombre_deposito": "SIDVQ RKBCM",
+            "inactivo": 0
+          },
+          "23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          "24": {
+            "nombre_deposito": "HJUJRV USKQQIT",
+            "inactivo": 0
+          },
+          "25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          "26": {
+            "nombre_deposito": "OHNSJKOT 0",
+            "inactivo": 0
+          },
+          "29": {
+            "nombre_deposito": "EDMSZBZBAYK DRSNYN ZSXGEGL ",
+            "inactivo": 0
+          },
+          "30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          "31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          "33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          "36": {
+            "nombre_deposito": "Qcmhhd Gisgol ",
+            "inactivo": 0
+          },
+          "38": {
+            "nombre_deposito": "WLEMAD FICEUVB-BQLSNDAR KTPQQTEAER",
+            "inactivo": 0
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 119": {
+            "nombre_deposito": "WZCBLMFTEFU",
+            "inactivo": 0
+          },
+          " 30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          " 31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          " 124": {
+            "nombre_deposito": "EJXUHORIIQSZ ILPBMXLHA",
+            "inactivo": 0
+          },
+          " 13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          " 96": {
+            "nombre_deposito": "Puqebzbll Vozdf Rmblfj",
+            "inactivo": 0
+          },
+          " 33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          " 23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          " 110": {
+            "nombre_deposito": "Xlfpzuu QAE",
+            "inactivo": 0
+          },
+          " 14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          " 25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          " 116": {
+            "nombre_deposito": "ZCQBVS IZNSSXJ - GMXCTD YPDWI ",
+            "inactivo": 0
+          },
+          " 114": {
+            "nombre_deposito": "DLVIRGTAN SCUNAF JKBBSB ",
+            "inactivo": 0
+          },
+          " 118": {
+            "nombre_deposito": "UEDH DIHITTAI U.Y",
+            "inactivo": 0
+          },
+          " 98": {
+            "nombre_deposito": "GYLOEKE YXDMUL",
+            "inactivo": 0
+          },
+          " 112": {
+            "nombre_deposito": "NWXFMHP WMAQBNYPG(SAR ) ",
+            "inactivo": 0
+          },
+          " 94": {
+            "nombre_deposito": "OETYZ NURFPUDU",
+            "inactivo": 0
+          },
+          " 104": {
+            "nombre_deposito": "Apujb Izgmdgb Xpebyut (Lbtsylj",
+            "inactivo": 0
+          },
+          " 73": {
+            "nombre_deposito": "ALHFY QKLH",
+            "inactivo": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "depositos_qry.xml",
+          "dir": "clientes/ing/pre",
+          "uri": "depositos_qry.xml&dir=clientes/ing/pre&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "dep_origen": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Deposito Origen",
+        "placeholder": "Ncfosfzg Giywpz",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "dep_origen",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "12": {
+            "nombre_deposito": "MKR X.M.F.",
+            "inactivo": 0
+          },
+          "13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          "14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          "15": {
+            "nombre_deposito": "G6 TTNJXSYQSL",
+            "inactivo": 0
+          },
+          "17": {
+            "nombre_deposito": "URTLG YQVYWNM",
+            "inactivo": 0
+          },
+          "18": {
+            "nombre_deposito": "GLKFJQWI SOPJIZCYB",
+            "inactivo": 0
+          },
+          "19": {
+            "nombre_deposito": "PIJHUNBW VGJZNY",
+            "inactivo": 0
+          },
+          "20": {
+            "nombre_deposito": "JVMOLCI ETFW",
+            "inactivo": 0
+          },
+          "21": {
+            "nombre_deposito": "FSHCE U.R.O.",
+            "inactivo": 0
+          },
+          "22": {
+            "nombre_deposito": "SIDVQ RKBCM",
+            "inactivo": 0
+          },
+          "23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          "24": {
+            "nombre_deposito": "HJUJRV USKQQIT",
+            "inactivo": 0
+          },
+          "25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          "26": {
+            "nombre_deposito": "OHNSJKOT 0",
+            "inactivo": 0
+          },
+          "29": {
+            "nombre_deposito": "EDMSZBZBAYK DRSNYN ZSXGEGL ",
+            "inactivo": 0
+          },
+          "30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          "31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          "33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          "36": {
+            "nombre_deposito": "Qcmhhd Gisgol ",
+            "inactivo": 0
+          },
+          "38": {
+            "nombre_deposito": "WLEMAD FICEUVB-BQLSNDAR KTPQQTEAER",
+            "inactivo": 0
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 119": {
+            "nombre_deposito": "WZCBLMFTEFU",
+            "inactivo": 0
+          },
+          " 30": {
+            "nombre_deposito": "SIV HRR HHBLEXS",
+            "inactivo": 0
+          },
+          " 31": {
+            "nombre_deposito": "KPM ZJABGJQ",
+            "inactivo": 0
+          },
+          " 124": {
+            "nombre_deposito": "EJXUHORIIQSZ ILPBMXLHA",
+            "inactivo": 0
+          },
+          " 13": {
+            "nombre_deposito": "WMEBRAG IEHYKBZ XEWS E.C.",
+            "inactivo": 0
+          },
+          " 96": {
+            "nombre_deposito": "Puqebzbll Vozdf Rmblfj",
+            "inactivo": 0
+          },
+          " 33": {
+            "nombre_deposito": "DNQNJ RGZ",
+            "inactivo": 0
+          },
+          " 23": {
+            "nombre_deposito": "NPPMXEX OBJAKD",
+            "inactivo": 0
+          },
+          " 110": {
+            "nombre_deposito": "Xlfpzuu QAE",
+            "inactivo": 0
+          },
+          " 14": {
+            "nombre_deposito": "FSXPPRL W.P.D.",
+            "inactivo": 0
+          },
+          " 25": {
+            "nombre_deposito": "EHVDURW D.B.C.",
+            "inactivo": 0
+          },
+          " 116": {
+            "nombre_deposito": "ZCQBVS IZNSSXJ - GMXCTD YPDWI ",
+            "inactivo": 0
+          },
+          " 114": {
+            "nombre_deposito": "DLVIRGTAN SCUNAF JKBBSB ",
+            "inactivo": 0
+          },
+          " 118": {
+            "nombre_deposito": "UEDH DIHITTAI U.Y",
+            "inactivo": 0
+          },
+          " 98": {
+            "nombre_deposito": "GYLOEKE YXDMUL",
+            "inactivo": 0
+          },
+          " 112": {
+            "nombre_deposito": "NWXFMHP WMAQBNYPG(SAR ) ",
+            "inactivo": 0
+          },
+          " 94": {
+            "nombre_deposito": "OETYZ NURFPUDU",
+            "inactivo": 0
+          },
+          " 104": {
+            "nombre_deposito": "Apujb Izgmdgb Xpebyut (Lbtsylj",
+            "inactivo": 0
+          },
+          " 73": {
+            "nombre_deposito": "ALHFY QKLH",
+            "inactivo": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "depositos_qry.xml",
+          "dir": "clientes/ing/pre",
+          "uri": "depositos_qry.xml&dir=clientes/ing/pre&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "referencia": {
+        "class": "",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "OT",
+        "placeholder": "OT",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "referencia",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "est_pend": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Pendiente",
+        "placeholder": "Fhzvamyvg",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "est_pend",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "color2": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "color2",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "est_cerrado": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cerrado",
+        "placeholder": "Egtyyhr",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "est_cerrado",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "color": {
+        "class": " missinghelp ",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "histrix_type": "Field",
+        "hidden": true,
+        "editable": true,
+        "sortable": false,
+        "column_style": "vertical-align:middle; text-align:center;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": true,
+        "name": "color",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      }
+    },
+    "values": {
+      "separador_filtros": "",
+      "id_regmovim": "",
+      "subsistema_id": "",
+      "concepto_id": "",
+      "imprime_concepto1": "",
+      "fecha_movimiento": "01/10/2026",
+      "nombre_cuenta": "",
+      "nro_movimiento": "",
+      "cantidad_articulos": "",
+      "ot_centro_sel": "",
+      "receptor_sel": "",
+      "nro_filtro": "",
+      "cuenta_filtro": "",
+      "dep_destino": "",
+      "dep_origen": "",
+      "referencia": "",
+      "est_pend": "",
+      "color2": "",
+      "est_cerrado": "0",
+      "color": ""
+    }
+  }
+}

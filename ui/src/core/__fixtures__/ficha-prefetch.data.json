@@ -1,0 +1,51 @@
+{
+  "data": [
+    {
+      "subsistema_id": "01",
+      "id_regcuenta": 4567,
+      "nro_cuenta": 3,
+      "nombre_cuenta": "FW",
+      "ops_grid": "",
+      "fcs_grid": ""
+    },
+    {
+      "subsistema_id": "01",
+      "id_regcuenta": 4569,
+      "nro_cuenta": 4,
+      "nombre_cuenta": "VYGRAOTUXFO QWS QUIZW",
+      "ops_grid": "",
+      "fcs_grid": ""
+    },
+    {
+      "subsistema_id": "01",
+      "id_regcuenta": 5753,
+      "nro_cuenta": 5,
+      "nombre_cuenta": "CBZQKGDB A.H.J.T.",
+      "ops_grid": "",
+      "fcs_grid": ""
+    },
+    {
+      "subsistema_id": "01",
+      "id_regcuenta": 4571,
+      "nro_cuenta": 6,
+      "nombre_cuenta": "VGHXXJHFC ZVRFR IVHPWHL",
+      "ops_grid": "",
+      "fcs_grid": ""
+    },
+    {
+      "subsistema_id": "01",
+      "id_regcuenta": 4572,
+      "nro_cuenta": 7,
+      "nombre_cuenta": "OQJNCYDXVREJTN EPWNHLQL P.C.",
+      "ops_grid": "",
+      "fcs_grid": ""
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/proveedores/imputacion/imputacion_rec.xml?subsistema_id=01&_limit=5&offset=5&limit=5"
+  }
+}

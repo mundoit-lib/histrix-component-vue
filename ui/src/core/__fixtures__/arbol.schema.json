@@ -1,0 +1,1286 @@
+{
+  "resources": {
+    "GET": "Get Data",
+    "OPTIONS": "App Info",
+    "EXPORT": "Export Data",
+    "POST": "insert Data",
+    "PUT": "Update Data",
+    "DELETE": "Delete Data"
+  },
+  "schema": {
+    "title": "Cuentas",
+    "type": "arbol",
+    "observation": "",
+    "can_insert": true,
+    "print": true,
+    "can_update": true,
+    "redirect": null,
+    "can_delete": true,
+    "can_process": false,
+    "process_next_step": false,
+    "readonly": false,
+    "path": "",
+    "instance": "CTB540300185",
+    "fieldValidations": [],
+    "formValidations": [],
+    "header": false,
+    "filters": [],
+    "auto_filter": false,
+    "charts": [],
+    "insertButton": false,
+    "updateButton": true,
+    "defaultView": null,
+    "export": true,
+    "import": false,
+    "processButton": "process",
+    "preFetch": true,
+    "pdf": false,
+    "detail": false,
+    "inline_detail": false,
+    "width": null,
+    "conditions": [],
+    "pagination": {
+      "enabled": false,
+      "page_size": 0,
+      "offset": 0,
+      "max_limit": 200
+    },
+    "projection": {
+      "enabled": false,
+      "param": "$select",
+      "aliases": ["_select"],
+      "wildcard": "*",
+      "separator": ","
+    },
+    "parentField": "cuenta_superior_id",
+    "childField": "id_cuenta",
+    "number_of_fields": 17,
+    "fields": {
+      "id_cuenta": {
+        "class": "",
+        "size": "14",
+        "esClave": "true",
+        "required": "required",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Codigo",
+        "placeholder": "Curfuh be hhrsih",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "id_cuenta",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "esclave",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "nombre_cuenta": {
+        "class": "",
+        "size": "70",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Nombre",
+        "placeholder": "Xhxsvi jv iv kqnrld twkpvpke",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "nombre_cuenta",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "tipo_id": {
+        "class": " missinghelp  refreshable",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Tipo de cuenta",
+        "placeholder": "Jdap ny ualvoa",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;cuenta_superior_id&quot;,&quot;targetField&quot;:&quot;tipo_id&quot;,&quot;xml&quot;:&quot;ctbcuentas_tree.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "tipo_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_tipo": "QWMNLL",
+            "abreviacion_tipo": "QWMNLL",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          },
+          "2": {
+            "nombre_tipo": "AEOMGH",
+            "abreviacion_tipo": "AEOMGH",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          },
+          "3": {
+            "nombre_tipo": "IVTUCXKQOE LRVZ",
+            "abreviacion_tipo": "T.DMJH",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          },
+          "4": {
+            "nombre_tipo": "EL QFSNQ",
+            "abreviacion_tipo": "VLF",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          },
+          "5": {
+            "nombre_tipo": "EOVWTIE",
+            "abreviacion_tipo": "KRZ",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          },
+          "6": {
+            "nombre_tipo": "EXGRZXFL",
+            "abreviacion_tipo": "VLF",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "nombre_tipo": "QWMNLL",
+            "abreviacion_tipo": "QWMNLL",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          },
+          " 4": {
+            "nombre_tipo": "EL QFSNQ",
+            "abreviacion_tipo": "VLF",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          },
+          " 5": {
+            "nombre_tipo": "EOVWTIE",
+            "abreviacion_tipo": "KRZ",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          },
+          " 6": {
+            "nombre_tipo": "EXGRZXFL",
+            "abreviacion_tipo": "VLF",
+            "patrimonial": 0,
+            "test": "zqtfd:liaqx;",
+            "tipo_saldo": 0
+          },
+          " 2": {
+            "nombre_tipo": "AEOMGH",
+            "abreviacion_tipo": "AEOMGH",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          },
+          " 3": {
+            "nombre_tipo": "IVTUCXKQOE LRVZ",
+            "abreviacion_tipo": "T.DMJH",
+            "patrimonial": 1,
+            "test": "drqht:mvu;",
+            "tipo_saldo": 0
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "cuenta_superior_id",
+            "targetField": "tipo_id",
+            "xml": "ctbcuentas_tree.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "ctbtipos_crud.xml",
+          "dir": "contabilidad/man",
+          "uri": "ctbtipos_crud.xml&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "cuenta_superior_id": {
+        "class": " missinghelp ",
+        "size": "15",
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cuenta superior",
+        "placeholder": "Jnjqdj njvxdqft",
+        "histrix_type": "Varchar",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "cuenta_superior_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "6683790": {
+            "cuenta_superior_nombre": "9572006 HIZKTY VBWOROPOUXM"
+          },
+          "16248483": {
+            "cuenta_superior_nombre": "34693501 YWFILG RVLRBCSJQ"
+          },
+          "16339116": {
+            "cuenta_superior_nombre": "80986147 BKTOZI JOTASQOJUNJ"
+          },
+          "17482644": {
+            "cuenta_superior_nombre": "76192498 VTAQLBZ MFQ COBSYA PLV HWIAOJ"
+          },
+          "18559019": {
+            "cuenta_superior_nombre": "14613926 PGBANJVIN AKAQGREMAUU"
+          },
+          "36137268": {
+            "cuenta_superior_nombre": "14663928 HQFYFLUWTHTWNQQS"
+          },
+          "41646120": {
+            "cuenta_superior_nombre": "74248766 SBLILN WR PSDLGNXBX"
+          },
+          "48112238": {
+            "cuenta_superior_nombre": "90027643 WEPGOM VOW FHHEQH FAYDEPSQUR"
+          },
+          "49005993": {
+            "cuenta_superior_nombre": "29021276 QTSAEAUB HMINUFMC E TDNISLEU"
+          },
+          "49496308": {
+            "cuenta_superior_nombre": "94918840 CAMPON VR DUR"
+          },
+          "54095265": {
+            "cuenta_superior_nombre": "41595530 VKRFU YOIAHGH MZZ VHUHPQ"
+          },
+          "54888258": {
+            "cuenta_superior_nombre": "18376735 HNDJST JWHCMPDIO"
+          },
+          "63665684": {
+            "cuenta_superior_nombre": "91905948 NOZCZH"
+          },
+          "70216205": {
+            "cuenta_superior_nombre": "27822858 KDSLRNKGHBG"
+          },
+          "83725862": {
+            "cuenta_superior_nombre": "79842795 ZXXWYA"
+          },
+          "84830844": {
+            "cuenta_superior_nombre": "33856018 DNAKEC RPVSSLDU"
+          },
+          "07523168": {
+            "cuenta_superior_nombre": "96107555 MCZTCUOHVHS HCXOUROCACN"
+          },
+          "00553721": {
+            "cuenta_superior_nombre": "51727723 DECRES ZA MGPBCF"
+          },
+          "04677756": {
+            "cuenta_superior_nombre": "45214806 AUKKQUFD CQS GWIFQJ"
+          },
+          "08712445": {
+            "cuenta_superior_nombre": "12267783 FJXGKL MKDJIQHN"
+          }
+        },
+        "options_sorted": {
+          " 42541988": {
+            "cuenta_superior_nombre": "91905948 NOZCZH"
+          },
+          " 85961838": {
+            "cuenta_superior_nombre": "34693501 YWFILG RVLRBCSJQ"
+          },
+          " 87395774": {
+            "cuenta_superior_nombre": "14663928 HQFYFLUWTHTWNQQS"
+          },
+          " 69065132": {
+            "cuenta_superior_nombre": "76192498 VTAQLBZ MFQ COBSYA PLV HWIAOJ"
+          },
+          " 24041557": {
+            "cuenta_superior_nombre": "41595530 VKRFU YOIAHGH MZZ VHUHPQ"
+          },
+          " 05560202": {
+            "cuenta_superior_nombre": "29021276 QTSAEAUB HMINUFMC E TDNISLEU"
+          },
+          " 83293350": {
+            "cuenta_superior_nombre": "96107555 MCZTCUOHVHS HCXOUROCACN"
+          },
+          " 12387498": {
+            "cuenta_superior_nombre": "51727723 DECRES ZA MGPBCF"
+          },
+          " 59290013": {
+            "cuenta_superior_nombre": "74248766 SBLILN WR PSDLGNXBX"
+          },
+          " 64846214": {
+            "cuenta_superior_nombre": "45214806 AUKKQUFD CQS GWIFQJ"
+          },
+          " 49873160": {
+            "cuenta_superior_nombre": "94918840 CAMPON VR DUR"
+          },
+          " 06041424": {
+            "cuenta_superior_nombre": "79842795 ZXXWYA"
+          },
+          " 32513731": {
+            "cuenta_superior_nombre": "18376735 HNDJST JWHCMPDIO"
+          },
+          " 75998330": {
+            "cuenta_superior_nombre": "80986147 BKTOZI JOTASQOJUNJ"
+          },
+          " 17664426": {
+            "cuenta_superior_nombre": "14613926 PGBANJVIN AKAQGREMAUU"
+          },
+          " 40702359": {
+            "cuenta_superior_nombre": "12267783 FJXGKL MKDJIQHN"
+          },
+          " 97999626": {
+            "cuenta_superior_nombre": "33856018 DNAKEC RPVSSLDU"
+          },
+          " 79519120": {
+            "cuenta_superior_nombre": "90027643 WEPGOM VOW FHHEQH FAYDEPSQUR"
+          },
+          " 70605225": {
+            "cuenta_superior_nombre": "27822858 KDSLRNKGHBG"
+          },
+          " 5623061": {
+            "cuenta_superior_nombre": "9572006 HIZKTY VBWOROPOUXM"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 63665684,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1739182206",
+          "dir": "contabilidad/man",
+          "uri": "xml1739182206&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "tipo_saldo": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Tipo saldo",
+        "placeholder": "Dagr shexf",
+        "histrix_type": "Tinyint",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "tipo_saldo",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": ["Jtwofj", "Qbuuplaa"],
+        "options_sorted": {
+          " 0": "Jtwofj",
+          " 1": "Qbuuplaa"
+        },
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 0,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "tipo_centro": {
+        "class": " missinghelp  refreshable",
+        "size": 12,
+        "type": "text",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Tipo de Centro de Costo",
+        "placeholder": "Llwt fq Kxqsot eh Hkuix",
+        "data-refreshfields": "[{&quot;field&quot;:&quot;ctbcentro_id&quot;,&quot;targetField&quot;:&quot;tipo_centro_id&quot;,&quot;xml&quot;:&quot;ctbcuentas_tree.xml&quot;,&quot;filter&quot;:&quot;&quot;}]",
+        "histrix_type": "Field",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "tipo_centro",
+        "isExpression": false,
+        "local": true,
+        "enabler": "",
+        "options": {
+          "1": {
+            "tipo": "Tfqkdeuhx"
+          },
+          "2": {
+            "tipo": "Zirfqz"
+          },
+          "3": {
+            "tipo": "Qdujmwdfkpv"
+          },
+          "4": {
+            "tipo": "Oymkgcwceq"
+          },
+          "5": {
+            "tipo": "Qzutbformj"
+          },
+          "6": {
+            "tipo": "Dgtp px Qioh"
+          },
+          "7": {
+            "tipo": "Iiqsrqyob"
+          },
+          "8": {
+            "tipo": "Cumngmc"
+          },
+          "9": {
+            "tipo": "Lttdgwesegwpqmt"
+          },
+          "": ""
+        },
+        "options_sorted": {
+          " ": "",
+          " 1": {
+            "tipo": "Tfqkdeuhx"
+          },
+          " 2": {
+            "tipo": "Zirfqz"
+          },
+          " 3": {
+            "tipo": "Qdujmwdfkpv"
+          },
+          " 4": {
+            "tipo": "Oymkgcwceq"
+          },
+          " 5": {
+            "tipo": "Qzutbformj"
+          },
+          " 6": {
+            "tipo": "Dgtp px Qioh"
+          },
+          " 7": {
+            "tipo": "Iiqsrqyob"
+          },
+          " 8": {
+            "tipo": "Cumngmc"
+          },
+          " 9": {
+            "tipo": "Lttdgwesegwpqmt"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [
+          {
+            "field": "ctbcentro_id",
+            "targetField": "tipo_centro_id",
+            "xml": "ctbcuentas_tree.xml",
+            "filter": ""
+          }
+        ],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1130113410",
+          "dir": "/ayudas",
+          "uri": "xml1130113410&dir=/ayudas&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "ctbcentro_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Centro de Costo",
+        "placeholder": "Skgihi pl Ddaji",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "ctbcentro_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "2": {
+            "nombre_centro": "Lbrtgown Dvrnatfid"
+          },
+          "3": {
+            "nombre_centro": "Rwcssspe Yrinus"
+          },
+          "4": {
+            "nombre_centro": "Vshzgtsb Yywlru"
+          },
+          "5": {
+            "nombre_centro": "Dbrcerfe Wvkzobb"
+          },
+          "6": {
+            "nombre_centro": "Mflrwbh yg voctazzjgzg"
+          },
+          "7": {
+            "nombre_centro": "Kgyggf es Jzgjacokmnv O61734"
+          },
+          "9": {
+            "nombre_centro": "Mcgqdq Laegbiiueto N48774"
+          },
+          "10": {
+            "nombre_centro": "Daouye sq Iaodjjkxa G17524"
+          },
+          "11": {
+            "nombre_centro": "Vjduddjppno Jgiczwyozl X46336"
+          },
+          "12": {
+            "nombre_centro": "Wxltocw L56607"
+          },
+          "13": {
+            "nombre_centro": "Jltxfi eq Yxp W18589"
+          },
+          "14": {
+            "nombre_centro": "Gsenfcwj Lmstoo"
+          },
+          "15": {
+            "nombre_centro": "Elncoyjzcewf - FQZ 973"
+          },
+          "16": {
+            "nombre_centro": "Xbsnimqpfcsv - GFS 345"
+          },
+          "17": {
+            "nombre_centro": "Ufyfvk Gzfys - ZF487TB"
+          },
+          "18": {
+            "nombre_centro": "Gdvire Ksnmg - LZR481"
+          },
+          "19": {
+            "nombre_centro": "Odnfej Bujfr - DL443EI"
+          },
+          "20": {
+            "nombre_centro": "Ftvoih SM 80245 - QNX155"
+          },
+          "23": {
+            "nombre_centro": "Svrmmxq Exqk M71075"
+          },
+          "24": {
+            "nombre_centro": "Xkdelx Pactkm - BCF477"
+          }
+        },
+        "options_sorted": {
+          " ": "",
+          " 334": {
+            "nombre_centro": "I Yzozqd Ulahiib Mrixbnlh"
+          },
+          " 379": {
+            "nombre_centro": "Z Gvkffw Elnzm Denol"
+          },
+          " 320": {
+            "nombre_centro": "S Veihwx Jzfhxop Cukpsge"
+          },
+          " 318": {
+            "nombre_centro": "J Hxjcoo Nbcqba Jvexsqh"
+          },
+          " 358": {
+            "nombre_centro": "Q Xwemqs Xsnms Ocgnub"
+          },
+          " 325": {
+            "nombre_centro": "H Noxtgo Gjndqyp Ucccoftee"
+          },
+          " 324": {
+            "nombre_centro": "W Lniqqk Gile Pikw"
+          },
+          " 326": {
+            "nombre_centro": "D Vvisan Bzrz Pxew"
+          },
+          " 380": {
+            "nombre_centro": "Q Voerku Mujknchfd Lbxqdwdu"
+          },
+          " 352": {
+            "nombre_centro": "Z Uawuwz Frutsr Okkyssz"
+          },
+          " 321": {
+            "nombre_centro": "O Ldxjlv Nwhda Ujeuarv"
+          },
+          " 333": {
+            "nombre_centro": "U Rqoatj Ahjntlb Iuliuej"
+          },
+          " 322": {
+            "nombre_centro": "R Hkdsgf Cpvjs Uozgyn"
+          },
+          " 323": {
+            "nombre_centro": "Q Tptpip Dizym Rwdtl"
+          },
+          " 319": {
+            "nombre_centro": "Q Djwzxi Quvrcycil Qpefdq"
+          },
+          " 317": {
+            "nombre_centro": "S Jpdvpb Enytio Qvsxzhec"
+          },
+          " 122": {
+            "nombre_centro": "B002449"
+          },
+          " 123": {
+            "nombre_centro": "X428108"
+          },
+          " 124": {
+            "nombre_centro": "H672755"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml689759773",
+          "dir": "contabilidad/man",
+          "uri": "xml689759773&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": true
+        }
+      },
+      "genmoneda_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Moneda",
+        "placeholder": "Ultoar",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "genmoneda_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          "2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion_moneda": " SRJHA"
+          },
+          " 2": {
+            "descripcion_moneda": "ALPYV AYJIUU"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1381135106",
+          "dir": "contabilidad/man",
+          "uri": "xml1381135106&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "resultado": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Es de resultado",
+        "placeholder": "Lj ac zbcsvxdns",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "resultado",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "cuenta_patrimonial_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Cuenta Patrimonial",
+        "placeholder": "Nxvplv Bazhtisofxn",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "cuenta_patrimonial_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "cuenta": "Lxrzoxycnf bqhh"
+          },
+          "2": {
+            "cuenta": "Witlmd"
+          },
+          "3": {
+            "cuenta": "Ezxtby"
+          }
+        },
+        "options_sorted": {
+          " 2": {
+            "cuenta": "Witlmd"
+          },
+          " 3": {
+            "cuenta": "Ezxtby"
+          },
+          " 1": {
+            "cuenta": "Lxrzoxycnf bqhh"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 2,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml127233253",
+          "dir": "contabilidad/man",
+          "uri": "xml127233253&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "estado_resultado_id": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Estado resultado",
+        "placeholder": "Sgbpfv uqccjebbw",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "estado_resultado_id",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "nombre_estado_resultado": "Ltslibqt Nxjijhugoo - MGMCUR"
+          },
+          "2": {
+            "nombre_estado_resultado": "Hhcflmors f fdb Lsswoh - MSGQTK TKAEMYLHH CF LMO RSFFDB"
+          },
+          "3": {
+            "nombre_estado_resultado": "Owdxkjeklnnvuf g Dgqgikzsoa - XKEDDO FOWDXKJEK LN NVU FGDGQG"
+          },
+          "4": {
+            "nombre_estado_resultado": "Wotojdmrir rdh Udqois - JKSNFT USYAQLXWO TO JDM RIRRDH"
+          },
+          "5": {
+            "nombre_estado_resultado": "Bbhud sf Tzeorijndd Dnttyldwx - VBVXMI BBHUDSFTZ EO RIJ NDDDNTTYLDW"
+          },
+          "6": {
+            "nombre_estado_resultado": "Qtqpow Bzqcruejha Owqbnjdaz - HLFGYI GQTQPOWBZ QC RUE JHAOWQBNJDA"
+          },
+          "7": {
+            "nombre_estado_resultado": "Czifp ak Bdxwbjlagy Mpzu - ZXFUPD WGNUB CZ IFP AKBDXWBJLAG"
+          },
+          "9": {
+            "nombre_estado_resultado": "Rnmnpf Desomuumxxfgdixa Mqzjm - NXLVWR NMNPF"
+          },
+          "10": {
+            "nombre_estado_resultado": "Ospeus Sfnzzzewmzajhc Bpaef - WHDBNB JOSPE"
+          },
+          "11": {
+            "nombre_estado_resultado": "Wqydli Vwtdjzicr Jeabu - ZFAORG YXPDE"
+          },
+          "12": {
+            "nombre_estado_resultado": "Dlbeu Kgfjapij - VDTYE ATEJZYIP"
+          },
+          "13": {
+            "nombre_estado_resultado": "Qaesv Yhaqjto - BGFTH MBDPNIH"
+          },
+          "14": {
+            "nombre_estado_resultado": "Hxolwksrbf + Bndrvcceigl - RSNGKAD BFXJHXOLWKS"
+          },
+          "15": {
+            "nombre_estado_resultado": "Xornsucofo - Pfndifjprpp - YMRROJW QPLOXORNSUC"
+          }
+        },
+        "options_sorted": {
+          " 3": {
+            "nombre_estado_resultado": "Owdxkjeklnnvuf g Dgqgikzsoa - XKEDDO FOWDXKJEK LN NVU FGDGQG"
+          },
+          " 4": {
+            "nombre_estado_resultado": "Wotojdmrir rdh Udqois - JKSNFT USYAQLXWO TO JDM RIRRDH"
+          },
+          " 7": {
+            "nombre_estado_resultado": "Czifp ak Bdxwbjlagy Mpzu - ZXFUPD WGNUB CZ IFP AKBDXWBJLAG"
+          },
+          " 5": {
+            "nombre_estado_resultado": "Bbhud sf Tzeorijndd Dnttyldwx - VBVXMI BBHUDSFTZ EO RIJ NDDDNTTYLDW"
+          },
+          " 10": {
+            "nombre_estado_resultado": "Ospeus Sfnzzzewmzajhc Bpaef - WHDBNB JOSPE"
+          },
+          " 9": {
+            "nombre_estado_resultado": "Rnmnpf Desomuumxxfgdixa Mqzjm - NXLVWR NMNPF"
+          },
+          " 11": {
+            "nombre_estado_resultado": "Wqydli Vwtdjzicr Jeabu - ZFAORG YXPDE"
+          },
+          " 6": {
+            "nombre_estado_resultado": "Qtqpow Bzqcruejha Owqbnjdaz - HLFGYI GQTQPOWBZ QC RUE JHAOWQBNJDA"
+          },
+          " 2": {
+            "nombre_estado_resultado": "Hhcflmors f fdb Lsswoh - MSGQTK TKAEMYLHH CF LMO RSFFDB"
+          },
+          " 1": {
+            "nombre_estado_resultado": "Ltslibqt Nxjijhugoo - MGMCUR"
+          },
+          " 13": {
+            "nombre_estado_resultado": "Qaesv Yhaqjto - BGFTH MBDPNIH"
+          },
+          " 12": {
+            "nombre_estado_resultado": "Dlbeu Kgfjapij - VDTYE ATEJZYIP"
+          },
+          " 14": {
+            "nombre_estado_resultado": "Hxolwksrbf + Bndrvcceigl - RSNGKAD BFXJHXOLWKS"
+          },
+          " 15": {
+            "nombre_estado_resultado": "Xornsucofo - Pfndifjprpp - YMRROJW QPLOXORNSUC"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 3,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1181367382",
+          "dir": "contabilidad/man",
+          "uri": "xml1181367382&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "comportamiento": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Comportamiento",
+        "placeholder": "Zgiiqsorckygtr",
+        "histrix_type": "Tinyint",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "comportamiento",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": "C (Ivpe)",
+          "2": "S (Ujivotxc)",
+          "": ""
+        },
+        "options_sorted": {
+          " ": "",
+          " 1": "C (Ivpe)",
+          " 2": "S (Ujivotxc)"
+        },
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": "",
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "porc_s_venta": {
+        "class": " missinghelp ",
+        "size": "20,2",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "% S/Venta",
+        "placeholder": "% J/Agaco",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "porc_s_venta",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "indice": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Indice",
+        "placeholder": "Jstdxw",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "indice",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": {
+          "1": {
+            "descripcion": "Xxybsj jm wshkaak wbuukmsnpa"
+          },
+          "2": {
+            "descripcion": "Damegu wg bqomkef mykfdmvci"
+          }
+        },
+        "options_sorted": {
+          " 1": {
+            "descripcion": "Xxybsj jm wshkaak wbuukmsnpa"
+          },
+          " 2": {
+            "descripcion": "Damegu wg bqomkef mykfdmvci"
+          }
+        },
+        "path": "",
+        "isSelect": true,
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": 1,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": {
+          "xml": "xml1024615398",
+          "dir": "contabilidad/man",
+          "uri": "xml1024615398&dir=contabilidad/man&",
+          "relationship": [],
+          "empty": false
+        }
+      },
+      "valor_min": {
+        "class": " missinghelp ",
+        "size": "20,2",
+        "type": "text",
+        "align": "right",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "Mínimo valor de activación",
+        "placeholder": "Vuqasm cffqw nj tkjawimwjl",
+        "step": "any",
+        "histrix_type": "Decimal",
+        "hidden": false,
+        "editable": true,
+        "sortable": true,
+        "column_style": "display:none;",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "valor_min",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "habilitada": {
+        "class": " missinghelp ",
+        "size": "",
+        "type": "checkbox",
+        "align": "center",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "habilitada",
+        "placeholder": "rknoqloggc",
+        "histrix_type": "Check",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "",
+        "form_style": "",
+        "label_style": "",
+        "hidden_column": false,
+        "name": "habilitada",
+        "isExpression": false,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      },
+      "esmadre": {
+        "class": "",
+        "size": 12,
+        "type": "number",
+        "align": "left",
+        "dir": "ltr",
+        "autocomplete": "off",
+        "title": "",
+        "placeholder": "",
+        "disabled": "disabled",
+        "readonly": "readonly",
+        "histrix_type": "Integer",
+        "hidden": false,
+        "editable": true,
+        "sortable": false,
+        "column_style": "display:none;",
+        "form_style": "display:none;",
+        "label_style": "display:none;",
+        "hidden_column": false,
+        "name": "esmadre",
+        "isExpression": true,
+        "local": false,
+        "enabler": "",
+        "options": null,
+        "path": "",
+        "isSelect": "",
+        "cell_class": "",
+        "sum": null,
+        "help_key": "",
+        "detail": [],
+        "default_option_value": null,
+        "colspan": "",
+        "update_fields": [],
+        "computed_fields": null,
+        "computed_totals": "",
+        "innerContainer": false
+      }
+    },
+    "values": {
+      "id_cuenta": "",
+      "nombre_cuenta": "",
+      "tipo_id": "",
+      "cuenta_superior_id": "0",
+      "tipo_saldo": "",
+      "tipo_centro": "",
+      "ctbcentro_id": "",
+      "genmoneda_id": "",
+      "resultado": "",
+      "cuenta_patrimonial_id": "",
+      "estado_resultado_id": "",
+      "comportamiento": "",
+      "porc_s_venta": "",
+      "indice": "",
+      "valor_min": "",
+      "habilitada": "",
+      "esmadre": ""
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "data": [
+    {
+      "id_cuenta": "06765173",
+      "ctbnombre_cuenta": "BBMPPOMLAX GVHKHE - 25799741",
+      "habilitada": 1,
+      "tipo_id": 2
+    },
+    {
+      "id_cuenta": "91945423",
+      "ctbnombre_cuenta": "HVVKOJL ORBOHOLY KTNTJHSD - 14383771",
+      "habilitada": 1,
+      "tipo_id": 2
+    },
+    {
+      "id_cuenta": "92058238",
+      "ctbnombre_cuenta": "RVIPXHXU UPRHUBUBSD - 74189611",
+      "habilitada": 1,
+      "tipo_id": 5
+    },
+    {
+      "id_cuenta": "35423593",
+      "ctbnombre_cuenta": "FTSQXRBRN ZR QUWSYUD - 84415122",
+      "habilitada": 1,
+      "tipo_id": 1
+    },
+    {
+      "id_cuenta": "35405888",
+      "ctbnombre_cuenta": "WIYUUF JK WOZRDYW - 15702982",
+      "habilitada": 1,
+      "tipo_id": 3
+    }
+  ],
+  "pagination": {
+    "limit": 5,
+    "offset": 0,
+    "count": 5,
+    "has_more": true,
+    "next": "https://histrix.example/api/db/demo/app/ayudas/cuentas_habilitadas_qry.xml?_limit=5&offset=5&limit=5"
+  }
+}

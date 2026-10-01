@@ -14,7 +14,7 @@
 /**
  * Devuelve los nombres de los campos marcados como clave primaria.
  *
- * @param {Object} fields - schema.fields ({ nombre: fieldSchema }).
+ * @param {Record<string, import('../../types').HistrixFieldSchema>} fields - schema.fields ({ nombre: fieldSchema }).
  * @returns {string[]} nombres de los campos con esClave === 'true'.
  */
 export function keyFieldNames(fields) {
@@ -31,8 +31,8 @@ export function keyFieldNames(fields) {
  * no existe en `item`, el valor resultante es `undefined` (igual que el
  * acceso directo a la propiedad). Si no hay claves, devuelve {}.
  *
- * @param {Object} item - fila de datos.
- * @param {Object} fields - schema.fields ({ nombre: fieldSchema }).
+ * @param {import('../../types').HistrixRow} item - fila de datos.
+ * @param {Record<string, import('../../types').HistrixFieldSchema>} fields - schema.fields ({ nombre: fieldSchema }).
  * @returns {Object} { nombreCampo: valorEnLaFila }.
  */
 export function extractKeys(item, fields) {
