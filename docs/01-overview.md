@@ -27,7 +27,7 @@ import { HistrixApp, HistrixForm, HistrixTable } from '@mundoit-lib/histrix-comp
 // o registra todo:  app.use(HistrixPlugin)  desde '@mundoit-lib/histrix-component-vue/plugin'
 ```
 
-…y arma su UI orquestando estos componentes. Toda la lógica de **fetch de schema**, **submit de formularios**, **export PDF/Excel/CSV**, **favoritos**, **menú**, **login con OAuth password grant**, **upload de archivos**, etc., ya está adentro de la librería.
+…y arma su UI orquestando estos componentes. Toda la lógica de **fetch de schema**, **submit de formularios**, **export PDF/Excel/CSV/XML**, **favoritos**, **menú**, **login con OAuth password grant**, **upload de archivos**, etc., ya está adentro de la librería.
 
 ## Stack
 

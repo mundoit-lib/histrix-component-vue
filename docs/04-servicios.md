@@ -67,7 +67,7 @@ apiUrl()    = `${host()}/api/db/${currentDb()}`  (si hay DB)
 | `upload(files)` | POST | `{apiUrl}/files/{file.path}` (multipart por archivo) |
 | `getFiles(path)` | GET | `{apiUrl}/dir/{path}` |
 | `deleteFile(path)` | DELETE | `{apiUrl}/files/{path}` |
-| `downloadAppData(path, query, fmt, fname)` | GET (blob) | `{apiUrl}/export/{fmt}/{path}` + dispara descarga local. **Retorna la promesa** y propaga el error (el consumidor lo muestra) |
+| `downloadAppData(path, query, fmt, fname)` | GET (blob) | `{apiUrl}/export/{fmt}/{path}` (URL armada con `buildExportUrl` de `core/export.js`) + dispara descarga local. `query` ya trae los filtros del listado y, para `csv`, `_delimiter`. **Retorna la promesa** y propaga el error (el consumidor lo muestra) |
 | `getFavoritesOption()` | GET | `{apiUrl}/favorites/` (devuelve array) |
 | `getFavorites()` | GET | `{apiUrl}/favorites/` (devuelve `{keys: […]}`) |
 | `setFavorit(menuId, uri, name)` | PUT | `{apiUrl}/favorites/` |
@@ -75,6 +75,22 @@ apiUrl()    = `${host()}/api/db/${currentDb()}`  (si hay DB)
 | `queryStringToObject(query)` | — | Util pura: parsea `URLSearchParams` a objeto con arrays para `?a[]=…&a[]=…`. |
 
 > **`useApi()` es agnóstico de Quasar (desde 2026-06-08).** Antes `downloadAppData` mostraba un `Notify` de Quasar ante error de descarga (y se tragaba el error). Ahora el service no muestra UI: retorna la promesa y propaga; `ExportForm.vue` hace el `.catch` y muestra el `$q.notify`. `services/` quedó 100% libre de Quasar. El patrón a seguir: **el service propaga el error, la UI (componente) lo muestra**.
+
+### Export (`core/export.js`)
+
+La parte testeable del export vive en `ui/src/core/export.js` (27 tests); el service sólo hace la descarga binaria (Blob + `<a download>`).
+
+| Export | Qué hace |
+|---|---|
+| `EXPORT_FORMATS` | Formatos en el orden del diálogo: `xls` (Excel), `pdf`, `csv` (`hasDelimiter: true`) y `xml`, con ícono y color. |
+| `DEFAULT_DELIMITER` | `','` |
+| `getFormatExtension(fmt)` / `findFormat(fmt)` / `formatHasDelimiter(fmt)` | Consultas sobre la tabla de formatos. |
+| `sanitizeFileName(name)` / `buildExportFileName(title, fmt)` | Nombre de archivo a partir del título de la pantalla. |
+| `parseQueryString(query)` | Parsea el querystring de filtros del listado (`_f[]/_o[]/_v[]`, ver `core/filters.js`) a objeto. |
+| `buildExportParams({ query, exportQuery, format, delimiter })` | Mezcla los parámetros de la pantalla con los filtros; agrega `_delimiter` sólo si el formato lo acepta. |
+| `buildExportUrl(apiBase, fmt, path)` | `{apiBase}/export/{fmt}/{path}` |
+
+Flujo: `HistrixTable` abre `ExportForm` → el usuario elige formato (y delimitador si es CSV) → `buildExportParams` + `buildExportFileName` → `useApi().downloadAppData(path, params, fmt, fileName)`.
 
 ### API de favoritos — nota
 
@@ -93,3 +109,12 @@ Helper `defineLazyComponent(loader, options)` (Vue 3): envuelve `defineAsyncComp
 Usado por `HistrixApp` (mapa `schema.type` → componente), `HistrixField` y `HistrixDashboard`, donde hay dependencias circulares con `HistrixApp` o se quiere code-splitting.
 
 > Hasta v0.0.x se llamaba `defineAsyncComponentCompat` y tenía una rama Vue 2 (`vue-demi`); se renombró y simplificó en la Fase 1.
+
+## Dependencias de la app que la librería asume
+
+Además de los peers declarados, varios componentes usan cosas que **la app consumidora tiene que proveer** y que hoy no están en `peerDependencies`:
+
+- **`$events`** (bus global de `@mundoit-lib/plugin-vue-event`): `HistrixForm`, `HistrixTable`, `HistrixExpansionMenu`, `FormLoginNotStyles` y `HistrixLoginSplit` disparan eventos por ahí (lista en `03-componentes.md`). `HistrixLoginSplit` chequea que exista; el resto falla si no está.
+- **`$router`** (`vue-router`): `HistrixApp` (redirect), `HistrixList`, `HistrixTable`, `HistrixTree`, `HistrixExpansionMenu` y `HistrixMenuSearch` navegan con `push`/`replace`.
+
+La subtarea de higiene **HD-7526** los reemplaza por emits/`provide` para que la librería no dependa de ninguno de los dos. Hasta entonces, una app sin el plugin de eventos o sin router no puede usar esos componentes.
