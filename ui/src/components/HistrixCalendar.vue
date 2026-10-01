@@ -142,13 +142,19 @@ import {
 } from '../core/calendar.js';
 import { backendDateToDisplay } from '../core/dates.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import HistrixFilters from './HistrixFilters.vue';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  loadError: 'Error de carga de datos'
+};
 
 export default {
   name: 'HistrixCalendar',
   setup() {
     const { getData } = useApi();
-    return { getData };
+    return { notify: useHistrixNotify(), getData };
   },
   props: {
     schema: {},
@@ -235,10 +241,10 @@ export default {
           const incoming = Array.isArray(response.data) ? response.data.map(normalizeEvent) : [];
           this.events = mergeEvents(this.events, incoming);
         })
-        .catch((_e) => {
+        .catch((e) => {
           if (generation !== this.generation) return;
           this.loadedRanges = this.loadedRanges.filter((r) => r !== range);
-          this.$q.notify({ type: 'negative', message: 'Error de Carga de Datos' });
+          this.notify.error(`${messages.loadError}: ${e.message}`);
         });
     },
     applyFilter(query) {

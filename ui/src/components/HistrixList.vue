@@ -24,13 +24,19 @@
 
 <script>
 import useApi from '../services/histrixApi.js';
+import { useHistrixNotify } from '../services/notify.js';
 import HistrixFilters from './HistrixFilters.vue';
+
+// Textos del componente (centralizados para la futura i18n, HD-7530).
+const messages = {
+  confirmDelete: '¿Realmente desea borrar este elemento?'
+};
 
 export default {
   name: 'HistrixList',
   setup() {
     const { getAppData } = useApi();
-    return { getAppData };
+    return { notify: useHistrixNotify(), getAppData };
   },
   props: {
     path: null,
@@ -71,9 +77,11 @@ export default {
     xmlUrl(query) {
       return `${this.path}?${query || ''}&_dt=list`;
     },
-    deleteItem(item) {
+    async deleteItem(item) {
       const index = this.data.indexOf(item);
-      confirm('Are you sure you want to delete this item?') && this.data.splice(index, 1);
+      if (await this.notify.confirm(messages.confirmDelete)) {
+        this.data.splice(index, 1);
+      }
     },
     editItem(item) {
       this.editedIndex = this.data.indexOf(item);
