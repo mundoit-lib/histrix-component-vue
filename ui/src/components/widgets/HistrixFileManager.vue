@@ -37,15 +37,15 @@ const messages = {
 export default {
   name: 'HistrixFileManager',
   setup() {
-    const { getFiles, apiUrl, deleteFile } = useApi();
-    return { notify: useHistrixNotify(), getFiles, apiUrl, deleteFile };
+    const { getFiles, apiUrl, deleteFile, getToken } = useApi();
+    return { notify: useHistrixNotify(), getFiles, apiUrl, deleteFile, getToken };
   },
   props: ['path'],
   components: {},
   data() {
     return {
       files: [],
-      uploadHeaders: { Authorization: `Bearer ${localStorage.getItem('accessToken')}` },
+      uploadHeaders: { Authorization: `Bearer ${this.getToken()}` },
       uploadUrl: `${this.apiUrl()}/files${this.path}`
     };
   },

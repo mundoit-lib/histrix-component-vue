@@ -17,23 +17,25 @@ npm install @mundoit-lib/histrix-component-vue
 Peers requeridos en tu app:
 
 ```bash
-npm install vue@^3 quasar@^2 @vuelidate/core @vuelidate/validators \
-  @mundoit-lib/plugin-vue-axios @mundoit-lib/plugin-vue-auth
+npm install vue@^3 quasar@^2 @vuelidate/core @vuelidate/validators
 ```
 
-Peers opcionales (declarados en `peerDependenciesMeta`): algunos componentes los usan si están instalados en la app.
+Peers opcionales (declarados en `peerDependenciesMeta`): son los adaptadores por defecto de los contratos de la librería (ver [Integración](#integración)). Si están instalados se usan solos; si no, la app inyecta los suyos.
 
-| Paquete | Uso | Componentes |
+| Paquete | Contrato | Se toma de |
 | --- | --- | --- |
-| `@mundoit-lib/plugin-vue-event` | bus `this.$events` | `HistrixForm`, `HistrixTable`, `HistrixLoginSplit`, `LoginForm`, `FormLoginNotStyles`, `HistrixExpansionMenu` |
-| `vue-router@^4` | `this.$router` (navegación y redirects) | `HistrixApp`, `HistrixForm`, `HistrixTable`, `HistrixList`, `HistrixTree`, `HistrixMenuSearch`, `HistrixExpansionMenu` |
+| `@mundoit-lib/plugin-vue-axios` | http | `$axios` |
+| `@mundoit-lib/plugin-vue-auth` | auth (1.x/websanova o el `AuthService` nuevo) | `$auth` |
+| `@mundoit-lib/plugin-vue-event` | bus de eventos hacia la app | `$events` (sin él, bus interno) |
+| `vue-router@^4` | navegación (`schema.redirect`, menú, volver) | `$router` |
 
 ## Componentes
 
-35 componentes Vue 3. Salvo `HistrixUnsupported` (aviso interno de `HistrixApp` para tipos de pantalla sin componente), todos se registran con el plugin y se exportan desde la raíz y por subpath.
+37 componentes Vue 3. Salvo `HistrixUnsupported` (aviso interno de `HistrixApp` para tipos de pantalla sin componente), todos se registran con el plugin y se exportan desde la raíz y por subpath.
 
 | Grupo | Componentes |
 |---|---|
+| Páginas y diálogos | `HistrixPage` (página de app: path de la ruta, query y `_title`), `HistrixAppDialog` (app en un `q-dialog` con `v-model`; se cierra en `process-finish`/`closepopup` y emite `finish`) |
 | Pantallas schema-driven | `HistrixApp` (raíz: monta la pantalla según el schema), `HistrixForm`, `HistrixTable`, `HistrixTree`, `HistrixList`, `HistrixCalendar`, `HistrixDashboard`, `HistrixChart` |
 | Piezas de pantalla | `HistrixField`, `HistrixCell`, `HistrixFilters`, `HistrixHelp` (picker de ayudas), `ExportForm`, `HistrixUnsupported` |
 | Auth nativa (sin Quasar) | `HistrixLoginSplit`, `HistrixRegisterSplit`, `HistrixForgotPasswordSplit`, `HistrixResetPasswordSplit` |
@@ -63,7 +65,7 @@ Configuración runtime (host del backend, base, credenciales OAuth):
 ```js
 import { config } from '@mundoit-lib/histrix-component-vue';
 
-config.fixApi = 'https://mi-backend-histrix.com';
+config.apiUrl = 'https://mi-backend-histrix.com'; // `fixApi` sigue andando, pero está deprecado
 config.db = 'micliente';
 config.clientId = '...';
 config.clientSecret = '...';
@@ -73,6 +75,26 @@ config.clientSecret = '...';
 <!-- Montar cualquier pantalla declarada en un XML de Histrix: -->
 <HistrixApp path="ventas/qry/listado.xml" :query="{ id: 123 }" />
 ```
+
+## Integración
+
+La librería depende de contratos, no de paquetes: **bus** (`{ emit, on, off }`), **auth** (`{ login, logout, user, setUser, getToken, check, onUserChange }`), **http** (instancia tipo axios), **storage** (`{ get, set, remove }`) y **navegación** (`(to, { replace, back }) => void`). Los tipos están en `types/integration.d.ts`.
+
+**(a) App Mundo IT con los tres plugins**: no hay que configurar nada más. La librería toma `$axios`, `$auth` y `$events` de la app, y `$router` si existe. Los eventos `login-ok`, `loaded-user`, `update-favorit` y el `eventAfter` del login siguen saliendo por `$events`, así que los `events: { 'loaded-user'() {} }` de las apps no cambian. Además salen como `emits` del componente: `<HistrixLoginSplit @loaded-user="...">`.
+
+**(b) App sin plugins**: se inyecta lo que haga falta. Lo que no se pase usa el default:
+
+```js
+app.use(HistrixPlugin, {
+  http: miAxios,                    // o config.http
+  auth: miAuth,                     // adaptador parcial; también acepta el AuthService nuevo
+  bus: miBus,                       // opcional: sin él hay un bus interno
+  storage: false,                   // false = no persistir; sin definir = localStorage
+  onNavigate: (to, { replace, back }) => (back ? history.back() : miNavegar(to, replace))
+});
+```
+
+Para la sesión, `useHistrixSession()` devuelve `{ user, isLogged, login(u, p), logout(), refresh() }`. Es la única fuente de `user` y reemplaza a leer `localStorage.user`. Para las pantallas, `HistrixPage` reemplaza el `pages/Histrix.vue` de cada app y `HistrixAppDialog`, los `HistrixAppCard`. `HistrixList`/`HistrixTree` ya no navegan a la ruta `form`, que no existe: emiten `select` con `{ path, query }`. `HistrixField.resetField(names)` reemplaza al evento global `reset-field`.
 
 ## Errores y notificaciones
 

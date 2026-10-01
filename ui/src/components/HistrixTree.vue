@@ -153,7 +153,7 @@ export default {
     HistrixCell,
     HistrixFilters
   },
-  emits: ['export', 'print'],
+  emits: ['export', 'print', 'select'],
   mounted() {
     this.getData(this.xmlUrl(this.query));
   },
@@ -228,16 +228,8 @@ export default {
         });
     },
     addItem() {
-      this.$router.push({
-        name: 'form',
-        params: {
-          path: this.path,
-          editedItem: {},
-          newRecord: true,
-          schema: this.schema,
-          resources: this.resources
-        }
-      });
+      // La app decide cómo abrir el alta (antes: push a una ruta `form` que no existía).
+      this.$emit('select', { path: this.path, query: {}, newRecord: true });
     },
     editItem(item) {
       this.editedIndex = this.data.indexOf(item);

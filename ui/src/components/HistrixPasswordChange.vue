@@ -49,6 +49,7 @@
 <script>
 import { useVuelidate } from '@vuelidate/core';
 import { minLength, required, sameAs } from '@vuelidate/validators';
+import { useHistrixSession } from '../composables/useHistrixSession.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
 import { useHistrixNotify } from '../services/notify.js';
@@ -72,7 +73,7 @@ export default {
   },
   setup() {
     const { changePassword } = useApi();
-    return { v$: useVuelidate(), notify: useHistrixNotify(), changePassword };
+    return { v$: useVuelidate(), notify: useHistrixNotify(), session: useHistrixSession(), changePassword };
   },
   data: () => ({
     user: '',
@@ -107,8 +108,8 @@ export default {
     }
   },
   mounted() {
-    this.user = JSON.parse(localStorage.getItem('user'));
-    this.form.user_id = this.user.user_id;
+    this.user = this.session.user.value;
+    this.form.user_id = this.user?.user_id;
   },
   methods: {
     showScore(_score) {
@@ -122,8 +123,6 @@ export default {
         return;
       }
       this.btnLoading = true;
-      const _redirect = this.$auth.redirect();
-
       this.changePassword(this.form)
         .then((resp) => {
           this.response = resp.data.responseText;

@@ -217,6 +217,7 @@ import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
 import { normalizeScreenType } from '../core/normalize.js';
 import { defineLazyComponent } from '../services/asyncComponents.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixNavigate } from '../services/navigation.js';
 import { useHistrixNotify } from '../services/notify.js';
 import HistrixCell from './HistrixCell.vue';
 import HistrixField from './HistrixField.vue';
@@ -262,6 +263,7 @@ export default {
     const { getAppSchema, upload, processAppForm, insertAppData, updateAppData, getAppData } = useApi();
     return {
       v$: useVuelidate(),
+      navigation: useHistrixNavigate(),
       notify: useHistrixNotify(),
       getAppSchema,
       upload,
@@ -594,7 +596,7 @@ export default {
       }
     },
     back() {
-      this.$router.back();
+      this.navigation.back();
     },
 
     fieldClass(field) {

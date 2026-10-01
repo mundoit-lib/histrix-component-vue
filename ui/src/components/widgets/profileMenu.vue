@@ -35,15 +35,20 @@
 </template>
 
 <script>
+import useApi from '../../services/histrixApi.js';
 import HistrixMenu from './HistrixExpansionMenu.vue';
 export default {
   name: 'profileMenu',
   components: {
     HistrixMenu
   },
+  setup() {
+    const { logout } = useApi();
+    return { logout };
+  },
   methods: {
     exit() {
-      this.$auth.logout();
+      this.logout();
     }
   },
   data() {

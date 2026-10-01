@@ -154,8 +154,10 @@
 import { useVuelidate } from '@vuelidate/core';
 import { helpers, required } from '@vuelidate/validators';
 
+import { useHistrixBus } from '../services/bus.js';
 import config from '../services/config.js';
 import useApi from '../services/histrixApi.js';
+import { useHistrixStorage } from '../services/storage.js';
 import { shade } from '../utils/color.js';
 
 export default {
@@ -200,10 +202,17 @@ export default {
     /** Destino (router-link `to`) del enlace de recuperar contraseña. */
     forgotPasswordTo: { type: [String, Object], default: () => ({ name: 'mail-reset-password' }) }
   },
-  emits: ['success', 'error', 'db-change'],
+  // login-ok y loaded-user también salen por el bus (compat con las apps que los escuchan ahí).
+  emits: ['success', 'error', 'db-change', 'login-ok', 'loaded-user'],
   setup() {
     const { login, apiDBQuery } = useApi();
-    return { login, apiDBQuery, v$: useVuelidate() };
+    return {
+      storage: useHistrixStorage(),
+      login,
+      apiDBQuery,
+      bus: useHistrixBus(),
+      v$: useVuelidate()
+    };
   },
   data() {
     return {
@@ -223,7 +232,7 @@ export default {
     db(newVal) {
       if (!newVal) return;
       config.db = newVal;
-      localStorage.setItem('database', newVal);
+      this.storage.set('database', newVal);
       this.$emit('db-change', newVal);
     }
   },
@@ -232,7 +241,7 @@ export default {
     this.apiDBQuery()
       .then((list) => {
         this.databases = list;
-        // Preseleccionar la base ya configurada (config.db / localStorage).
+        // Preseleccionar la base ya configurada (config.db / storage).
         const current = config.db;
         if (current && list.some((opt) => opt.value === current)) {
           this.db = current;
@@ -270,10 +279,9 @@ export default {
       this.loading = true;
       try {
         await this.login(this.email, this.password, this.nextUrl);
-        // Compat con apps que escuchan el bus global (igual que FormLoginNotStyles).
-        if (this.$events) {
-          this.$events.fire('login-ok');
-          this.$events.fire('loaded-user');
+        for (const name of ['login-ok', 'loaded-user']) {
+          this.$emit(name);
+          this.bus.emit(name);
         }
         this.$emit('success', this.nextUrl);
       } catch (e) {

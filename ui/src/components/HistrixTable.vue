@@ -924,12 +924,14 @@ export default {
     'closepopup',
     'open-popup',
     'open-detail',
-    'select-row'
+    'select-row',
+    'edit-value'
   ],
   methods: {
     setEdit(value) {
       this.editValue = value;
-      this.$events.fire('editValue', value);
+      // Antes salía por el bus global (`editValue`) y le llegaba a todas las tablas.
+      this.$emit('edit-value', value);
     },
     getRowSchema(key, cell) {
       return this.dataById.get(key)?.DT_RowAttr?.attributes?.[cell];
@@ -1370,18 +1372,6 @@ export default {
       this.newRecord = false;
       this.editedRow = row;
       this.editedItem = Object.assign({}, this.getValuesFromRow(row));
-      // this.editedItem = this.data[this.editedIndex]
-      /*
-      this.$router.push({
-        name: "form",
-        params: {
-          path: this.path,
-          editedItem: item2,
-          schema: this.schema,
-          resources: this.resources
-        }
-      });
-      */
 
       this.edit = true;
     },

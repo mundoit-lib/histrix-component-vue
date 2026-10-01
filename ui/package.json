@@ -30,6 +30,10 @@
       "import": "./src/components/HistrixApp.vue",
       "require": "./src/components/HistrixApp.vue"
     },
+    "./components/HistrixAppDialog": {
+      "import": "./src/components/HistrixAppDialog.vue",
+      "require": "./src/components/HistrixAppDialog.vue"
+    },
     "./components/HistrixCalendar": {
       "import": "./src/components/HistrixCalendar.vue",
       "require": "./src/components/HistrixCalendar.vue"
@@ -73,6 +77,10 @@
     "./components/HistrixLoginSplit": {
       "import": "./src/components/HistrixLoginSplit.vue",
       "require": "./src/components/HistrixLoginSplit.vue"
+    },
+    "./components/HistrixPage": {
+      "import": "./src/components/HistrixPage.vue",
+      "require": "./src/components/HistrixPage.vue"
     },
     "./components/HistrixPasswordChange": {
       "import": "./src/components/HistrixPasswordChange.vue",
@@ -154,6 +162,18 @@
       "import": "./src/components/widgets/profileMenuItems.vue",
       "require": "./src/components/widgets/profileMenuItems.vue"
     },
+    "./composables/useHistrixSession": {
+      "import": "./src/composables/useHistrixSession.js",
+      "require": "./src/composables/useHistrixSession.js"
+    },
+    "./services/auth": {
+      "import": "./src/services/auth.js",
+      "require": "./src/services/auth.js"
+    },
+    "./services/bus": {
+      "import": "./src/services/bus.js",
+      "require": "./src/services/bus.js"
+    },
     "./services/config": {
       "import": "./src/services/config.js",
       "require": "./src/services/config.js"
@@ -162,9 +182,17 @@
       "import": "./src/services/histrixApi.js",
       "require": "./src/services/histrixApi.js"
     },
+    "./services/navigation": {
+      "import": "./src/services/navigation.js",
+      "require": "./src/services/navigation.js"
+    },
     "./services/notify": {
       "import": "./src/services/notify.js",
       "require": "./src/services/notify.js"
+    },
+    "./services/storage": {
+      "import": "./src/services/storage.js",
+      "require": "./src/services/storage.js"
     }
   },
   "scripts": {
@@ -190,6 +218,12 @@
     "vue-router": "^4.0.0"
   },
   "peerDependenciesMeta": {
+    "@mundoit-lib/plugin-vue-auth": {
+      "optional": true
+    },
+    "@mundoit-lib/plugin-vue-axios": {
+      "optional": true
+    },
     "@mundoit-lib/plugin-vue-event": {
       "optional": true
     },

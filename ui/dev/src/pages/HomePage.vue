@@ -58,7 +58,7 @@
     <q-card flat bordered class="q-pa-md q-mt-lg" style="max-width: 720px">
       <div class="text-subtitle1 q-mb-sm">Configuración activa</div>
       <div class="text-caption text-grey-8">
-        <div>host (config.fixApi): <code>{{ cfg.fixApi || '—' }}</code></div>
+        <div>host (config.apiUrl): <code>{{ cfg.apiUrl || '—' }}</code></div>
         <div>db (config.db): <code>{{ cfg.db || '—' }}</code></div>
         <div>apiUrl efectivo: <code>{{ apiUrlPreview }}</code></div>
         <div>clientId: <code>{{ cfg.clientId ? '••• set' : '—' }}</code></div>
@@ -93,7 +93,7 @@ export default {
 
     const cfg = config;
     const apiUrlPreview = computed(() => {
-      const host = localStorage.getItem('host') || config.fixApi || '';
+      const host = localStorage.getItem('host') || config.apiUrl || '';
       const db = localStorage.getItem('database') || config.db || '';
       return db ? `${host}/api/db/${db}` : config.apiUrl || host;
     });

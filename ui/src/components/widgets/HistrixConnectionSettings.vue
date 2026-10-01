@@ -43,8 +43,13 @@
 </template>
 
 <script>
+import { useHistrixStorage } from '../../services/storage.js';
+
 export default {
   name: 'HistrixConnectionSettings',
+  setup() {
+    return { storage: useHistrixStorage() };
+  },
   data() {
     return {
       host: null,
@@ -52,13 +57,13 @@ export default {
     };
   },
   mounted() {
-    this.host = localStorage.getItem('host');
-    this.database = localStorage.getItem('database');
+    this.host = this.storage.get('host');
+    this.database = this.storage.get('database');
   },
   methods: {
     async save() {
-      localStorage.setItem('host', this.host);
-      localStorage.setItem('database', this.database);
+      this.storage.set('host', this.host);
+      this.storage.set('database', this.database);
       this.$emit('change-database');
     }
   },

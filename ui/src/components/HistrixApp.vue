@@ -256,7 +256,9 @@
 import { getCurrentInstance } from 'vue';
 
 import useApi from '../services/histrixApi.js';
+import { useHistrixNavigate } from '../services/navigation.js';
 import { useHistrixNotify } from '../services/notify.js';
+import { useHistrixStorage } from '../services/storage.js';
 
 import { useHistrixKeys } from '../composables/useHistrixKeys.js';
 
@@ -288,8 +290,9 @@ const messages = {
 
 export default {
   name: 'HistrixApp',
-  setup() {
+  setup(props) {
     const { currentDb, apiUrl, getAppPdf, getAppSchema } = useApi();
+    const { navigate } = useHistrixNavigate(props);
     // Atajos de teclado (F9, Esc, F2, F4, Enter): ver core/hotkeys.js.
     const vm = getCurrentInstance().proxy;
     useHistrixKeys({
@@ -299,6 +302,8 @@ export default {
     });
     return {
       notify: useHistrixNotify(),
+      storage: useHistrixStorage(),
+      navigate,
       currentDb,
       apiUrl,
       getAppPdf,
@@ -325,6 +330,9 @@ export default {
       required: false
     },
     finalStep: Boolean,
+    // Navegación propia (to, { replace, back }) para `schema.redirect`; sin
+    // definir usa config.onNavigate o el router de la app.
+    onNavigate: { type: Function, default: null },
     // Atajos de teclado y foco automático. false los apaga en esta app y en
     // todo lo que contiene (forms, apps embebidas o abiertas en popups).
     keyboard: {
@@ -383,7 +391,7 @@ export default {
       return this.schema.redirect;
     },
     user() {
-      return localStorage.getItem('user');
+      return this.storage.get('user');
     },
     hasStepper() {
       if (this.schema?.process_next_step) {
@@ -536,7 +544,7 @@ export default {
       this.processing = false;
       this.$emit('process-finish', data);
       if (this.redirectPage) {
-        this.$router.push(this.redirectPage);
+        this.navigate(this.redirectPage);
       }
     },
     onValidityChange(validity) {
