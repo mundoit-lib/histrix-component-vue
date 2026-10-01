@@ -446,6 +446,7 @@ import { visibleColumnNames } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
 import { keyFieldNames } from '../core/keys.js';
 import { normalizeScreenType } from '../core/normalize.js';
+import { formatNumber, isNumericField, numericSpec } from '../core/numeric.js';
 import { buildPageParams, parsePageResponse } from '../core/pagination.js';
 import useApi from '../services/histrixApi.js';
 import { useHistrixNotify } from '../services/notify.js';
@@ -863,8 +864,11 @@ export default {
     isSumColumn(col) {
       return col.sum === true || col.sum === 'true';
     },
-    /** Formato de una celda numérica del pie (hook hasta tener el renderer numérico). */
-    formatCell(_col, value) {
+    /** Formato de una celda numérica del pie: el de la columna si es numérica. */
+    formatCell(col, value) {
+      if (isNumericField(col)) {
+        return formatNumber(value, numericSpec(col));
+      }
       if (Number.isInteger(value)) {
         return String(value);
       }
