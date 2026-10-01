@@ -210,6 +210,7 @@
 import { useVuelidate } from '@vuelidate/core';
 import { isFieldEditable as isFieldEditablePure } from '../core/fieldVisibility.js';
 import { evaluateFormula } from '../core/formula.js';
+import { isFocusCandidate, nextFocusable } from '../core/hotkeys.js';
 import { mapUiIcon } from '../core/icons.js';
 import { extractKeys } from '../core/keys.js';
 import { buildLinkParameters, resolveHelperLinkPath } from '../core/links.js';
@@ -233,7 +234,14 @@ export default {
     editedItem: null,
     editedRow: null,
     editedIndex: null,
-    computedFields: Object
+    computedFields: Object,
+    // Enter en el último campo graba el form. Por defecto no: evita
+    // grabaciones accidentales en carga intensiva (comprobantes).
+    enterSubmits: { type: Boolean, default: false }
+  },
+  inject: {
+    // Lo provee HistrixApp (prop `keyboard`). Fuera de una app, activo.
+    histrixKeyboard: { default: () => () => true }
   },
   components: {
     HistrixField,
@@ -438,6 +446,7 @@ export default {
   },
   mounted() {
     this.refresh();
+    this.focusFirstField();
   },
   watch: {
     editedItem: {
@@ -662,6 +671,60 @@ export default {
      * formulario es válido. Es público: HistrixApp lo invoca vía ref antes de
      * procesar un comprobante o avanzar un paso del stepper.
      */
+    /** Inputs enfocables del form, en orden del DOM (ver core/hotkeys.js). */
+    focusCandidates() {
+      const root = this.$el;
+      if (!root || typeof root.querySelectorAll !== 'function') {
+        return [];
+      }
+      return Array.from(root.querySelectorAll('input, select, textarea')).filter(isFocusCandidate);
+    },
+    /**
+     * Foco inicial (H.focusFirstInput del legacy): el campo con `autofocus` en
+     * el schema o, si no hay, el primer campo editable visible. No le saca el
+     * foco al usuario si ya está escribiendo en otro lado.
+     */
+    focusFirstField() {
+      if (!this.histrixKeyboard() || typeof document === 'undefined') {
+        return;
+      }
+      // Los campos son componentes async: esperamos a que terminen de pintar.
+      this.$nextTick(() => {
+        setTimeout(() => {
+          const active = document.activeElement;
+          if (active && active !== document.body && isFocusCandidate(active)) {
+            return;
+          }
+          const candidates = this.focusCandidates();
+          const auto = Object.values(this.localSchema.fields || {}).find(
+            (f) => f.autofocus === true || f.autofocus === 'true'
+          );
+          const target = (auto && candidates.find((el) => el.name === auto.name)) || candidates[0];
+          target?.focus?.();
+        }, 100);
+      });
+    },
+    /**
+     * Enter: pasa al siguiente campo editable. En el último no hace nada
+     * (salvo `enterSubmits`). Devuelve true si consumió la tecla. Lo llama
+     * HistrixApp desde el atajo.
+     */
+    focusNextField(current) {
+      const candidates = this.focusCandidates();
+      if (!candidates.includes(current)) {
+        return false;
+      }
+      const next = nextFocusable(candidates, current);
+      if (next) {
+        next.focus();
+        next.select?.();
+        return true;
+      }
+      if (this.enterSubmits) {
+        this.onSubmit();
+      }
+      return true;
+    },
     async validateAndFocus() {
       const valid = await this.v$.$validate();
       if (!valid) {

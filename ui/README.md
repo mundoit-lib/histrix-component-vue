@@ -126,6 +126,35 @@ notify.error(e); // acepta un HistrixApiError
 if (await notify.confirm('¿Eliminar el registro?')) { /* … */ }
 ```
 
+## Atajos de teclado
+
+`HistrixApp` replica los atajos del ERP legacy. Atiende las teclas la app más interna que tenga el foco, y si esa no resuelve F9 o Esc, los pasa a la app que la contiene (por ejemplo, del grid de renglones al comprobante).
+
+| Tecla | Acción |
+| --- | --- |
+| `F9` | Procesa (igual que el botón Procesar: valida antes y sólo si el schema trae `can_process`). |
+| `Esc` | Cierra el diálogo abierto más reciente. Si la app es `inner` y está dentro de un popup, emite `closepopup`. |
+| `F2` | Abre la ayuda (`helpContainer`) del campo que tiene el foco. |
+| `F4` | Limpia los filtros de búsqueda, si el foco está en un filtro. |
+| `Enter` | Pasa al siguiente campo editable. En el último campo no graba, salvo que el form tenga `enter-submits`. |
+| `Ctrl+K` / `⌘K`, `/` | Abre el buscador de programas (`HistrixMenuSearch`). |
+
+Al cargar, el form pone el foco en el campo que tenga `autofocus` en el schema o, si ninguno lo tiene, en el primero editable.
+
+Dentro de un `textarea`, un `contenteditable` o un `QEditor` no se intercepta ninguna tecla.
+
+```vue
+<!-- Sin atajos ni foco automático (también en las apps y forms que contiene) -->
+<HistrixApp path="/ventas/fac.xml" :keyboard="false" />
+
+<!-- Enter en el último campo graba el form -->
+<HistrixApp path="/ventas/fac.xml" enter-submits />
+
+<!-- Otro atajo para el buscador, y abrirlo desde código -->
+<HistrixMenuSearch ref="search" hotkey="alt+m" />
+<!-- this.$refs.search.show() / this.$refs.search.focus() -->
+```
+
 ## Desarrollo
 
 El playground vive en `dev/` (Vite + Quasar 2, consume esta librería vía `link:..`). Todo el repo usa **pnpm**:

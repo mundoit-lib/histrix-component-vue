@@ -1,5 +1,5 @@
 <template>
-  <div v-show="isVisible">
+  <div v-show="isVisible" @histrix-help="onHelpKey">
     <div v-if="isRadio">
       <div class="header-check">
         <b>{{ rowSchema.label }}</b>
@@ -16,7 +16,6 @@
         v-bind="$attrs"
         style="flex: 1;"
         v-on:computed-total="onComputedTotal"
-        @v-on:keyup.113="showHelper()"
         @filter="filterFn"
         bottom-slots
         :name="fieldSchema.name"
@@ -410,6 +409,19 @@ export default {
       if (this.fieldSchema.helpContainer) {
         this.showHelp = true;
       }
+    },
+    /**
+     * F2 con el foco en el campo (atajo de HistrixApp, ver core/hotkeys.js):
+     * abre la ayuda. Cancela el evento para avisar que lo atendió; Esc la
+     * cierra QDialog.
+     */
+    onHelpKey(event) {
+      if (!this.fieldSchema.helpContainer) {
+        return;
+      }
+      event.stopPropagation();
+      event.preventDefault();
+      this.showHelper();
     },
     /**
      * Input del usuario en el campo. Setea el valor y, si el campo tiene ayuda,

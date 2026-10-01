@@ -118,6 +118,7 @@
 </template>
 
 <script>
+import { isTypingTarget, matchHotkey } from '../../core/hotkeys.js';
 import useApi from '../../services/histrixApi.js';
 
 const decodeCache = new Map();
@@ -184,8 +185,11 @@ export default {
     // 'input' (barra con atajo) | 'button' (solo lupa)
     variant: { type: String, default: 'input' },
     placeholder: { type: String, default: 'Buscar…' },
-    // Atajo global Cmd/Ctrl + K para abrir desde cualquier lado.
+    // Atajo global para abrir desde cualquier lado (también `/` fuera de un
+    // campo de texto). false lo apaga.
     shortcut: { type: Boolean, default: true },
+    // Combinación del atajo: 'ctrl+k' (en Mac también Cmd+K), 'alt+m', etc.
+    hotkey: { type: String, default: 'ctrl+k' },
     // Máximo de resultados a mostrar.
     limit: { type: Number, default: 40 }
   },
@@ -202,7 +206,11 @@ export default {
   },
   computed: {
     shortcutLabel() {
-      return this.isMac ? '⌘ K' : 'Ctrl K';
+      const names = { ctrl: this.isMac ? '⌘' : 'Ctrl', meta: '⌘', alt: this.isMac ? '⌥' : 'Alt', shift: 'Shift' };
+      return String(this.hotkey)
+        .split('+')
+        .map((p) => names[p.trim().toLowerCase()] || p.trim().toUpperCase())
+        .join(' ');
     },
     results() {
       const q = foldStr(this.query.trim());
@@ -349,8 +357,22 @@ export default {
       this.query = '';
       this.$refs.input?.focus();
     },
+    /** Abre la paleta (API pública, p. ej. desde un botón del layout). */
+    show() {
+      this.open = true;
+    },
+    /** Abre la paleta y pone el foco en el input de búsqueda. */
+    focus() {
+      if (this.open) {
+        this.$refs.input?.focus();
+      } else {
+        this.open = true; // onShow enfoca al terminar de abrir
+      }
+    },
     onGlobalKey(e) {
-      if ((e.metaKey || e.ctrlKey) && (e.key === 'k' || e.key === 'K')) {
+      if (e.defaultPrevented) return;
+      const slash = matchHotkey(e, '/') && !isTypingTarget(e.target);
+      if (matchHotkey(e, this.hotkey) || slash) {
         e.preventDefault();
         this.open = true;
       }
